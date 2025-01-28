@@ -1,6 +1,9 @@
 package com.sponsorando.app.services;
 
+import com.sponsorando.app.models.ImageForm;
+import com.sponsorando.app.models.Role;
 import com.sponsorando.app.models.UserAccount;
+import com.sponsorando.app.models.UserForm;
 import com.sponsorando.app.repositories.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -8,6 +11,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +23,9 @@ public class UserAccountService implements UserDetailsService {
 
     @Autowired
     private UserAccountRepository userAccountRepository;
+
+    @Autowired
+    private ImageService imageService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -41,5 +48,25 @@ public class UserAccountService implements UserDetailsService {
         return userDetails;
     }
 
+    public UserAccount createUserAccount(UserForm form) {
+        UserAccount userAccount = new UserAccount();
+
+        userAccount.setName(form.getName());
+        userAccount.setEmail(form.getEmail());
+        userAccount.setPassword(new BCryptPasswordEncoder().encode(form.getPassword()));
+        userAccount.setRole(Role.USER);
+        if (form.getImageUrl() != null) {
+            ImageForm imageForm = new ImageForm();
+            imageForm.setUrl(form.getImageUrl());
+            imageForm.setAltText(form.getName() + "'s profile picture");
+            userAccount.setImageUrl(imageService.createImage(imageForm));
+        }
+
+        // Todo: Add column to database and update UserAccount entity
+        // userAccount.setEnabled(true);
+
+        userAccountRepository.save(userAccount);
+        return userAccount;
+    }
 
 }

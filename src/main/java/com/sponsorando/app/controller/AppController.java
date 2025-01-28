@@ -1,9 +1,12 @@
 package com.sponsorando.app.controller;
 
+import com.sponsorando.app.models.UserAccount;
 import com.sponsorando.app.models.UserForm;
+import com.sponsorando.app.services.UserAccountService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +18,9 @@ import java.security.Principal;
 
 @Controller
 public class AppController {
+
+    @Autowired
+    private UserAccountService userAccountService;
 
     @GetMapping("/")
     public String index() {
@@ -37,8 +43,19 @@ public class AppController {
             RedirectAttributes redirectAttributes,
             Model model
     ){
-        System.out.println("SIGNUP USER: " + userForm);
-        redirectAttributes.addFlashAttribute("isSignedUp", true);
+        try {
+            UserAccount user = userAccountService.createUserAccount(userForm);
+
+            if(user != null) {
+                redirectAttributes.addFlashAttribute("isSignedUp", true);
+            } else {
+                redirectAttributes.addFlashAttribute("isSignedUp", false);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("isSignedUp", false);
+        }
         return "redirect:/";
     }
 
