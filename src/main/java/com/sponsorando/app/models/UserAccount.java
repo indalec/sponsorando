@@ -14,15 +14,21 @@ public class UserAccount {
     private Long id;
 
     private String name;
+
     private String email;
+
     private String password;
 
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
+
     private String imageUrl;
+
+    private Boolean enabled;
 
     @CreationTimestamp
     private LocalDate createdAt;
+
     private LocalDate updatedAt;
 
     public Long getId() {
@@ -73,6 +79,14 @@ public class UserAccount {
         this.imageUrl = imageUrl;
     }
 
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
     public LocalDate getCreatedAt() {
         return createdAt;
     }
@@ -88,6 +102,4 @@ public class UserAccount {
     public void setUpdatedAt(LocalDate updatedAt) {
         this.updatedAt = updatedAt;
     }
-
-
 }
