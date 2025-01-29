@@ -10,7 +10,11 @@ import java.time.LocalDateTime;
 public class Payment {
 
     @Id
+    @Column(name = "donation_id")
+    private Long id;
+
     @OneToOne
+    @MapsId
     @JoinColumn(name = "donation_id")
     private Donation donation;
 

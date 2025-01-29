@@ -61,9 +61,7 @@ public class UserAccountService implements UserDetailsService {
             imageForm.setAltText(form.getName() + "'s profile picture");
             userAccount.setImageUrl(imageService.createImage(imageForm));
         }
-
-        // Todo: Add column to database and update UserAccount entity
-        // userAccount.setEnabled(true);
+        userAccount.setEnabled(true);
 
         userAccountRepository.save(userAccount);
         return userAccount;

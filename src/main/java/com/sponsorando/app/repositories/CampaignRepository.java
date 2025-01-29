@@ -9,5 +9,4 @@ import java.util.List;
 
 @Repository
 public interface CampaignRepository extends JpaRepository<Campaign, Long > {
-    List<Donation> getDonations(Long campaignId);
 }
