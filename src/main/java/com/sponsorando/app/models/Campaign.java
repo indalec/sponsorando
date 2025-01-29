@@ -1,5 +1,6 @@
 package com.sponsorando.app.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.boot.autoconfigure.web.WebProperties;
@@ -7,6 +8,7 @@ import org.springframework.boot.autoconfigure.web.WebProperties;
 import javax.annotation.processing.Generated;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "campaigns")
@@ -34,6 +36,18 @@ public class Campaign {
     @ManyToOne
     @JoinColumn(name = "creator_id")
     private UserAccount userAccount;
+
+    @ManyToMany
+    @JoinTable(
+            name = "campaigns_has_campaign_categories",
+            joinColumns = @JoinColumn(name = "campaign_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private List<CampaignCategory> categories;
+
+    @OneToMany(mappedBy = "campaign")
+    @JsonIgnore
+    private List<Image> images;
 
     @CreationTimestamp
     private LocalDate createdAt;
@@ -113,6 +127,22 @@ public class Campaign {
         this.userAccount = userAccount;
     }
 
+    public List<CampaignCategory> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<CampaignCategory> categories) {
+        this.categories = categories;
+    }
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+
     public LocalDate getCreatedAt() {
         return createdAt;
     }
@@ -141,6 +171,8 @@ public class Campaign {
                 ", collectedAmount=" + collectedAmount +
                 ", status=" + status +
                 ", userAccount=" + userAccount +
+                ", categories=" + categories +
+                ", images=" + images +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
