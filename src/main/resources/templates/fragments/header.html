@@ -41,8 +41,10 @@
                         </li>
                     </ul>
                     <div class="d-flex align-items-center">
-                        <button class="btn btn-outline-success me-2" type="button">Sign Up</button>
-                        <button class="btn btn-outline-success" type="button">Login</button>
+                        <a id="signup" th:if="${username == null}" href="/signup" class="btn btn-outline-success me-2" >Sign Up</a>
+                        <a id="login" th:if="${username == null}" href="/login" class="btn btn-outline-success" >Login</a>
+                        <span id="username" class="button is-white" th:if="${username != null}" th:text="${username}"></span>
+                        <a id="logout" th:if="${username != null}" href="/logout"  class="btn btn-outline-danger" >Logout</a>
                     </div>
                 </div>
             </div>
