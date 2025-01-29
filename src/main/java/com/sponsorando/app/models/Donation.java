@@ -2,7 +2,6 @@ package com.sponsorando.app.models;
 
 import jakarta.persistence.*;
 
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -19,21 +18,17 @@ public class Donation {
 
     private LocalDateTime donationDate;
 
-
     @ManyToOne
     @JoinColumn(name = "campaign_id")
     private Campaign campaign;
-
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserAccount userAccount;
 
-
     @ManyToOne
     @JoinColumn(name = "subscription_id")
     private Subscription subscription;
-
 
     public Long getId() {
         return id;
@@ -89,5 +84,18 @@ public class Donation {
 
     public void setSubscription(Subscription subscription) {
         this.subscription = subscription;
+    }
+
+    @Override
+    public String toString() {
+        return "Donation{" +
+                "id=" + id +
+                ", amount=" + amount +
+                ", currency='" + currency + '\'' +
+                ", donationDate=" + donationDate +
+                ", campaign=" + campaign +
+                ", userAccount=" + userAccount +
+                ", subscription=" + subscription +
+                '}';
     }
 }

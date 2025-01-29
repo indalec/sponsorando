@@ -17,7 +17,6 @@ public class Image {
 
     private String altText;
 
-
     @ManyToOne
     @JoinColumn(name = "campaign_id")
     private Campaign campaign;
@@ -25,8 +24,7 @@ public class Image {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-     private LocalDateTime updatedAt;
-
+    private LocalDateTime updatedAt;
 
     public Long getId() {
         return id;
@@ -60,5 +58,15 @@ public class Image {
         this.createdAt = createdAt;
     }
 
-
+    @Override
+    public String toString() {
+        return "Image{" +
+                "id=" + id +
+                ", url='" + url + '\'' +
+                ", altText='" + altText + '\'' +
+                ", campaign=" + campaign +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 }

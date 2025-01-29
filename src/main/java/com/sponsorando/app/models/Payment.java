@@ -32,7 +32,6 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     private PaymentProvider paymentProvider;
 
-
     private String paymentMethod;
 
     private String failureMessage;
@@ -143,5 +142,24 @@ public class Payment {
 
     public void setTransactionDate(LocalDateTime transactionDate) {
         this.transactionDate = transactionDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Payment{" +
+                "donation=" + donation +
+                ", transactionId='" + transactionId + '\'' +
+                ", paymentStatus=" + paymentStatus +
+                ", grossAmount=" + grossAmount +
+                ", transactionFee=" + transactionFee +
+                ", serviceFee=" + serviceFee +
+                ", netAmount=" + netAmount +
+                ", currency='" + currency + '\'' +
+                ", paymentProvider=" + paymentProvider +
+                ", paymentMethod='" + paymentMethod + '\'' +
+                ", failureMessage='" + failureMessage + '\'' +
+                ", invoiceId='" + invoiceId + '\'' +
+                ", transactionDate=" + transactionDate +
+                '}';
     }
 }

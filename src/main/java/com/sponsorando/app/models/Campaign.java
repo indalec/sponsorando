@@ -3,10 +3,7 @@ package com.sponsorando.app.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.boot.autoconfigure.web.WebProperties;
 
-import javax.annotation.processing.Generated;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -49,11 +46,11 @@ public class Campaign {
     @JsonIgnore
     private List<Image> images;
 
+
     @CreationTimestamp
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
-    private LocalDate updatedAt;
-
+    private LocalDateTime updatedAt;
 
     public Long getId() {
         return id;
@@ -139,23 +136,19 @@ public class Campaign {
         return images;
     }
 
-    public void setImages(List<Image> images) {
-        this.images = images;
-    }
-
-    public LocalDate getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDate createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDate getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDate updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 

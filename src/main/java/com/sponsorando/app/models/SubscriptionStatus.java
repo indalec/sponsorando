@@ -6,7 +6,6 @@ public enum SubscriptionStatus {
     PAUSE,
     OFF;
 
-
     public static SubscriptionStatus[] getSubscriptionStatuses() {
         return SubscriptionStatus.values();
     }

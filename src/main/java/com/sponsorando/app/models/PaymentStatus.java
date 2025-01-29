@@ -5,8 +5,6 @@ public enum PaymentStatus {
     FAILED,
     PENDING;
 
-
-
     public  static PaymentStatus[] getPaymentStatuses() {
         return PaymentStatus.values();
     }
