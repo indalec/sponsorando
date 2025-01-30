@@ -14,31 +14,31 @@
 <header th:replace="~{fragments/header :: headerSection}" class="container"></header>
 <div class="container mt-5">
     <h1>Create New Campaign</h1>
-    <form th:action="@{/campaigns/create}" method="post" th:object="${campaignForm}" onsubmit="return validateDates()">
+    <form th:action="@{/add_campaign}" method="post" th:object="${campaignForm}" onsubmit="return validateDates()">
         <div class="mb-3">
             <label for="title" class="form-label">Title</label>
-            <input type="text" class="form-control" id="title" th:field="*{title}" required>
+            <input type="text" class="form-control" id="title" name="title" required>
         </div>
         <div class="mb-3">
             <label for="description" class="form-label">Description</label>
-            <textarea class="form-control" id="description" th:field="*{description}" rows="3" required></textarea>
+            <textarea class="form-control" id="description" rows="3" name="description" required></textarea>
         </div>
         <div class="mb-3">
             <label for="startDate" class="form-label">Start Date and Time</label>
-            <input type="text" class="form-control flatpickr" id="startDate" th:field="*{startDate}" required>
+            <input type="text" class="form-control flatpickr" id="startDate" name="startDate" required>
         </div>
         <div class="mb-3">
             <label for="endDate" class="form-label">End Date and Time</label>
-            <input type="text" class="form-control flatpickr" id="endDate" th:field="*{endDate}" required>
+            <input type="text" class="form-control flatpickr" id="endDate" name="endDate" required>
         </div>
         <div class="mb-3">
             <label for="goalAmount" class="form-label">Goal Amount</label>
-            <input type="number" class="form-control" id="goalAmount" th:field="*{goalAmount}" required>
+            <input type="number" class="form-control" id="goalAmount" name="goalAmount" required>
         </div>
         <div class="mb-3">
             <label for="categories" class="form-label">Categories</label>
-            <select class="form-control" id="categories" th:field="*{categories}" multiple required>
-                <!-- Dynamically load categories from the database -->
+            <select class="form-control" id="categories" name="categories" multiple required>
+
                 <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
             </select>
         </div>
