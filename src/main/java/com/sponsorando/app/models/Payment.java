@@ -11,11 +11,11 @@ public class Payment {
 
     @Id
     @Column(name = "donation_id")
-    private Long id;
+    private Long donationId;
 
     @OneToOne
     @MapsId
-    @JoinColumn(name = "donation_id")
+    @JoinColumn(name = "donation_id", referencedColumnName = "id")
     private Donation donation;
 
     private String transactionId;
@@ -43,6 +43,14 @@ public class Payment {
     private String invoiceId;
 
     private LocalDateTime transactionDate;
+
+    public Long getDonationId() {
+        return donationId;
+    }
+
+    public void setDonationId(Long donationId) {
+        this.donationId = donationId;
+    }
 
     public Donation getDonation() {
         return donation;
@@ -151,7 +159,8 @@ public class Payment {
     @Override
     public String toString() {
         return "Payment{" +
-                "donation=" + donation +
+                "donationId=" + donationId +
+                ", donation=" + donation +
                 ", transactionId='" + transactionId + '\'' +
                 ", paymentStatus=" + paymentStatus +
                 ", grossAmount=" + grossAmount +
