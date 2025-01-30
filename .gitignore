@@ -34,3 +34,6 @@ build/
 
 ### ENV ###
 .env
+
+### NOTES ###
+notes.txt

@@ -17,16 +17,14 @@ public class Image {
 
     private String altText;
 
-    // Todo: update entity including setters and getters
-//    @ManyToOne
-//    @JoinColumn(name = "campaign_id")
-//    private Campaign campaign;
+    @ManyToOne
+    @JoinColumn(name = "campaign_id")
+    private Campaign campaign;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    // private LocalDateTime updatedAt;
-
+    private LocalDateTime updatedAt;
 
     public Long getId() {
         return id;
@@ -58,5 +56,17 @@ public class Image {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Image{" +
+                "id=" + id +
+                ", url='" + url + '\'' +
+                ", altText='" + altText + '\'' +
+                ", campaign=" + campaign +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 }

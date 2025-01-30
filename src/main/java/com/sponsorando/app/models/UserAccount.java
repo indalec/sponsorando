@@ -3,7 +3,7 @@ package com.sponsorando.app.models;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name="users")
@@ -14,16 +14,22 @@ public class UserAccount {
     private Long id;
 
     private String name;
+
     private String email;
+
     private String password;
 
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
+
     private String imageUrl;
 
+    private Boolean enabled;
+
     @CreationTimestamp
-    private LocalDate createdAt;
-    private LocalDate updatedAt;
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 
     public Long getId() {
         return id;
@@ -73,21 +79,27 @@ public class UserAccount {
         this.imageUrl = imageUrl;
     }
 
-    public LocalDate getCreatedAt() {
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDate createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDate getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDate updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
-
-
 }
