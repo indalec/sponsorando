@@ -7,7 +7,6 @@
     <link href="/css/main.css" type="text/css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <!-- Flatpickr CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
@@ -61,54 +60,61 @@
                 Please select the categories for your campaign (hold ctrl to multi-select).
             </div>
         </div>
-        <button type="submit" class="btn btn-primary" onclick="return validateDates()">Create Campaign</button>
+        <button type="submit" class="btn btn-primary">Create Campaign</button>
     </form>
 </div>
 <footer th:replace="~{fragments/footer :: footerSection}" role="contentinfo" class="footer"></footer>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-<!-- Flatpickr JS -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
-    // Initialize Flatpickr for date and time pickers
-    flatpickr(".flatpickr", {
-        enableTime: true, // Enable time picker
-        dateFormat: "d/m/Y H:i", // Set date format to DD/MM/YYYY HH:MM
-        time_24hr: true, // Use 24-hour format
-        minDate: "today", // Prevent selecting past dates
-        onClose: validateDates
-    });
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Flatpickr for date and time pickers
+        flatpickr(".flatpickr", {
+            enableTime: true,
+            dateFormat: "d/m/Y H:i",
+            time_24hr: true,
+            minDate: "today"
+        });
 
-
-
-    // Validate that end date is greater than start date
-    function validateDates() {
+        const form = document.querySelector('form');
         const startDateInput = document.getElementById("startDate");
         const endDateInput = document.getElementById("endDate");
-        const startDate = new Date(startDateInput.value);
-        const endDate = new Date(endDateInput.value);
-        const endDateError = document.getElementById("endDateError");
 
-        // Reset previous validation styles
-        endDateInput.classList.remove("is-invalid", "is-valid");
+        function validateDates() {
+            const startDate = flatpickr.parseDate(startDateInput.value, "d/m/Y H:i");
+            const endDate = flatpickr.parseDate(endDateInput.value, "d/m/Y H:i");
 
-        if (!startDateInput.value || !endDateInput.value) {
-            return false; // Ensure both fields are filled
+            startDateInput.classList.remove("is-invalid", "is-valid");
+            endDateInput.classList.remove("is-invalid", "is-valid");
+
+            if (!startDate || !endDate) {
+                return false;
+            }
+
+            if (endDate <= startDate) {
+                endDateInput.classList.add("is-invalid");
+                endDateInput.nextElementSibling.textContent = "End date must be later than the start date.";
+                return false;
+            } else {
+                startDateInput.classList.add("is-valid");
+                endDateInput.classList.add("is-valid");
+                endDateInput.nextElementSibling.textContent = "";
+                return true;
+            }
         }
 
-        if (endDate <= startDate) {
-            endDateInput.classList.add("is-invalid");
-            endDateError.textContent = "End date must be later than the start date.";
-            return false;
-        } else {
-            endDateInput.classList.add("is-valid");
-            endDateError.textContent = "";
-        }
-        return true;
-    }
+        endDateInput.addEventListener('change', validateDates);
+
+        form.addEventListener('submit', function(event) {
+            if (!validateDates()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+        });
+    });
 
     document.getElementById("goalAmount").addEventListener("input", function (event) {
         let inputField = event.target;
@@ -154,7 +160,7 @@
                 form.classList.add('was-validated')
             }, false)
         })
-    })()
+    })();
 </script>
 </body>
 </html>
