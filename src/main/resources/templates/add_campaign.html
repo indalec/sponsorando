@@ -14,26 +14,42 @@
 <header th:replace="~{fragments/header :: headerSection}" class="container"></header>
 <div class="container mt-5">
     <h1>Create New Campaign</h1>
-    <form th:action="@{/add_campaign}" method="post" th:object="${campaignForm}" onsubmit="return validateDates()">
+    <form th:action="@{/add_campaign}" method="post" th:object="${campaignForm}"  class="needs-validation" novalidate>
         <div class="mb-3">
             <label for="title" class="form-label">Title</label>
             <input type="text" class="form-control" id="title" name="title" required>
+            <div class="invalid-feedback">
+                Please enter a title for your campaign.
+            </div>
         </div>
         <div class="mb-3">
             <label for="description" class="form-label">Description</label>
             <textarea class="form-control" id="description" rows="3" name="description" required></textarea>
+            <div class="invalid-feedback">
+                Please enter a description of your campaign.
+            </div>
         </div>
+
         <div class="mb-3">
             <label for="startDate" class="form-label">Start Date and Time</label>
             <input type="text" class="form-control flatpickr" id="startDate" name="startDate" required>
+            <div class="invalid-feedback">
+                Please enter the start date of your campaign.
+            </div>
         </div>
         <div class="mb-3">
             <label for="endDate" class="form-label">End Date and Time</label>
             <input type="text" class="form-control flatpickr" id="endDate" name="endDate" required>
+            <div class="invalid-feedback">
+                Please enter the end date of your campaign.
+            </div>
         </div>
         <div class="mb-3">
             <label for="goalAmount" class="form-label">Goal Amount</label>
-            <input type="number" class="form-control" id="goalAmount" name="goalAmount" required>
+            <input type="number" min="1" step="0.01" class="form-control" id="goalAmount" name="goalAmount" required>
+            <div class="invalid-feedback">
+                Please enter the amount you want to raise for your campaign.
+            </div>
         </div>
         <div class="mb-3">
             <label for="categories" class="form-label">Categories</label>
@@ -41,8 +57,11 @@
 
                 <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
             </select>
+            <div class="invalid-feedback">
+                Please select the categories for your campaign (hold ctrl to multi-select).
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Create Campaign</button>
+        <button type="submit" class="btn btn-primary" onclick="return validateDates()">Create Campaign</button>
     </form>
 </div>
 <footer th:replace="~{fragments/footer :: footerSection}" role="contentinfo" class="footer"></footer>
@@ -62,17 +81,79 @@
         minDate: "today" // Prevent selecting past dates
     });
 
+
+
     // Validate that end date is greater than start date
     function validateDates() {
-        const startDate = document.getElementById("startDate").value;
-        const endDate = document.getElementById("endDate").value;
+        const startDateInput = document.getElementById("startDate");
+        const endDateInput = document.getElementById("endDate");
+        const startDate = new Date(startDateInput.value);
+        const endDate = new Date(endDateInput.value);
+        const endDateError = document.getElementById("endDateError");
 
-        if (new Date(startDate) >= new Date(endDate)) {
-            alert("End date must be greater than the start date.");
+        // Reset previous validation styles
+        endDateInput.classList.remove("is-invalid", "is-valid");
+
+        if (!startDateInput.value || !endDateInput.value) {
+            return false; // Ensure both fields are filled
+        }
+
+        if (endDate <= startDate) {
+            endDateInput.classList.add("is-invalid");
+            endDateError.textContent = "End date must be later than the start date.";
             return false;
+        } else {
+            endDateInput.classList.add("is-valid");
+            endDateError.textContent = "";
         }
         return true;
     }
+
+    document.getElementById("goalAmount").addEventListener("input", function (event) {
+        let inputField = event.target;
+        let value = inputField.value.trim();
+        let errorMessage = "";
+
+        // Ensure the value is a valid currency format
+        if (value === "") {
+            errorMessage = "Please enter the amount you want to raise for your campaign.";
+        } else if (!/^\d+(\.\d{1,2})?$/.test(value)) {
+            errorMessage = "Please enter a valid number in currency format (e.g., 10.00).";
+        } else if (parseFloat(value) < 10) {
+            errorMessage = "The minimum goal amount must be at least 10.";
+        } else if (parseFloat(value) <= 0) {
+            errorMessage = "Please enter a positive amount greater than zero.";
+        }
+
+        // Display or remove error message
+        if (errorMessage) {
+            inputField.classList.add("is-invalid");
+            inputField.nextElementSibling.textContent = errorMessage; // Set the error message
+        } else {
+            inputField.classList.remove("is-invalid");
+            inputField.classList.add("is-valid");
+            inputField.nextElementSibling.textContent = ""; // Remove error message
+        }
+    });
+
+    (() => {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
 </script>
 </body>
 </html>
