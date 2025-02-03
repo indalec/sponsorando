@@ -66,6 +66,6 @@ public class CampaignController {
             }
         }
 
-        return "add_campaign";
+        return "redirect:/add_campaign";
     }
 }
