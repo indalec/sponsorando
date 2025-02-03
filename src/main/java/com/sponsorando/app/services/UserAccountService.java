@@ -70,8 +70,8 @@ public class UserAccountService implements UserDetailsService {
         return userAccount;
     }
 
-    public UserAccount getUser(Principal principal) {
-        Optional<UserAccount> user = userAccountRepository.findByEmail(principal.getName());
+    public UserAccount getUser(String email) {
+        Optional<UserAccount> user = userAccountRepository.findByEmail(email);
 
         if (user.isPresent()) {
             return user.get();

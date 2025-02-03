@@ -18,7 +18,7 @@
 <header th:replace="~{fragments/header :: headerSection}" class="container"></header>
 <div class="container mt-5">
     <h1>Create New Campaign</h1>
-    <form th:action="@{/add_campaign}" method="post" th:object="${campaignForm}"  class="needs-validation" novalidate>
+    <form th:action="@{/add_campaign}" method="post" class="needs-validation" novalidate>
         <div class="mb-3">
             <label for="title" class="form-label">Title</label>
             <input type="text" class="form-control" id="title" name="title" required>
@@ -289,6 +289,7 @@
             Array.from(forms).forEach(form => {
                 form.addEventListener('submit', event => {
                     if (!form.checkValidity()) {
+                        alert("am i coming")
                         event.preventDefault()
                         event.stopPropagation()
                     }

@@ -1,12 +1,13 @@
 package com.sponsorando.app.services;
 
+import com.sponsorando.app.models.Address;
 import com.sponsorando.app.models.Campaign;
 import com.sponsorando.app.models.CampaignForm;
 import com.sponsorando.app.models.UserAccount;
 import com.sponsorando.app.repositories.CampaignRepository;
-import com.sponsorando.app.repositories.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 
@@ -18,10 +19,15 @@ public class CampaignService {
     @Autowired
     private CampaignRepository campaignRepository;
 
+    @Autowired
+    private AddressService addressService;
 
-    public Campaign createCampaign(CampaignForm campaignForm, Principal principal) {
+    @Transactional
+    public Campaign createCampaign(CampaignForm campaignForm, String email) {
+
+        System.out.println("Campaign Form:::" + campaignForm);
         Campaign campaign = new Campaign();
-        UserAccount userAccount = userAccountService.getUser(principal);
+        UserAccount userAccount = userAccountService.getUser(email);
 
 
         campaign.setTitle(campaignForm.getTitle());
@@ -31,12 +37,19 @@ public class CampaignService {
         campaign.setGoalAmount(campaignForm.getGoalAmount());
         campaign.setCollectedAmount(0.0);
         campaign.setCategories(campaignForm.getCategories());
+        campaign.setShowLocation(Boolean.TRUE);
 
-        if(userAccount != null) {
+        if (userAccount != null) {
+
             campaign.setUserAccount(userAccount);
-            return campaignRepository.save(campaign);
-        }
+            Address address = addressService.createAddress(campaignForm);
 
+            if (address != null) {
+                address.setId(address.getId());
+                return campaignRepository.save(campaign);
+            }
+
+        }
         return null;
     }
 }

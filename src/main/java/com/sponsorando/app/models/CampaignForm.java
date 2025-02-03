@@ -32,6 +32,24 @@ public class CampaignForm {
     @NotEmpty(message = "Please select at least one option")
     private List<CampaignCategory> categories;
 
+    @NotBlank(message = "Street is mandatory")
+    private String street;
+
+    @NotBlank(message = "Street Number is mandatory")
+    private String number;
+
+    @NotBlank(message = "City is mandatory")
+    private String city;
+
+    @NotBlank(message = "Country is mandatory")
+    private String country;
+
+    @NotBlank(message = "Postcode is mandatory")
+    private String postcode;
+
+    private Double latitude;
+
+    private Double longitude;
 
     public String getTitle() {
         return title;
@@ -79,5 +97,61 @@ public class CampaignForm {
 
     public void setCategories(List<CampaignCategory> categories) {
         this.categories = categories;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getPostcode() {
+        return postcode;
+    }
+
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 }
