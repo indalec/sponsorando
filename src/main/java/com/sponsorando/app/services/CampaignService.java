@@ -45,7 +45,7 @@ public class CampaignService {
             Address address = addressService.createAddress(campaignForm);
 
             if (address != null) {
-                address.setId(address.getId());
+                campaign.setAddress(address);
                 return campaignRepository.save(campaign);
             }
 

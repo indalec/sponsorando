@@ -289,7 +289,6 @@
             Array.from(forms).forEach(form => {
                 form.addEventListener('submit', event => {
                     if (!form.checkValidity()) {
-                        alert("am i coming")
                         event.preventDefault()
                         event.stopPropagation()
                     }

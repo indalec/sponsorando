@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jdk.jfr.Unsigned;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,10 +20,12 @@ public class CampaignForm {
 
     @NotNull(message = "Please insert the date the campaign starts")
     @FutureOrPresent(message = "Date cannot be in the past")
+    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime startDate;
 
     @NotNull(message = "Please insert the date the campaign ends")
     @FutureOrPresent(message = "Please select at least one option")
+    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime endDate;
 
     @NotNull(message = "Please insert the amount your campaign needs to raise ")
@@ -153,5 +156,24 @@ public class CampaignForm {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    @Override
+    public String toString() {
+        return "CampaignForm{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", goalAmount=" + goalAmount +
+                ", categories=" + categories +
+                ", street='" + street + '\'' +
+                ", number='" + number + '\'' +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                ", postcode='" + postcode + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                '}';
     }
 }
