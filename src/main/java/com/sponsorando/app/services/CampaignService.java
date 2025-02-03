@@ -1,15 +1,13 @@
 package com.sponsorando.app.services;
 
-import com.sponsorando.app.models.Address;
-import com.sponsorando.app.models.Campaign;
-import com.sponsorando.app.models.CampaignForm;
-import com.sponsorando.app.models.UserAccount;
+import com.sponsorando.app.models.*;
 import com.sponsorando.app.repositories.CampaignRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.util.List;
 
 @Service
 public class CampaignService {
@@ -36,7 +34,8 @@ public class CampaignService {
         campaign.setEndDate(campaignForm.getEndDate());
         campaign.setGoalAmount(campaignForm.getGoalAmount());
         campaign.setCollectedAmount(0.0);
-        campaign.setCategories(campaignForm.getCategories());
+        List<CampaignCategory> categories = campaignForm.getCategories();
+        campaign.setCategories(categories);
         campaign.setShowLocation(Boolean.TRUE);
 
         if (userAccount != null) {

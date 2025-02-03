@@ -44,7 +44,7 @@ public class Campaign {
     @JoinTable(
             name = "campaigns_has_campaign_categories",
             joinColumns = @JoinColumn(name = "campaign_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
+            inverseJoinColumns = @JoinColumn(name = "campaign_category_id")
     )
     private List<CampaignCategory> categories;
 
