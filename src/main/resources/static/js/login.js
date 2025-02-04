@@ -1,10 +1,12 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+    // Hide the signup button if it exists
     const signupButton = document.getElementById("login");
     if (signupButton) {
         signupButton.style.display = "none";
     }
 
+    // Feedback for wrong Credentials
     const emailInput = document.getElementById("email");
     const emailError = document.getElementById("emailError");
     const loginForm = document.querySelector("form");
@@ -20,6 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
         loginForm.parentNode.insertBefore(errorDiv, loginForm);
     }
 
+    // Email format validation
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (emailInput) {
