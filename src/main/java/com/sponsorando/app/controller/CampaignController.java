@@ -29,6 +29,11 @@ public class CampaignController {
     @Autowired
     private CampaignService campaignService;
 
+    @GetMapping("/discover_campaigns")
+    public String discoverCampaigns(Model model) {
+
+        return "discover_campaigns";
+    }
 
     @GetMapping("/add_campaign")
     public String addCampaign(Model model) {
