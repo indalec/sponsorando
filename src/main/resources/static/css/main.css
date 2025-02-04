@@ -10,8 +10,6 @@ body {
     background-color: var(--background-color);
     color: var(--text-color);
     padding-top: 80px;
-
-    /*To fix the footer: */
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -65,7 +63,7 @@ body {
     margin-bottom: 30px;
 }
 
-.footer-fix {
+.footer {
     margin-top: auto;
 }
 
