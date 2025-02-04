@@ -4,7 +4,6 @@ import com.sponsorando.app.models.Campaign;
 import com.sponsorando.app.models.CampaignCategory;
 import com.sponsorando.app.models.CampaignForm;
 import com.sponsorando.app.repositories.CampaignCategoryRepository;
-import com.sponsorando.app.repositories.CampaignRepository;
 import com.sponsorando.app.services.CampaignService;
 import com.sponsorando.app.services.UserAccountService;
 import jakarta.validation.Valid;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -32,9 +30,9 @@ public class CampaignController {
     private CampaignService campaignService;
 
 
-
     @GetMapping("/add_campaign")
     public String addCampaign(Model model) {
+
         List<CampaignCategory> categories = campaignCategoryRepository.findAll();
         model.addAttribute("categories", categories);
 
@@ -48,12 +46,7 @@ public class CampaignController {
             Model model
     ) {
 
-        System.out.println("COME HERE");
-
-        System.out.println("Campaign Details::::::"+campaignForm);
-
         String email = (String) model.getAttribute("username");
-
 
         if(email != null) {
 
