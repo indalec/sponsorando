@@ -1,4 +1,7 @@
 <header th:fragment="headerSection" class="container">
+    <head>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/burger.css}">
+    </head>
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container align-items-center">
             <a class="navbar-brand" href="/">Sponsorando</a>
@@ -6,7 +9,7 @@
                     aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
+            <div class="offcanvas offcanvas-end custom-menu" tabindex="-1" id="offcanvasNavbar"
                  aria-labelledby="offcanvasNavbarLabel">
                 <div class="offcanvas-header">
                     <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
@@ -46,5 +49,4 @@
             </div>
         </div>
     </nav>
-
 </header>

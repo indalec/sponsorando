@@ -1,0 +1,85 @@
+.custom-menu {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 20px;
+    width: 320px;
+    height: min-content !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+
+.custom-menu.offcanvas {
+    transition: transform 0.4s ease-in-out;
+}
+
+.custom-menu .offcanvas-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: auto !important;
+    flex-grow: 0 !important;
+    flex-shrink: 1 !important;
+    padding-bottom: 0 !important;
+}
+
+
+.custom-menu .nav-link {
+    color: white !important;
+    font-weight: 500;
+    padding: 10px;
+    transition: all 0.3s ease;
+}
+
+.custom-menu .nav-link:hover {
+    color: #00ff99 !important;
+    transform: translateX(5px);
+}
+
+.custom-menu .d-flex {
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 0 !important;
+    flex-grow: 0 !important;
+}
+
+.custom-menu .btn {
+    width: 120px;
+    text-align: center;
+    margin: 5px;
+}
+
+.custom-menu .btn-outline-danger {
+    background: rgba(255, 0, 0, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 0, 0, 0.6);
+}
+
+.custom-menu .btn-outline-danger:hover {
+    background: rgba(255, 0, 0, 0.6);
+    color: white;
+}
+
+.custom-menu .btn-outline-success {
+    background: rgba(0, 255, 128, 0.2);
+    color: white;
+    border: 1px solid rgba(0, 255, 128, 0.6);
+}
+
+.custom-menu .btn-outline-success:hover {
+    background: rgba(0, 255, 128, 0.6);
+    color: white;
+}
+
+.custom-menu #username {
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+}
