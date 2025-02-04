@@ -10,6 +10,9 @@ body {
     background-color: var(--background-color);
     color: var(--text-color);
     padding-top: 80px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .navbar {
@@ -58,6 +61,10 @@ body {
 .hero-section p {
     font-size: 1.2rem;
     margin-bottom: 30px;
+}
+
+footer {
+    margin-top: auto;
 }
 
 @media (min-width: 992px) {
