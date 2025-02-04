@@ -1,7 +1,7 @@
 <header th:fragment="headerSection" class="container">
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container align-items-center">
-            <a class="navbar-brand" href="#">Sponsorando</a>
+            <a class="navbar-brand" href="/">Sponsorando</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
                     aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -15,35 +15,31 @@
                 <div class="offcanvas-body">
                     <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 no-wrap align-items-center">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                            <a class="nav-link active" aria-current="page" href="/">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Discover Campaigns</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                               aria-expanded="false">
-                                Collect Funds
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Register Campaign</a></li>
-                                <li><a class="dropdown-item" href="#">Start Fundraising Event</a></li>
-                            </ul>
+                            <a th:if="${username != null}" class="nav-link" href="/campaigns">Campaigns</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">About Us</a>
+                            <a class="nav-link" href="/discover_campaigns">Discover Campaigns</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Contact Us</a>
+                            <a class="nav-link" href="/add_campaign">Start a Campaign</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Help</a>
+                            <a class="nav-link" href="/about">About Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/contact">Contact Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/faq">Help</a>
                         </li>
                     </ul>
                     <div class="d-flex align-items-center">
                         <a id="signup" th:if="${username == null}" href="/signup" class="btn btn-outline-success me-2" >Sign Up</a>
                         <a id="login" th:if="${username == null}" href="/login" class="btn btn-outline-success" >Login</a>
-                        <span id="username" class="button is-white" th:if="${username != null}" th:text="${username}"></span>
+                        <span id="username" class="button is-white mx-3" th:if="${username != null}" th:text="${username}"></span>
                         <a id="logout" th:if="${username != null}" href="/logout"  class="btn btn-outline-danger" >Logout</a>
                     </div>
                 </div>
