@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.List;
@@ -41,7 +42,11 @@ public class CampaignController {
     }
 
     @PostMapping("/add_campaign")
-    public String addCampaign(@ModelAttribute @Valid CampaignForm campaignForm, Model model) {
+    public String addCampaign(
+            @ModelAttribute @Valid CampaignForm campaignForm,
+            RedirectAttributes redirectAttributes,
+            Model model
+    ) {
 
         System.out.println("COME HERE");
 
@@ -55,14 +60,14 @@ public class CampaignController {
             try {
                 Campaign campaign = campaignService.createCampaign(campaignForm, email);
                 if(campaign != null) {
-                    model.addAttribute("campaign", campaign);
-                    model.addAttribute("isCampaignAdded", true);
+                    redirectAttributes.addFlashAttribute("campaign", campaign);
+                    redirectAttributes.addFlashAttribute("isCampaignAdded", true);
                 }else{
-                    model.addAttribute("isCampaignAdded", false);
+                    redirectAttributes.addFlashAttribute("isCampaignAdded", false);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                model.addAttribute("isCampaignAdded", false);
+                redirectAttributes.addFlashAttribute("isCampaignAdded", false);
             }
         }
 

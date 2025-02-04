@@ -17,6 +17,7 @@
 <body>
 <header th:replace="~{fragments/header :: headerSection}" class="container"></header>
 <div class="container mt-5">
+    <div id="successDivAdd" th:if="${isCampaignAdded}" class="alert alert-success" role="alert">Campaign added successfully</div>
     <h1>Create New Campaign</h1>
     <form th:action="@{/add_campaign}" method="post" class="needs-validation" novalidate>
         <div class="mb-3">
@@ -307,5 +308,6 @@
         });
     });
 </script>
+<script src="/js/action_notifications.js"></script>
 </body>
 </html>
