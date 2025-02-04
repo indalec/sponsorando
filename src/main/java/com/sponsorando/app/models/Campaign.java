@@ -30,6 +30,12 @@ public class Campaign {
     @Enumerated(EnumType.STRING)
     private CampaignStatus status = CampaignStatus.DRAFT;
 
+    private Boolean showLocation;
+
+    @ManyToOne
+    @JoinColumn(name = "address_id")
+    private Address address;
+
     @ManyToOne
     @JoinColumn(name = "creator_id")
     private UserAccount userAccount;
@@ -38,7 +44,7 @@ public class Campaign {
     @JoinTable(
             name = "campaigns_has_campaign_categories",
             joinColumns = @JoinColumn(name = "campaign_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
+            inverseJoinColumns = @JoinColumn(name = "campaign_category_id")
     )
     private List<CampaignCategory> categories;
 
@@ -116,6 +122,22 @@ public class Campaign {
         this.status = status;
     }
 
+    public Boolean getShowLocation() {
+        return showLocation;
+    }
+
+    public void setShowLocation(Boolean showLocation) {
+        this.showLocation = showLocation;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
     public UserAccount getUserAccount() {
         return userAccount;
     }
@@ -134,6 +156,10 @@ public class Campaign {
 
     public List<Image> getImages() {
         return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -163,6 +189,8 @@ public class Campaign {
                 ", goalAmount=" + goalAmount +
                 ", collectedAmount=" + collectedAmount +
                 ", status=" + status +
+                ", showLocation=" + showLocation +
+                ", address=" + address +
                 ", userAccount=" + userAccount +
                 ", categories=" + categories +
                 ", images=" + images +
