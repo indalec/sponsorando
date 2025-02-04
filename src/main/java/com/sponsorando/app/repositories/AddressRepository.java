@@ -1,13 +1,10 @@
 package com.sponsorando.app.repositories;
 
-import com.sponsorando.app.models.CampaignCategory;
+import com.sponsorando.app.models.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface CampaignCategoryRepository extends JpaRepository<CampaignCategory, Long> {
-
+public interface AddressRepository extends JpaRepository<Address, Long> {
 
 }

@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>New Campaign - Sponsorando</title>
+    <link href="/css/add_campaign.css" type="text/css" rel="stylesheet">
+    <link href="/css/main.css" type="text/css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+</head>
+<body>
+<header th:replace="~{fragments/header :: headerSection}" class="container"></header>
+<div class="container mt-5">
+    <div id="successDivAdd" th:if="${isCampaignAdded}" class="alert alert-success" role="alert">Campaign added successfully</div>
+    <h1>Create New Campaign</h1>
+    <form th:action="@{/add_campaign}" method="post" class="needs-validation" novalidate>
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+            <div class="invalid-feedback">
+                Please enter a title for your campaign.
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" rows="3" name="description" required></textarea>
+            <div class="invalid-feedback">
+                Please enter a description of your campaign.
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="startDate" class="form-label">Start Date and Time</label>
+            <input type="text" class="form-control flatpickr" id="startDate" name="startDate" required>
+            <div class="invalid-feedback">
+                Please enter the start date of your campaign.
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="endDate" class="form-label">End Date and Time</label>
+            <input type="text" class="form-control flatpickr" id="endDate" name="endDate" required>
+            <div class="invalid-feedback">
+                Please enter the end date of your campaign.
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="goalAmount" class="form-label">Goal Amount</label>
+            <input type="number" min="1" step="0.01" class="form-control" id="goalAmount" name="goalAmount" required>
+            <div class="invalid-feedback">
+                Please enter the amount you want to raise for your campaign.
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="categories" class="form-label">Categories</label>
+            <select class="form-control" id="categories" name="categories" multiple required>
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+            </select>
+            <div class="invalid-feedback">
+                Please select the categories for your campaign (hold ctrl to multi-select).
+            </div>
+        </div>
+
+        <hr>
+        <h4>Address Information</h4>
+        <p>You can enter your address using the <strong>search bar</strong> OR manually fill in the fields below.</p>
+
+        <div class="mb-3">
+            <label for="address" class="form-label">Search Address (Optional)</label>
+            <input type="text" class="form-control" id="address" placeholder="Start typing an address..." autocomplete="off">
+            <ul id="suggestions" class="list-group position-absolute w-100"></ul>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="inputStreet" class="form-label">Street</label>
+                <input type="text" class="form-control validate-address" id="inputStreet" name="street" required>
+                <div class="invalid-feedback">Please enter a street.</div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="inputNumber" class="form-label">Number</label>
+                <input type="text" class="form-control validate-address" id="inputNumber" name="number" required>
+                <div class="invalid-feedback">Please enter a number.</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="inputCity" class="form-label">City</label>
+                <input type="text" class="form-control validate-address" id="inputCity" name="city" required>
+                <div class="invalid-feedback">Please enter a city.</div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="inputPostcode" class="form-label">Postcode</label>
+                <input type="text" class="form-control validate-address" id="inputPostcode" name="postcode" required>
+                <div class="invalid-feedback">Please enter a postcode.</div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="inputCountry" class="form-label">Country</label>
+            <input type="text" class="form-control validate-address" id="inputCountry" name="country" required>
+            <div class="invalid-feedback">Please enter a country.</div>
+        </div>
+
+        <input type="hidden" id="latitude" name="latitude">
+        <input type="hidden" id="longitude" name="longitude">
+
+        <div id="map" class="mb-3"></div>
+
+        <button type="submit" class="btn btn-primary">Create Campaign</button>
+    </form>
+</div>
+<footer th:replace="~{fragments/footer :: footerSection}" role="contentinfo" class="footer"></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script src="/js/add_campaign.js"></script>
+<script src="/js/action_notifications.js"></script>
+</body>
+</html>

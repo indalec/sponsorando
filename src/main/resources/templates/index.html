@@ -15,14 +15,7 @@
 <body>
 <header th:replace="~{fragments/header :: headerSection}" class="container"></header>
 <div class="container">
-    <div id="successToast" class="toast d-block align-items-center text-white bg-success border-0 position-fixed top-50 start-50 translate-middle p-3 delay-3000 autohide" th:if="${isSignedUp}" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
-        <div class="d-flex">
-            <div class="toast-body">
-                🎉 Registration successful! Welcome aboard.
-            </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-    </div>
+    <div id="successDivAdd" th:if="${isSignedUp}" class="alert alert-success" role="alert">🎉 Registration successful! Welcome aboard.</div>
     <section class="hero-section" style="background-image: url('/images/hero.jpg'); background-size: cover;">
         <div class="container text-center text-white">
             <h1>Make a Difference Today</h1>
@@ -104,5 +97,6 @@
 
 <footer th:replace="~{fragments/footer :: footerSection}" role="contentinfo" class="footer"></footer>
 <script src="/js/index.js"></script>
+<script src="/js/action_notifications.js"></script>
 </body>
 </html>

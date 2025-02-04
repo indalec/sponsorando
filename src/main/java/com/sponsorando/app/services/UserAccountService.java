@@ -15,6 +15,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
+import java.util.Optional;
+
 @Service
 public class UserAccountService implements UserDetailsService {
 
@@ -66,5 +69,16 @@ public class UserAccountService implements UserDetailsService {
         userAccountRepository.save(userAccount);
         return userAccount;
     }
+
+    public UserAccount getUser(String email) {
+        Optional<UserAccount> user = userAccountRepository.findByEmail(email);
+
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            return null;
+        }
+    }
+
 
 }
