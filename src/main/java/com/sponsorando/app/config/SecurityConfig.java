@@ -35,6 +35,7 @@ public class SecurityConfig {
                     auth
                             .requestMatchers("/add_campaign").authenticated()
                             .requestMatchers("/campaigns").authenticated()
+                            .requestMatchers("/delete_campaign/**").authenticated()
                             .requestMatchers("/admin/**").hasRole("ADMIN")
                             .anyRequest().permitAll();
                 }

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -16,8 +17,12 @@ public class CampaignService {
 
     @Autowired
     UserAccountService userAccountService;
+
     @Autowired
     private CampaignRepository campaignRepository;
+
+    @Autowired
+    private ImageService imageService;
 
     @Autowired
     private AddressService addressService;
@@ -57,6 +62,26 @@ public class CampaignService {
     public Page<Campaign> getCampaignsByUserEmail(String email, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return campaignRepository.findByUserAccountEmailAndStatusNot(email, CampaignStatus.INACTIVE, pageable);
+    }
+
+    @Transactional
+    public boolean deleteCampaign(Long campaignId) {
+
+        try {
+            if (imageService.deleteByCampaignId(campaignId)) {
+
+                Campaign campaign = campaignRepository.findById(campaignId).orElseThrow(() -> new RuntimeException("Campaign not found"));
+                campaign.setStatus(CampaignStatus.INACTIVE);
+                campaign.setUpdatedAt(LocalDateTime.now());
+                campaignRepository.save(campaign);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }
