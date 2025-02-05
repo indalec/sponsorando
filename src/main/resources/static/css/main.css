@@ -5,6 +5,28 @@
     --background-color: #f4f4f4;
 }
 
+.navbar-auth {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 10px !important;
+    white-space: nowrap; /* Prevents wrapping */
+}
+
+.navbar-nav {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-grow: 1 !important;
+}
+
+.navbar-auth #username-expanded {
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 body {
     font-family: 'Arial', sans-serif;
     background-color: var(--background-color);
@@ -20,11 +42,54 @@ body {
     box-shadow: 0 2px 4px rgba(0,0,0,.1);
 }
 
+/* 🔥 Fix Alignment for Auth Buttons (Username + Logout) */
+.navbar-auth {
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important; /* Ensure consistent spacing */
+    white-space: nowrap; /* Prevents wrapping issues */
+    justify-content: flex-end; /* Aligns auth buttons properly */
+}
+
+/* 🔥 Fix Username Styling */
+.navbar-auth #username-expanded {
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 160px; /* Prevents long emails from breaking layout */
+    display: inline-block;
+}
+
+/* 🔥 Prevent Logout Button from Moving */
+.navbar-auth #logout-expanded {
+    white-space: nowrap;
+}
+
+/* 🔥 Keep Navbar Items Aligned Properly */
+.navbar-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+/* 🔥 Prevent Navbar Links from Shifting */
+.navbar-nav .nav-item {
+    display: flex;
+    align-items: center;
+}
+
+/* 🔥 Fix Hover & Active State */
+.navbar-nav .nav-item .nav-link {
+    padding: 10px 15px;
+}
+
 .navbar-brand {
     font-weight: bold;
     color: var(--primary-color) !important;
 }
 
+/* 🔥 Navbar Links */
 .nav-link {
     color: var(--text-color) !important;
     font-weight: 500;
@@ -34,14 +99,32 @@ body {
     color: var(--primary-color) !important;
 }
 
+/* 🔥 Navbar Responsiveness Fix */
+@media (min-width: 992px) {
+    .navbar-nav.no-wrap {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .navbar-nav.no-wrap .nav-item {
+        white-space: nowrap;
+    }
+
+    .navbar-nav.no-wrap::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+/* 🔥 Adjust Navbar Toggler */
 .navbar-toggler {
-    border: 0 !important; /* No border by default */
-    outline: none !important; /* No focus outline */
-    background-color: transparent !important; /* Ensure no background */
-    padding: 4px !important; /* Keep padding minimal */
+    border: 0 !important;
+    outline: none !important;
+    background-color: transparent !important;
+    padding: 4px !important;
     width: 40px !important;
     height: 40px !important;
-    transition: border 0.2s ease-in-out !important; /* Smooth transition */
+    transition: border 0.2s ease-in-out !important;
 }
 
 .navbar-toggler .navbar-toggler-icon {
@@ -49,19 +132,17 @@ body {
     height: 30px !important;
 }
 
-/* 🔥 Show thin border on hover */
 .navbar-toggler:hover {
-    border: 1px solid rgba(0, 0, 0, 0.4) !important; /* Thin border on hover */
-    border-radius: 6px !important; /* Keep it slightly rounded */
+    border: 1px solid rgba(0, 0, 0, 0.4) !important;
+    border-radius: 6px !important;
 }
 
-/* 🔥 Optional: Keep a focus effect for accessibility */
 .navbar-toggler:focus {
-    border: 1px solid rgba(0, 0, 0, 0.5) !important; /* Slightly darker when focused */
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2) !important; /* Subtle shadow */
+    border: 1px solid rgba(0, 0, 0, 0.5) !important;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2) !important;
 }
 
-
+/* 🔥 Ensure Buttons Stay Consistent */
 .btn-outline-success {
     color: var(--primary-color);
     border-color: var(--primary-color);
@@ -72,6 +153,7 @@ body {
     color: #fff;
 }
 
+/* 🔥 Hero Section */
 .hero-section {
     background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://example.com/hero-image.jpg');
     background-size: cover;
@@ -91,22 +173,54 @@ body {
     margin-bottom: 30px;
 }
 
+/* 🔥 Footer Stays at Bottom */
 footer {
     margin-top: auto;
 }
 
-@media (min-width: 992px) {
-    .navbar-nav.no-wrap {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+@media (min-width: 992px) and (max-width: 1200px) {
+    .navbar-auth {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        gap: 10px !important;
+        white-space: nowrap !important; /* Prevents line breaks */
     }
 
-    .navbar-nav.no-wrap .nav-item {
+    .navbar-nav {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex-grow: 1 !important;
+    }
+
+    .navbar-nav .nav-item {
+        display: flex;
+        align-items: center;
         white-space: nowrap;
     }
 
-    .navbar-nav.no-wrap::-webkit-scrollbar {
-        display: none;
+    .navbar-auth #username-expanded {
+        max-width: 180px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 }
+
+@media (max-width: 991px) {
+    .navbar {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+    }
+
+    .navbar-brand {
+        margin-left: 15px !important;
+    }
+
+    .navbar-toggler {
+        margin-right: 15px !important;
+    }
+}
+

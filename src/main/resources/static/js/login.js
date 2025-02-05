@@ -1,7 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
-        const signupButton = document.getElementById("login");
+    setTimeout(function () {
+        const loginButtons = document.querySelectorAll("#login, #login-expanded");
 
-        if (signupButton) {
-            signupButton.style.display = "none";
-        }
+        loginButtons.forEach(button => {
+            if (button) {
+                button.style.display = "none";
+            }
+        });
+
+        console.log("Login button(s) hidden:", loginButtons);
+    }, 100);
 });
