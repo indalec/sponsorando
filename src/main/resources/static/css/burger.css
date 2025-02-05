@@ -1,85 +1,92 @@
-.custom-menu {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
-    padding: 20px;
-    width: 320px;
+/* === MILKY TRANSPARENT BURGER MENU === */
+
+/* 🔥 Offcanvas (Burger Menu) */
+.offcanvas.custom-menu {
+    background: rgba(255, 255, 255, 0.25) !important; /* Soft milky white */
+    backdrop-filter: blur(20px) !important; /* Strong blur effect */
+    -webkit-backdrop-filter: blur(20px) !important; /* Safari Fix */
+    border-radius: 12px !important;
+    padding: 20px !important;
+    width: 320px !important;
     height: min-content !important;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    max-height: 85vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    overflow: hidden !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
+    color: black !important; /* Adjust text color */
+    z-index: 1050 !important; /* Keep it on top */
 }
 
-
-.custom-menu.offcanvas {
-    transition: transform 0.4s ease-in-out;
+/* 🔥 Menu Title */
+.offcanvas.custom-menu .offcanvas-title {
+    color: black !important;
+    font-weight: bold !important;
+    font-size: 22px !important;
 }
 
-.custom-menu .offcanvas-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    height: auto !important;
-    flex-grow: 0 !important;
-    flex-shrink: 1 !important;
-    padding-bottom: 0 !important;
+/* 🔥 Navigation Links */
+.offcanvas.custom-menu .nav-link {
+    color: black !important;
+    font-weight: 600 !important;
+    font-size: 18px !important;
+    padding: 12px !important;
+    transition: all 0.3s ease !important;
+    text-align: center !important;
 }
 
+.offcanvas.custom-menu .nav-link:hover {
+    color: #00cc66 !important;
+    transform: translateX(5px) !important;
+}
 
-.custom-menu .nav-link {
+/* 🔥 Buttons */
+.offcanvas.custom-menu .btn {
+    width: 220px !important;
+    text-align: center !important;
+    margin: 10px 0 !important;
+    font-weight: bold !important;
+    padding: 14px !important;
+    border-radius: 12px !important;
+    border: 2px solid transparent !important;
+    transition: all 0.3s ease-in-out !important;
+}
+
+/* 🔥 Button Colors */
+.offcanvas.custom-menu .btn-outline-success {
+    background: rgba(0, 255, 128, 0.4) !important; /* Softer green */
     color: white !important;
-    font-weight: 500;
-    padding: 10px;
-    transition: all 0.3s ease;
+    border: 2px solid rgba(0, 255, 128, 0.8) !important;
 }
 
-.custom-menu .nav-link:hover {
-    color: #00ff99 !important;
-    transform: translateX(5px);
+.offcanvas.custom-menu .btn-outline-success:hover {
+    background: rgba(0, 255, 128, 0.8) !important;
+    color: white !important;
 }
 
-.custom-menu .d-flex {
-    justify-content: center;
-    width: 100%;
-    margin-top: 10px;
-    margin-bottom: 0 !important;
-    flex-grow: 0 !important;
+.offcanvas.custom-menu .btn-outline-danger {
+    background: rgba(255, 0, 0, 0.4) !important; /* Softer red */
+    color: white !important;
+    border: 2px solid rgba(255, 0, 0, 0.8) !important;
 }
 
-.custom-menu .btn {
-    width: 120px;
-    text-align: center;
-    margin: 5px;
+.offcanvas.custom-menu .btn-outline-danger:hover {
+    background: rgba(255, 0, 0, 0.8) !important;
+    color: white !important;
 }
 
-.custom-menu .btn-outline-danger {
-    background: rgba(255, 0, 0, 0.2);
-    color: white;
-    border: 1px solid rgba(255, 0, 0, 0.6);
+/* 🔥 Username Display */
+.offcanvas.custom-menu #username {
+    font-size: 18px !important;
+    font-weight: bold !important;
+    color: black !important; /* Adjusted for visibility */
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1) !important;
 }
 
-.custom-menu .btn-outline-danger:hover {
-    background: rgba(255, 0, 0, 0.6);
-    color: white;
-}
-
-.custom-menu .btn-outline-success {
-    background: rgba(0, 255, 128, 0.2);
-    color: white;
-    border: 1px solid rgba(0, 255, 128, 0.6);
-}
-
-.custom-menu .btn-outline-success:hover {
-    background: rgba(0, 255, 128, 0.6);
-    color: white;
-}
-
-.custom-menu #username {
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+/* 🔥 Prevent Issues on Desktop */
+@media (min-width: 992px) {
+    .offcanvas.custom-menu {
+        display: none !important;
+    }
 }
