@@ -1,34 +1,20 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const loginPage = window.location.pathname.includes("/login");
-    const signupPage = window.location.pathname.includes("/signup");
 
-    // Hide the respective button based on the current page
-    setTimeout(function () {
-        if (loginPage) {
-            const loginButtons = document.querySelectorAll("#login, #login-expanded");
-            loginButtons.forEach(button => {
-                if (button) {
-                    button.style.display = "none";
-                }
-            });
-            console.log("Login button(s) hidden:", loginButtons);
-        } else if (signupPage) {
-            const signupButtons = document.querySelectorAll("#signup, #signup-expanded");
-            signupButtons.forEach(button => {
-                if (button) {
-                    button.style.display = "none";
-                }
-            });
-            console.log("Signup button(s) hidden:", signupButtons);
+// Hide the respective button based on the current page
+    const loginButtons = document.querySelectorAll("#login, #login-expanded");
+    loginButtons.forEach(button => {
+        if (button) {
+            button.style.display = "none";
         }
-    }, 100);
+    });
 
-    // Ensure form, input, and error elements exist before using them
+
+// Ensure form, input, and error elements exist before using them
     const loginForm = document.querySelector("form");
     const emailInput = document.getElementById("email");
     let emailError = document.getElementById("emailError");
 
-    // Create email error message dynamically if it doesn’t exist
+// Create email error message dynamically if it doesn’t exist
     if (!emailError && emailInput) {
         emailError = document.createElement("div");
         emailError.id = "emailError";
@@ -38,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
         emailInput.parentNode.appendChild(emailError);
     }
 
-    // Display login error if wrong credentials
+// Display login error if wrong credentials
     const urlParams = new URLSearchParams(window.location.search);
     const loginError = urlParams.get("error");
 
@@ -49,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
         loginForm.parentNode.insertBefore(errorDiv, loginForm);
     }
 
-    // Email format validation
+// Email format validation
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (emailInput) {
