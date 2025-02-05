@@ -1,44 +1,48 @@
-/* === MILKY TRANSPARENT BURGER MENU === */
+/* === FRIENDLIER TRANSPARENT BURGER MENU === */
 
 /* 🔥 Offcanvas (Burger Menu) */
 .offcanvas.custom-menu {
-    background: rgba(255, 255, 255, 0.25) !important; /* Soft milky white */
-    backdrop-filter: blur(20px) !important; /* Strong blur effect */
-    -webkit-backdrop-filter: blur(20px) !important; /* Safari Fix */
-    border-radius: 12px !important;
-    padding: 20px !important;
-    width: 320px !important;
+    background: rgba(255, 255, 255, 0.6) !important; /* Lighter, warmer transparency */
+    backdrop-filter: blur(15px) !important; /* Softer blur effect */
+    -webkit-backdrop-filter: blur(15px) !important; /* Safari Fix */
+    border-radius: 16px !important;
+    padding: 25px !important;
+    width: 340px !important;
     height: min-content !important;
     max-height: 85vh !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     overflow: hidden !important;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
-    color: black !important; /* Adjust text color */
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important; /* Softer shadow */
+    color: #000000 !important; /* Pure black text */
     z-index: 1050 !important; /* Keep it on top */
 }
 
 /* 🔥 Menu Title */
 .offcanvas.custom-menu .offcanvas-title {
-    color: black !important;
-    font-weight: bold !important;
+    color: #000000 !important; /* Pure black */
+    font-weight: 500 !important;
     font-size: 22px !important;
+    letter-spacing: 0.5px !important;
 }
 
 /* 🔥 Navigation Links */
 .offcanvas.custom-menu .nav-link {
-    color: black !important;
-    font-weight: 600 !important;
-    font-size: 18px !important;
+    color: #000000 !important; /* Pure black */
+    font-weight: 400 !important;
+    font-size: 17px !important;
     padding: 12px !important;
     transition: all 0.3s ease !important;
     text-align: center !important;
+    border-radius: 8px !important;
+    width: 90% !important;
 }
 
 .offcanvas.custom-menu .nav-link:hover {
-    color: #00cc66 !important;
-    transform: translateX(5px) !important;
+    color: white !important;
+    background: rgba(0, 204, 102, 0.8) !important; /* Warmer green */
+    transform: translateX(4px) !important;
 }
 
 /* 🔥 Buttons */
@@ -46,42 +50,43 @@
     width: 220px !important;
     text-align: center !important;
     margin: 10px 0 !important;
-    font-weight: bold !important;
-    padding: 14px !important;
-    border-radius: 12px !important;
+    font-weight: 400 !important;
+    padding: 12px !important;
+    border-radius: 16px !important;
     border: 2px solid transparent !important;
     transition: all 0.3s ease-in-out !important;
+    font-size: 16px !important;
 }
 
 /* 🔥 Button Colors */
 .offcanvas.custom-menu .btn-outline-success {
-    background: rgba(0, 255, 128, 0.4) !important; /* Softer green */
-    color: white !important;
-    border: 2px solid rgba(0, 255, 128, 0.8) !important;
+    background: rgba(0, 204, 102, 0.6) !important; /* Warmer green */
+    color: #000000 !important; /* Pure black text */
+    border: 2px solid rgba(0, 204, 102, 0.9) !important;
 }
 
 .offcanvas.custom-menu .btn-outline-success:hover {
-    background: rgba(0, 255, 128, 0.8) !important;
+    background: rgba(0, 204, 102, 1) !important;
     color: white !important;
 }
 
 .offcanvas.custom-menu .btn-outline-danger {
-    background: rgba(255, 0, 0, 0.4) !important; /* Softer red */
-    color: white !important;
-    border: 2px solid rgba(255, 0, 0, 0.8) !important;
+    background: rgba(255, 80, 80, 0.6) !important; /* Softer red */
+    color: #000000 !important; /* Pure black text */
+    border: 2px solid rgba(255, 80, 80, 0.9) !important;
 }
 
 .offcanvas.custom-menu .btn-outline-danger:hover {
-    background: rgba(255, 0, 0, 0.8) !important;
+    background: rgba(255, 80, 80, 1) !important;
     color: white !important;
 }
 
 /* 🔥 Username Display */
 .offcanvas.custom-menu #username {
-    font-size: 18px !important;
-    font-weight: bold !important;
-    color: black !important; /* Adjusted for visibility */
-    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1) !important;
+    font-size: 17px !important;
+    font-weight: 400 !important;
+    color: #000000 !important; /* Pure black */
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.05) !important;
 }
 
 /* 🔥 Prevent Issues on Desktop */
