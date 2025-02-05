@@ -34,6 +34,34 @@ body {
     color: var(--primary-color) !important;
 }
 
+.navbar-toggler {
+    border: 0 !important; /* No border by default */
+    outline: none !important; /* No focus outline */
+    background-color: transparent !important; /* Ensure no background */
+    padding: 4px !important; /* Keep padding minimal */
+    width: 40px !important;
+    height: 40px !important;
+    transition: border 0.2s ease-in-out !important; /* Smooth transition */
+}
+
+.navbar-toggler .navbar-toggler-icon {
+    width: 30px !important;
+    height: 30px !important;
+}
+
+/* 🔥 Show thin border on hover */
+.navbar-toggler:hover {
+    border: 1px solid rgba(0, 0, 0, 0.4) !important; /* Thin border on hover */
+    border-radius: 6px !important; /* Keep it slightly rounded */
+}
+
+/* 🔥 Optional: Keep a focus effect for accessibility */
+.navbar-toggler:focus {
+    border: 1px solid rgba(0, 0, 0, 0.5) !important; /* Slightly darker when focused */
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2) !important; /* Subtle shadow */
+}
+
+
 .btn-outline-success {
     color: var(--primary-color);
     border-color: var(--primary-color);

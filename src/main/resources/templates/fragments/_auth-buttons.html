@@ -1,0 +1,19 @@
+<div th:fragment="authButtons">
+    <!-- Expanded Navbar Layout -->
+    <div class="d-flex align-items-center gap-3 d-none d-lg-flex">
+        <span id="username-expanded" class="fw-bold" th:if="${username != null}" th:text="${username}"></span>
+        <a id="logout-expanded" th:if="${username != null}" href="/logout" class="btn btn-outline-danger">Logout</a>
+        <a id="signup-expanded" th:if="${username == null}" href="/signup" class="btn btn-outline-success">Sign Up</a>
+        <a id="login-expanded" th:if="${username == null}" href="/login" class="btn btn-outline-success">Login</a>
+    </div>
+
+    <!-- Offcanvas Dropdown Layout -->
+    <div class="d-flex flex-column align-items-center gap-3 w-100 auth-buttons">
+        <a id="signup" th:if="${username == null}" href="/signup" class="btn btn-outline-success">Sign Up</a>
+        <a id="login" th:if="${username == null}" href="/login" class="btn btn-outline-success">Login</a>
+        <div th:if="${username != null}" class="user-info d-flex flex-column align-items-center w-100 text-center mt-4 mb-3">
+            <span id="username" class="fw-bold d-block" th:text="${username}"></span>
+            <a id="logout" href="/logout" class="btn btn-outline-danger mt-2">Logout</a>
+        </div>
+    </div>
+</div>

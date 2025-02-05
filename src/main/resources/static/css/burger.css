@@ -1,10 +1,20 @@
-/* === FRIENDLIER TRANSPARENT BURGER MENU === */
+.navbar-auth {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
 
-/* 🔥 Offcanvas (Burger Menu) */
+.navbar-auth .btn {
+    width: auto !important;
+    padding: 6px 12px !important;
+    font-size: 14px !important;
+    border-radius: 6px !important;
+}
+
 .offcanvas.custom-menu {
-    background: rgba(255, 255, 255, 0.6) !important; /* Lighter, warmer transparency */
-    backdrop-filter: blur(15px) !important; /* Softer blur effect */
-    -webkit-backdrop-filter: blur(15px) !important; /* Safari Fix */
+    background: rgba(255, 255, 255, 0.6) !important;
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
     border-radius: 16px !important;
     padding: 25px !important;
     width: 340px !important;
@@ -14,82 +24,100 @@
     flex-direction: column !important;
     align-items: center !important;
     overflow: hidden !important;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important; /* Softer shadow */
-    color: #000000 !important; /* Pure black text */
-    z-index: 1050 !important; /* Keep it on top */
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+    color: #000000 !important;
+    z-index: 1050 !important;
 }
 
-/* 🔥 Menu Title */
-.offcanvas.custom-menu .offcanvas-title {
-    color: #000000 !important; /* Pure black */
-    font-weight: 500 !important;
-    font-size: 22px !important;
-    letter-spacing: 0.5px !important;
+.offcanvas.custom-menu .offcanvas-body {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
 }
 
-/* 🔥 Navigation Links */
 .offcanvas.custom-menu .nav-link {
-    color: #000000 !important; /* Pure black */
+    color: #000000 !important;
     font-weight: 400 !important;
     font-size: 17px !important;
     padding: 12px !important;
     transition: all 0.3s ease !important;
     text-align: center !important;
-    border-radius: 8px !important;
-    width: 90% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 220px !important; /* Match button width */
+    border-radius: 16px !important; /* Match button roundness */
 }
 
 .offcanvas.custom-menu .nav-link:hover {
     color: white !important;
-    background: rgba(0, 204, 102, 0.8) !important; /* Warmer green */
-    transform: translateX(4px) !important;
+    background: rgba(0, 204, 102, 0.8) !important;
 }
 
-/* 🔥 Buttons */
 .offcanvas.custom-menu .btn {
     width: 220px !important;
     text-align: center !important;
-    margin: 10px 0 !important;
     font-weight: 400 !important;
     padding: 12px !important;
     border-radius: 16px !important;
     border: 2px solid transparent !important;
     transition: all 0.3s ease-in-out !important;
     font-size: 16px !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: blur(8px) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* 🔥 Button Colors */
 .offcanvas.custom-menu .btn-outline-success {
-    background: rgba(0, 204, 102, 0.6) !important; /* Warmer green */
-    color: #000000 !important; /* Pure black text */
-    border: 2px solid rgba(0, 204, 102, 0.9) !important;
+    color: var(--primary-color) !important;
+    border: 2px solid var(--secondary-color) !important;
 }
 
 .offcanvas.custom-menu .btn-outline-success:hover {
-    background: rgba(0, 204, 102, 1) !important;
+    background: var(--secondary-color) !important;
     color: white !important;
 }
 
 .offcanvas.custom-menu .btn-outline-danger {
-    background: rgba(255, 80, 80, 0.6) !important; /* Softer red */
-    color: #000000 !important; /* Pure black text */
-    border: 2px solid rgba(255, 80, 80, 0.9) !important;
+    color: #dc3545 !important;
+    border: 2px solid rgba(220, 53, 69, 0.8) !important;
 }
 
 .offcanvas.custom-menu .btn-outline-danger:hover {
-    background: rgba(255, 80, 80, 1) !important;
+    background: rgba(220, 53, 69, 1) !important;
     color: white !important;
 }
 
-/* 🔥 Username Display */
 .offcanvas.custom-menu #username {
     font-size: 17px !important;
-    font-weight: 400 !important;
-    color: #000000 !important; /* Pure black */
-    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.05) !important;
+    font-weight: 500 !important;
+    color: #000000 !important;
+    width: 100% !important;
+    display: block !important;
+    margin: 15px 0 !important;
+    text-align: center !important;
 }
 
-/* 🔥 Prevent Issues on Desktop */
+.offcanvas.custom-menu .offcanvas-title {
+    color: var(--primary-color) !important;
+    font-weight: 600 !important;
+}
+
+.offcanvas.custom-menu .auth-buttons {
+    margin-top: 15px !important;
+}
+
+.user-info {
+    width: 100% !important;
+    text-align: center !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    margin: 20px 0 !important;
+}
+
 @media (min-width: 992px) {
     .offcanvas.custom-menu {
         display: none !important;

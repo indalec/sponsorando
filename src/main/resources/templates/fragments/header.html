@@ -1,79 +1,42 @@
 <header th:fragment="headerSection" class="container">
     <link rel="stylesheet" th:href="@{/css/burger.css}">
     <nav class="navbar navbar-expand-lg fixed-top">
-        <div class="container align-items-center">
+        <div class="container d-flex align-items-center justify-content-between">
             <a class="navbar-brand" href="/">Sponsorando</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
                     aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a th:if="${username != null}" class="nav-link" href="/campaigns">Campaigns</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/discover_campaigns">Discover Campaigns</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/add_campaign">Start a Campaign</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/about">About Us</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/contact">Contact Us</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/faq">Help</a>
-                    </li>
+            <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+                <ul class="navbar-nav ms-auto d-flex align-items-center">
+                    <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
+                    <li class="nav-item"><a th:if="${username != null}" class="nav-link" href="/campaigns">Campaigns</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/discover_campaigns">Discover Campaigns</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/add_campaign">Start a Campaign</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/faq">Help</a></li>
                 </ul>
-                <div class="d-flex ms-3">
-                    <a id="signup" th:if="${username == null}" href="/signup" class="btn btn-outline-success me-2">Sign Up</a>
-                    <a id="login" th:if="${username == null}" href="/login" class="btn btn-outline-success">Login</a>
-                    <span id="username" class="fw-bold mx-3" th:if="${username != null}" th:text="${username}"></span>
-                    <a id="logout" th:if="${username != null}" href="/logout" class="btn btn-outline-danger">Logout</a>
-                </div>
+                <!-- Separate Expanded Navbar Authentication Buttons -->
+                <div class="navbar-auth d-flex align-items-center gap-3" th:replace="fragments/_auth-buttons :: authButtons"></div>
             </div>
-            <div class="offcanvas offcanvas-end custom-menu" tabindex="-1" id="offcanvasNavbar"
-                 aria-labelledby="offcanvasNavbarLabel">
+
+            <div class="offcanvas offcanvas-end custom-menu" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Sponsorando</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-center flex-grow-1 pe-3 text-center">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a th:if="${username != null}" class="nav-link" href="/campaigns">Campaigns</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/discover_campaigns">Discover Campaigns</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/add_campaign">Start a Campaign</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/about">About Us</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/contact">Contact Us</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/faq">Help</a>
-                        </li>
+                <div class="offcanvas-body d-flex flex-column align-items-center text-center">
+                    <ul class="navbar-nav w-100">
+                        <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
+                        <li class="nav-item"><a th:if="${username != null}" class="nav-link" href="/campaigns">Campaigns</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/discover_campaigns">Discover Campaigns</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/add_campaign">Start a Campaign</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/about">About Us</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/contact">Contact Us</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/faq">Help</a></li>
                     </ul>
-                    <div class="d-flex flex-column align-items-center mt-3">
-                        <a id="signup" th:if="${username == null}" href="/signup" class="btn btn-outline-success mb-2">Sign Up</a>
-                        <a id="login" th:if="${username == null}" href="/login" class="btn btn-outline-success mb-2">Login</a>
-                        <span id="username" class="fw-bold" th:if="${username != null}" th:text="${username}"></span>
-                        <a id="logout" th:if="${username != null}" href="/logout" class="btn btn-outline-danger mt-2">Logout</a>
-                    </div>
+                    <div class="user-info w-100 text-center mt-4 mb-3" th:replace="fragments/_auth-buttons :: authButtons"></div>
                 </div>
             </div>
         </div>
