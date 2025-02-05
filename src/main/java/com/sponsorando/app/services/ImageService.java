@@ -2,9 +2,12 @@ package com.sponsorando.app.services;
 
 import com.sponsorando.app.models.Image;
 import com.sponsorando.app.models.ImageForm;
+import com.sponsorando.app.repositories.ImageRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,6 +17,9 @@ import java.util.UUID;
 
 @Service
 public class ImageService {
+
+    @Autowired
+    private ImageRepository imageRepository;
 
     public String createImage(ImageForm form) {
 //    public Image createImage(ImageForm form) {
@@ -54,6 +60,17 @@ public class ImageService {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    @Transactional
+    public boolean deleteByCampaignId(Long campaignId) {
+        try {
+            imageRepository.deleteByCampaignId(campaignId);
+            return true;
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }
