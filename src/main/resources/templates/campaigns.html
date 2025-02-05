@@ -10,30 +10,34 @@
 </head>
 <body>
 <header th:replace="~{fragments/header :: headerSection}" class="container"></header>
-
+<div id="successDivDelete" th:if="${isCampaignDeleted}" class="alert alert-success text-center w-50 mx-auto mt-5" role="alert">
+    <span th:text="${currentRole == 'ROLE_ADMIN' ? 'Campaign deactivated successfully' : 'Campaign deleted successfully'}"></span>
+</div>
 <div class="container mt-5">
-    <h1>Campaigns</h1>
-    <form th:action="@{/campaigns}" method="post">
+    <h1 th:text="${currentRole == 'ROLE_ADMIN' ? 'Campaigns' : 'Your Campaigns'}"></h1>
+    <form th:action="@{/campaigns}" method="post" class="mt-5">
         <div class="table-responsive-lg">
-            <table class="table table-striped table-bordered table-hover table-sm">
+            <table class="table table-striped table-bordered table-hover table-sm"
+                   th:if="${campaigns != null and campaigns.size() > 0}">
                 <thead class="thead-light">
-                <tr>
-                    <th scope="col">Id</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Start Date</th>
-                    <th scope="col">End Date</th>
-                    <th scope="col">Goal Amount</th>
-                    <th scope="col">Collected Amount</th>
-                    <th scope="col">Status</th>
-                    <th scope="col" th:text="${currentRole == 'ROLE_ADMIN' ? 'Address Id' : 'Address'}"></th>
-                    <th scope="col" th:if="${currentRole == 'ROLE_ADMIN'}">Creator Id</th>
-                    <th scope="col">Categories</th>
-                    <th scope="col">Created At</th>
-                    <th scope="col">Updated At</th>
-                    <th scope="col">Actions</th>
+                <tr class="align-top text-center">
+                    <th scope="col" class="p-1">Id</th>
+                    <th scope="col" class="p-1">Title</th>
+                    <th scope="col" class="p-1">Description</th>
+                    <th scope="col" class="p-1">Start Date</th>
+                    <th scope="col" class="p-1">End Date</th>
+                    <th scope="col" class="p-1">Goal Amount</th>
+                    <th scope="col" class="p-1">Collected Amount</th>
+                    <th scope="col" class="p-1">Status</th>
+                    <th scope="col" class="p-1" th:text="${currentRole == 'ROLE_ADMIN' ? 'Address Id' : 'Address'}"></th>
+                    <th scope="col" class="p-1" th:if="${currentRole == 'ROLE_ADMIN'}">Creator Id</th>
+                    <th scope="col" class="p-1">Categories</th>
+                    <th scope="col" class="p-1">Created At</th>
+                    <th scope="col" class="p-1">Updated At</th>
+                    <th scope="col" class="p-1">Actions</th>
                 </tr>
                 </thead>
+
                 <tbody>
                 <tr th:each="campaign : ${campaigns}">
                     <td th:text="${campaign.id}"></td>
@@ -75,17 +79,26 @@
                     <td th:text="${campaign.updatedAt}"></td>
                     <td class="d-flex justify-content-start">
                         <a class="btn btn-info btn-sm me-2" th:href="@{/view_campaign/{id}(id=${campaign.id})}">View</a>
-                        <a class="btn btn-warning btn-sm me-2" th:href="@{/edit_campaign/{id}(id=${campaign.id})}">Edit</a>
-                        <a class="btn btn-danger btn-sm" onclick="" th:href="@{/delete_campaign/{id}(id=${campaign.id})}">Delete</a>
+                        <a class="btn btn-warning btn-sm me-2"
+                           th:href="@{/edit_campaign/{id}(id=${campaign.id})}">Edit</a>
+                        <a class="btn btn-danger btn-sm"
+                           href="#"
+                           th:onclick="'confirmCampaignDelete(\'' + ${campaign.id} + '\', ' + ${currentPage} + '); return false;'">Delete</a>
                     </td>
-
-
                 </tr>
                 </tbody>
             </table>
+            <div th:if="${campaigns == null or campaigns.size() == 0}"
+                 class="alert alert-warning text-center w-50 mx-auto mt-5">
+                Currently, you don't have any campaigns.
+
+                <div><a th:href="@{/add_campaign}" class="btn btn-link">Start a
+                    campaign now!</a></div>
+            </div>
+
         </div>
 
-        <nav aria-label="Page navigation">
+        <nav aria-label="Page navigation" th:if="${campaigns != null and campaigns.size() > 0}">
             <ul class="pagination justify-content-center">
                 <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
                     <a class="page-link" th:href="@{/campaigns(page=0)}">First</a>
@@ -113,5 +126,16 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+<script>
+    function confirmCampaignDelete(campaignId, currentPage) {
+        if (confirm('Are you sure you want to delete this campaign?')) {
+            window.location.href = '/delete_campaign/' + campaignId + '?page=' + currentPage;
+        }
+    }
+
+
+</script>
+<script src="/js/action_notifications.js"></script>
+
 </body>
 </html>
