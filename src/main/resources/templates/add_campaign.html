@@ -46,11 +46,24 @@
                 Please enter the end date of your campaign.
             </div>
         </div>
-        <div class="mb-3">
-            <label for="goalAmount" class="form-label">Goal Amount</label>
-            <input type="number" min="1" step="0.01" class="form-control" id="goalAmount" name="goalAmount" required>
-            <div class="invalid-feedback">
-                Please enter the amount you want to raise for your campaign.
+        <div class="row align-items-end">
+            <div class="col-md-9 mb-3">
+                <label for="goalAmount" class="form-label">Goal Amount</label>
+                <input type="number" min="1" step="0.01" class="form-control" id="goalAmount" name="goalAmount" required>
+                <div class="invalid-feedback">
+                    Please enter the amount you want to raise for your campaign.
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="currency" class="form-label">Currency</label>
+                <select class="form-select" id="currency" name="currency" required>
+                    <option value="">Select currency</option>
+                    <option th:each="currency : ${currencies}"
+                            th:value="${currency.code}"
+                            th:text="${currency.code}"
+                            th:selected="${currency.code == 'EUR'}">
+                    </option>
+                </select>
             </div>
         </div>
         <div class="mb-3">

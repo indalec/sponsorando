@@ -27,6 +27,7 @@
                     <th scope="col" class="p-1">Start Date</th>
                     <th scope="col" class="p-1">End Date</th>
                     <th scope="col" class="p-1">Goal Amount</th>
+                    <th scope="col" class="p-1">Currency</th>
                     <th scope="col" class="p-1">Collected Amount</th>
                     <th scope="col" class="p-1">Status</th>
                     <th scope="col" class="p-1" th:text="${currentRole == 'ROLE_ADMIN' ? 'Address Id' : 'Address'}"></th>
@@ -51,6 +52,7 @@
                     <td th:text="${campaign.startDate}"></td>
                     <td th:text="${campaign.endDate}"></td>
                     <td th:text="${campaign.goalAmount}"></td>
+                    <td th:text="${campaign.currency.code}"></td>
                     <td th:text="${campaign.collectedAmount}"></td>
                     <td th:text="${campaign.status}"></td>
                     <td>

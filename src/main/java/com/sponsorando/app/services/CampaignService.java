@@ -37,6 +37,7 @@ public class CampaignService {
         campaign.setStartDate(campaignForm.getStartDate());
         campaign.setEndDate(campaignForm.getEndDate());
         campaign.setGoalAmount(campaignForm.getGoalAmount());
+        campaign.setCurrency(campaignForm.getCurrency());
         campaign.setCollectedAmount(0.0);
         List<CampaignCategory> categories = campaignForm.getCategories();
         campaign.setCategories(categories);

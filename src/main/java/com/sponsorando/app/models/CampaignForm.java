@@ -32,6 +32,9 @@ public class CampaignForm {
     @Unsigned
     private Double goalAmount;
 
+    @NotNull(message = "Please select a currency for your goal amount")
+    private Currency currency;
+
     @NotEmpty(message = "Please select at least one option")
     private List<CampaignCategory> categories;
 
@@ -92,6 +95,14 @@ public class CampaignForm {
 
     public void setGoalAmount(Double goalAmount) {
         this.goalAmount = goalAmount;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 
     public List<CampaignCategory> getCategories() {
@@ -166,6 +177,7 @@ public class CampaignForm {
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", goalAmount=" + goalAmount +
+                ", currency=" + currency +
                 ", categories=" + categories +
                 ", street='" + street + '\'' +
                 ", number='" + number + '\'' +
