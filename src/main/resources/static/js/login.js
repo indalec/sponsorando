@@ -1,15 +1,26 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Hide login and signup buttons dynamically
+    const loginPage = window.location.pathname.includes("/login");
+    const signupPage = window.location.pathname.includes("/signup");
+
+    // Hide the respective button based on the current page
     setTimeout(function () {
-        const authButtons = document.querySelectorAll("#login, #login-expanded, #signup, #signup-expanded");
-
-        authButtons.forEach(button => {
-            if (button) {
-                button.style.display = "none";
-            }
-        });
-
-        console.log("Auth button(s) hidden:", authButtons);
+        if (loginPage) {
+            const loginButtons = document.querySelectorAll("#login, #login-expanded");
+            loginButtons.forEach(button => {
+                if (button) {
+                    button.style.display = "none";
+                }
+            });
+            console.log("Login button(s) hidden:", loginButtons);
+        } else if (signupPage) {
+            const signupButtons = document.querySelectorAll("#signup, #signup-expanded");
+            signupButtons.forEach(button => {
+                if (button) {
+                    button.style.display = "none";
+                }
+            });
+            console.log("Signup button(s) hidden:", signupButtons);
+        }
     }, 100);
 
     // Ensure form, input, and error elements exist before using them
