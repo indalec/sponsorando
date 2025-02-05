@@ -1,7 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
-        const signupButton = document.getElementById("signup");
 
-        if (signupButton) {
-            signupButton.style.display = "none";
+    const signupButtons = document.querySelectorAll("#signup, #signup-expanded");
+
+    signupButtons.forEach(button => {
+        if (button) {
+            button.style.display = "none";
         }
+    });
 });

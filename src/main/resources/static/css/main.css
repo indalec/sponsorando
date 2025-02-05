@@ -17,7 +17,7 @@ body {
 
 .navbar {
     background-color: #fff !important;
-    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-brand {
@@ -25,13 +25,72 @@ body {
     color: var(--primary-color) !important;
 }
 
-.nav-link {
+.navbar-nav {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-grow: 1 !important;
+}
+
+.navbar-nav .nav-item {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.navbar-nav .nav-item .nav-link {
+    padding: 10px 15px;
     color: var(--text-color) !important;
     font-weight: 500;
 }
 
 .nav-link:hover, .nav-link.active {
     color: var(--primary-color) !important;
+}
+
+.navbar-auth {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 15px !important;
+    white-space: nowrap;
+}
+
+.navbar-auth #username-expanded {
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 160px;
+    display: inline-block;
+}
+
+.navbar-auth #logout-expanded {
+    white-space: nowrap;
+}
+
+.navbar-toggler {
+    border: 0 !important;
+    outline: none !important;
+    background-color: transparent !important;
+    padding: 4px !important;
+    width: 40px !important;
+    height: 40px !important;
+    transition: border 0.2s ease-in-out !important;
+}
+
+.navbar-toggler .navbar-toggler-icon {
+    width: 30px !important;
+    height: 30px !important;
+}
+
+.navbar-toggler:hover {
+    border: 1px solid rgba(0, 0, 0, 0.4) !important;
+    border-radius: 6px !important;
+}
+
+.navbar-toggler:focus {
+    border: 1px solid rgba(0, 0, 0, 0.5) !important;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2) !important;
 }
 
 .btn-outline-success {
@@ -80,5 +139,38 @@ footer {
 
     .navbar-nav.no-wrap::-webkit-scrollbar {
         display: none;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1200px) {
+    .navbar-auth {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        gap: 10px !important;
+        white-space: nowrap !important;
+    }
+
+    .navbar-nav {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex-grow: 1 !important;
+    }
+}
+
+@media (max-width: 991px) {
+    .navbar {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+    }
+
+    .navbar-brand {
+        margin-left: 15px !important;
+    }
+
+    .navbar-toggler {
+        margin-right: 15px !important;
     }
 }
