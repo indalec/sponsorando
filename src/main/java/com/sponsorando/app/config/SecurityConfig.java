@@ -29,13 +29,12 @@ public class SecurityConfig {
     @Autowired
     private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
-
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> {
                     auth
                             .requestMatchers("/add_campaign").authenticated()
+                            .requestMatchers("/campaigns").authenticated()
                             .requestMatchers("/admin/**").hasRole("ADMIN")
                             .anyRequest().permitAll();
                 }
@@ -82,6 +81,4 @@ public class SecurityConfig {
 
         return provider;
     }
-
-
 }
