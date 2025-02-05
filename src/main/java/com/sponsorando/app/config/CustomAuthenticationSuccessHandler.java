@@ -15,18 +15,16 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
-                                        Authentication authentication) throws IOException{
+                                        Authentication authentication) throws IOException {
 
-        // TODO remove print
-        System.out.println("auth::::::::::::::::::::" + authentication.getAuthorities().toString());
-        boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
-        // TODO remove print
-        System.out.println(isAdmin + "hey admin................................");
-        String targetUrl = isAdmin ? "/admin" : "/";
-
-        response.sendRedirect(targetUrl);
-
-
+        String redirect = request.getParameter("redirect");
+        if ("add_campaign".equals(redirect)) {
+            response.sendRedirect("/add_campaign.html");
+        } else {
+            boolean isAdmin = authentication.getAuthorities().stream()
+                    .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
+            String targetUrl = isAdmin ? "/admin" : "/";
+            response.sendRedirect(targetUrl);
+        }
     }
 }
