@@ -1,5 +1,5 @@
 <div th:fragment="authButtons">
-    <!-- Expanded Navbar Layout (Visible on Large Screens Only) -->
+    <!-- Expanded Navbar Layout  -->
     <div class="d-flex align-items-center gap-3 d-none d-lg-flex flex-nowrap ms-auto">
     <span id="username-expanded" class="fw-bold" th:if="${username != null}" th:text="${username}"></span>
         <a id="logout-expanded" th:if="${username != null}" href="/logout" class="btn btn-outline-danger">Logout</a>
@@ -7,7 +7,7 @@
         <a id="login-expanded" th:if="${username == null}" href="/login" class="btn btn-outline-success">Login</a>
     </div>
 
-    <!-- Offcanvas Layout (Visible on Small Screens Only) -->
+    <!-- Offcanvas Layout (Burger Dropdown) -->
     <div class="d-flex auth-buttons flex-column align-items-center gap-3 w-100 d-lg-none">
         <a id="signup" th:if="${username == null}" href="/signup" class="btn btn-outline-success">Sign Up</a>
         <a id="login" th:if="${username == null}" href="/login" class="btn btn-outline-success">Login</a>

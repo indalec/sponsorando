@@ -24,14 +24,12 @@
     width: 100% !important;
 }
 
-/* 🔥 Fix Centering in Offcanvas Menu */
 .offcanvas.custom-menu .nav-item {
     display: flex;
     justify-content: center;
     width: 100%;
 }
 
-/* 🔥 Ensure Offcanvas Menu Items Have Fixed Width */
 .offcanvas.custom-menu .nav-link {
     color: #000000 !important;
     font-weight: 400 !important;
@@ -51,7 +49,6 @@
     background: rgba(0, 204, 102, 0.8) !important;
 }
 
-/* 🔥 Ensure Login and Sign Up Buttons Are Aligned */
 .offcanvas.custom-menu .auth-buttons {
     display: flex;
     flex-direction: column;
@@ -59,13 +56,7 @@
     margin-top: 20px !important;
 }
 
-.offcanvas.custom-menu .auth-buttons a {
-    width: 180px;
-    text-align: center;
-    border-radius: 20px;
-}
-
-/* 🔥 Fix Button Styling */
+.offcanvas.custom-menu .auth-buttons a,
 .offcanvas.custom-menu .btn {
     width: 180px !important;
     text-align: center !important;
@@ -100,7 +91,6 @@
     color: white !important;
 }
 
-/* 🔥 Fix User Info Centering */
 .offcanvas.custom-menu #username {
     font-size: 17px !important;
     font-weight: 500 !important;
@@ -112,13 +102,11 @@
     margin: 15px 0 !important;
 }
 
-/* 🔥 Offcanvas Title Styling */
 .offcanvas.custom-menu .offcanvas-title {
     color: var(--primary-color) !important;
     font-weight: 600 !important;
 }
 
-/* 🔥 Ensure User Info Block Stays Aligned */
 .offcanvas.custom-menu .user-info {
     width: 100% !important;
     text-align: center !important;
@@ -128,7 +116,6 @@
     margin: 20px 0 !important;
 }
 
-/* 🔥 Prevent Offcanvas Styles From Affecting Desktop */
 @media (min-width: 992px) {
     .offcanvas.custom-menu {
         display: none !important;

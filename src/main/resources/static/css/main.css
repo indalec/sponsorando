@@ -5,28 +5,6 @@
     --background-color: #f4f4f4;
 }
 
-.navbar-auth {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-end !important;
-    gap: 10px !important;
-    white-space: nowrap; /* Prevents wrapping */
-}
-
-.navbar-nav {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    flex-grow: 1 !important;
-}
-
-.navbar-auth #username-expanded {
-    max-width: 180px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 body {
     font-family: 'Arial', sans-serif;
     background-color: var(--background-color);
@@ -39,49 +17,7 @@ body {
 
 .navbar {
     background-color: #fff !important;
-    box-shadow: 0 2px 4px rgba(0,0,0,.1);
-}
-
-/* 🔥 Fix Alignment for Auth Buttons (Username + Logout) */
-.navbar-auth {
-    display: flex !important;
-    align-items: center !important;
-    gap: 15px !important; /* Ensure consistent spacing */
-    white-space: nowrap; /* Prevents wrapping issues */
-    justify-content: flex-end; /* Aligns auth buttons properly */
-}
-
-/* 🔥 Fix Username Styling */
-.navbar-auth #username-expanded {
-    font-weight: bold;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 160px; /* Prevents long emails from breaking layout */
-    display: inline-block;
-}
-
-/* 🔥 Prevent Logout Button from Moving */
-.navbar-auth #logout-expanded {
-    white-space: nowrap;
-}
-
-/* 🔥 Keep Navbar Items Aligned Properly */
-.navbar-nav {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-grow: 1;
-}
-
-/* 🔥 Prevent Navbar Links from Shifting */
-.navbar-nav .nav-item {
-    display: flex;
-    align-items: center;
-}
-
-/* 🔥 Fix Hover & Active State */
-.navbar-nav .nav-item .nav-link {
-    padding: 10px 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-brand {
@@ -89,8 +25,21 @@ body {
     color: var(--primary-color) !important;
 }
 
-/* 🔥 Navbar Links */
-.nav-link {
+.navbar-nav {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-grow: 1 !important;
+}
+
+.navbar-nav .nav-item {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.navbar-nav .nav-item .nav-link {
+    padding: 10px 15px;
     color: var(--text-color) !important;
     font-weight: 500;
 }
@@ -99,24 +48,26 @@ body {
     color: var(--primary-color) !important;
 }
 
-/* 🔥 Navbar Responsiveness Fix */
-@media (min-width: 992px) {
-    .navbar-nav.no-wrap {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .navbar-nav.no-wrap .nav-item {
-        white-space: nowrap;
-    }
-
-    .navbar-nav.no-wrap::-webkit-scrollbar {
-        display: none;
-    }
+.navbar-auth {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 15px !important;
+    white-space: nowrap;
 }
 
-/* 🔥 Adjust Navbar Toggler */
+.navbar-auth #username-expanded {
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 160px;
+    display: inline-block;
+}
+
+.navbar-auth #logout-expanded {
+    white-space: nowrap;
+}
+
 .navbar-toggler {
     border: 0 !important;
     outline: none !important;
@@ -142,7 +93,6 @@ body {
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.2) !important;
 }
 
-/* 🔥 Ensure Buttons Stay Consistent */
 .btn-outline-success {
     color: var(--primary-color);
     border-color: var(--primary-color);
@@ -153,7 +103,6 @@ body {
     color: #fff;
 }
 
-/* 🔥 Hero Section */
 .hero-section {
     background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://example.com/hero-image.jpg');
     background-size: cover;
@@ -173,9 +122,24 @@ body {
     margin-bottom: 30px;
 }
 
-/* 🔥 Footer Stays at Bottom */
 footer {
     margin-top: auto;
+}
+
+@media (min-width: 992px) {
+    .navbar-nav.no-wrap {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .navbar-nav.no-wrap .nav-item {
+        white-space: nowrap;
+    }
+
+    .navbar-nav.no-wrap::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 @media (min-width: 992px) and (max-width: 1200px) {
@@ -184,7 +148,7 @@ footer {
         align-items: center !important;
         justify-content: flex-end !important;
         gap: 10px !important;
-        white-space: nowrap !important; /* Prevents line breaks */
+        white-space: nowrap !important;
     }
 
     .navbar-nav {
@@ -192,19 +156,6 @@ footer {
         align-items: center !important;
         justify-content: center !important;
         flex-grow: 1 !important;
-    }
-
-    .navbar-nav .nav-item {
-        display: flex;
-        align-items: center;
-        white-space: nowrap;
-    }
-
-    .navbar-auth #username-expanded {
-        max-width: 180px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
     }
 }
 
@@ -223,4 +174,3 @@ footer {
         margin-right: 15px !important;
     }
 }
-
