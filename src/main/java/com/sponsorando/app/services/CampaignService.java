@@ -3,6 +3,9 @@ package com.sponsorando.app.services;
 import com.sponsorando.app.models.*;
 import com.sponsorando.app.repositories.CampaignRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,11 +25,8 @@ public class CampaignService {
     @Transactional
     public Campaign createCampaign(CampaignForm campaignForm, String email) {
 
-        System.out.println("Campaign Form:::" + campaignForm);
-        Campaign campaign = new Campaign();
         UserAccount userAccount = userAccountService.getUser(email);
-
-
+        Campaign campaign = new Campaign();
         campaign.setTitle(campaignForm.getTitle());
         campaign.setDescription(campaignForm.getDescription());
         campaign.setStartDate(campaignForm.getStartDate());
@@ -38,7 +38,6 @@ public class CampaignService {
         campaign.setShowLocation(Boolean.TRUE);
 
         if (userAccount != null) {
-
             campaign.setUserAccount(userAccount);
             Address address = addressService.createAddress(campaignForm);
 
@@ -46,8 +45,18 @@ public class CampaignService {
                 campaign.setAddress(address);
                 return campaignRepository.save(campaign);
             }
-
         }
         return null;
     }
+
+    public Page<Campaign> getCampaigns(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return campaignRepository.findAll(pageable);
+    }
+
+    public Page<Campaign> getCampaignsByUserEmail(String email, int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return campaignRepository.findByUserAccountEmailAndStatusNot(email, CampaignStatus.INACTIVE, pageable);
+    }
+
 }
