@@ -3,7 +3,9 @@ package com.sponsorando.app.controller;
 import com.sponsorando.app.models.Campaign;
 import com.sponsorando.app.models.CampaignCategory;
 import com.sponsorando.app.models.CampaignForm;
+import com.sponsorando.app.models.Currency;
 import com.sponsorando.app.repositories.CampaignCategoryRepository;
+import com.sponsorando.app.repositories.CurrencyRepository;
 import com.sponsorando.app.services.CampaignService;
 import com.sponsorando.app.services.UserAccountService;
 import jakarta.validation.Valid;
@@ -31,6 +33,9 @@ public class CampaignController {
     @Autowired
     private CampaignService campaignService;
 
+    @Autowired
+    private CurrencyRepository currencyRepository;
+
     @GetMapping("/discover_campaigns")
     public String discoverCampaigns(Model model) {
 
@@ -42,7 +47,10 @@ public class CampaignController {
     public String addCampaign(Model model) {
 
         List<CampaignCategory> categories = campaignCategoryRepository.findAll();
+        List<Currency> currencies = currencyRepository.findAll();
+
         model.addAttribute("categories", categories);
+        model.addAttribute("currencies", currencies);
 
         return "add_campaign";
     }

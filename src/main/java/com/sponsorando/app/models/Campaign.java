@@ -25,6 +25,10 @@ public class Campaign {
 
     private Double goalAmount;
 
+    @ManyToOne
+    @JoinColumn(name = "currency_code", referencedColumnName = "code")
+    private Currency currency;
+
     private Double collectedAmount;
 
     @Enumerated(EnumType.STRING)
@@ -104,6 +108,14 @@ public class Campaign {
 
     public void setGoalAmount(Double goalAmount) {
         this.goalAmount = goalAmount;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 
     public Double getCollectedAmount() {
@@ -187,6 +199,7 @@ public class Campaign {
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", goalAmount=" + goalAmount +
+                ", currency=" + currency +
                 ", collectedAmount=" + collectedAmount +
                 ", status=" + status +
                 ", showLocation=" + showLocation +

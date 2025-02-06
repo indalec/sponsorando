@@ -19,7 +19,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
         String redirect = request.getParameter("redirect");
         if ("add_campaign".equals(redirect)) {
-            response.sendRedirect("/add_campaign.html");
+            response.sendRedirect("/add_campaign");
         } else {
             boolean isAdmin = authentication.getAuthorities().stream()
                     .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
