@@ -29,4 +29,12 @@ public class GlobalModelAttributes {
         return Collections.emptyList();
     }
 
+    @ModelAttribute("currentRole")
+    public String getCurrentRole(Authentication authentication) {
+        if (authentication != null && !authentication.getAuthorities().isEmpty()) {
+            return authentication.getAuthorities().iterator().next().getAuthority();
+        }
+        return null;
+    }
+
 }

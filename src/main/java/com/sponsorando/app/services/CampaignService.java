@@ -65,12 +65,25 @@ public class CampaignService {
         return campaignRepository.findByUserAccountEmailAndStatusNot(email, CampaignStatus.INACTIVE, pageable);
     }
 
+    public int getTotalPages(String email, String role, int pageSize) {
+
+        long totalCampaigns;
+
+        if ("ROLE_ADMIN".equals(role)) {
+            totalCampaigns = campaignRepository.count();
+        } else if ("ROLE_USER".equals(role)) {
+            totalCampaigns = campaignRepository.countByUserAccountEmailAndStatusNot(email, CampaignStatus.INACTIVE);
+        } else {
+            totalCampaigns = 0;
+        }
+        return (int) Math.ceil((double) totalCampaigns / pageSize);
+    }
+
     @Transactional
     public boolean deleteCampaign(Long campaignId) {
 
         try {
             if (imageService.deleteByCampaignId(campaignId)) {
-
                 Campaign campaign = campaignRepository.findById(campaignId).orElseThrow(() -> new RuntimeException("Campaign not found"));
                 campaign.setStatus(CampaignStatus.INACTIVE);
                 campaign.setUpdatedAt(LocalDateTime.now());

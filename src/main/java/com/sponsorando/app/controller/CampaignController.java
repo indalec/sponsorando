@@ -7,13 +7,10 @@ import com.sponsorando.app.models.Currency;
 import com.sponsorando.app.repositories.CampaignCategoryRepository;
 import com.sponsorando.app.repositories.CurrencyRepository;
 import com.sponsorando.app.services.CampaignService;
-import com.sponsorando.app.services.UserAccountService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +20,6 @@ import java.util.List;
 
 @Controller
 public class CampaignController {
-
-    @Autowired
-    private UserAccountService userAccountService;
 
     @Autowired
     private CampaignCategoryRepository campaignCategoryRepository;
@@ -64,14 +58,14 @@ public class CampaignController {
 
         String email = (String) model.getAttribute("username");
 
-        if(email != null) {
+        if (email != null) {
 
             try {
                 Campaign campaign = campaignService.createCampaign(campaignForm, email);
-                if(campaign != null) {
+                if (campaign != null) {
                     redirectAttributes.addFlashAttribute("campaign", campaign);
                     redirectAttributes.addFlashAttribute("isCampaignAdded", true);
-                }else{
+                } else {
                     redirectAttributes.addFlashAttribute("isCampaignAdded", false);
                 }
             } catch (Exception e) {
@@ -79,15 +73,14 @@ public class CampaignController {
                 redirectAttributes.addFlashAttribute("isCampaignAdded", false);
             }
         }
-
         return "redirect:/add_campaign";
     }
 
     @GetMapping("/campaigns")
-    public String getAllCampaigns(Model model, @RequestParam(name = "page", defaultValue = "0") int pageNumber, Authentication authentication) {
+    public String getAllCampaigns(Model model, @RequestParam(name = "page", defaultValue = "0") int pageNumber) {
 
-        String currentUser = authentication.getName();
-        String currentRole = authentication.getAuthorities().iterator().next().getAuthority();
+        String currentUser = (String) model.getAttribute("username");
+        String currentRole = (String) model.getAttribute("currentRole");
 
         int pageSize = 5;
         Page<Campaign> page;
@@ -104,20 +97,28 @@ public class CampaignController {
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("currentPage", page.getNumber());
 
-        if (authentication.getAuthorities() != null) {
+        if (currentUser != null && currentRole != null) {
             model.addAttribute("currentUser", currentUser);
             model.addAttribute("currentRole", currentRole);
         }
         return "campaigns";
     }
+
     @GetMapping("/delete_campaign/{id}")
-    public String deleteCampaign(@PathVariable("id") Long id, @RequestParam("page") int currentPage,
-                                 RedirectAttributes redirectAttributes, Authentication authentication) {
+    public String deleteCampaign(@PathVariable("id") Long id, @RequestParam("page") int currentPage, Model model, RedirectAttributes redirectAttributes) {
 
         boolean isCampaignDeleted = campaignService.deleteCampaign(id);
+        String email = (String) model.getAttribute("username");
+        String role = (String) model.getAttribute("currentRole");
+
+        int totalPages = campaignService.getTotalPages(email, role, 5);
+
+        if (totalPages > 0 && currentPage >= totalPages) {
+            currentPage = totalPages - 1;
+        }
+
         redirectAttributes.addFlashAttribute("isCampaignDeleted", isCampaignDeleted);
-        redirectAttributes.addFlashAttribute("currentRole", authentication.getAuthorities().iterator().next().getAuthority());
+        redirectAttributes.addFlashAttribute("currentRole", role);
         return "redirect:/campaigns?page=" + currentPage;
     }
-
 }

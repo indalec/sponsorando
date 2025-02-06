@@ -9,5 +9,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CampaignRepository extends JpaRepository<Campaign, Long > {
+
     Page<Campaign> findByUserAccountEmailAndStatusNot(String email, CampaignStatus status, Pageable pageable);
+    long countByUserAccountEmailAndStatusNot(String email, CampaignStatus status);
+
 }
