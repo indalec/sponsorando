@@ -10,8 +10,7 @@
 </head>
 <body>
 <header th:replace="~{fragments/header :: headerSection}" class="container"></header>
-<div id="successDivDelete" th:if="${isCampaignDeleted}" class="alert alert-success text-center w-50 mx-auto mt-5"
-     role="alert">
+<div id="successDivDelete" th:if="${isCampaignDeleted}" class="alert alert-success text-center w-50 mx-auto mt-5" role="alert">
     <span th:text="${currentRole == 'ROLE_ADMIN' ? 'Campaign deactivated successfully' : 'Campaign deleted successfully'}"></span>
 </div>
 <div class="container mt-5">
@@ -20,7 +19,8 @@
         <div class="card shadow-sm">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped align-middle" th:if="${campaigns != null and campaigns.size() > 0}">
+                    <table class="table table-striped align-middle"
+                           th:if="${campaigns != null and campaigns.size() > 0}">
                         <thead class="table-secondary">
                         <tr class="align-top text-center">
                             <th scope="col" class="p-1 py-3">Id</th>
@@ -102,7 +102,7 @@
             </div>
         </div>
 
-        <nav aria-label="Page navigation" th:if="${campaigns != null and campaigns.size() > 0}" class="mt-4">
+        <nav class="mt-4" aria-label="Page navigation" th:if="${campaigns != null and campaigns.size() > 0}">
             <ul class="pagination justify-content-center">
                 <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
                     <a class="page-link" th:href="@{/campaigns(page=0)}">First</a>
@@ -137,8 +137,6 @@
             window.location.href = '/delete_campaign/' + campaignId + '?page=' + currentPage;
         }
     }
-
-
 </script>
 <script src="/js/action_notifications.js"></script>
 
