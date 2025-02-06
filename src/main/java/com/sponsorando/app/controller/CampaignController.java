@@ -115,8 +115,17 @@ public class CampaignController {
                                  RedirectAttributes redirectAttributes, Authentication authentication) {
 
         boolean isCampaignDeleted = campaignService.deleteCampaign(id);
+        String email = authentication.getName();
+        String role = authentication.getAuthorities().iterator().next().getAuthority();
+
+        int totalPages = campaignService.getTotalPages(email, role, 5);
+
+        if (totalPages > 0 && currentPage >= totalPages) {
+            currentPage = totalPages - 1;
+        }
+
         redirectAttributes.addFlashAttribute("isCampaignDeleted", isCampaignDeleted);
-        redirectAttributes.addFlashAttribute("currentRole", authentication.getAuthorities().iterator().next().getAuthority());
+        redirectAttributes.addFlashAttribute("currentRole", role);
         return "redirect:/campaigns?page=" + currentPage;
     }
 
