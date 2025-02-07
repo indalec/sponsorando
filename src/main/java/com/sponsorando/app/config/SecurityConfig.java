@@ -33,10 +33,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> {
                     auth
-                            .requestMatchers("/add_campaign").authenticated()
                             .requestMatchers("/campaigns").authenticated()
+                            .requestMatchers("/add_campaign").authenticated()
                             .requestMatchers("/delete_campaign/**").authenticated()
                             .requestMatchers("/admin/**").hasRole("ADMIN")
+                            .requestMatchers("/c/**").permitAll()
+                            .requestMatchers("/discover_campaigns/**").permitAll()
                             .anyRequest().permitAll();
                 }
         );

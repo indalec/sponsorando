@@ -15,3 +15,13 @@ function showSuccessDiv(elementId) {
 showSuccessDiv("#successDivDelete");
 showSuccessDiv("#successDivAdd");
 showSuccessDiv("#successDivEdit");
+
+document.addEventListener('DOMContentLoaded', function() {
+    var errorMessage = document.getElementById('errorMessage');
+    if (errorMessage) {
+        var bsAlert = new bootstrap.Alert(errorMessage);
+        setTimeout(function() {
+            bsAlert.close();
+        }, 10000);
+    }
+});
