@@ -58,11 +58,16 @@ body {
 
 .navbar-auth #username-expanded {
     font-weight: bold;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 160px;
-    display: inline-block;
+    color: var(--text-color) !important;
+    text-decoration: none !important;
+    cursor: pointer;
 }
+
+.navbar-auth #username-expanded:hover {
+    color: var(--primary-color) !important;
+    text-decoration: underline !important;
+}
+
 
 .navbar-auth #logout-expanded {
     white-space: nowrap;
