@@ -8,12 +8,12 @@
     </div>
 
     <!-- Offcanvas Layout (Burger Dropdown) -->
-    <div class="d-flex auth-buttons flex-column align-items-center gap-3 w-100 d-lg-none">
-        <a id="signup" th:if="${username == null}" href="/signup" class="btn btn-outline-success">Sign Up</a>
-        <a id="login" th:if="${username == null}" href="/login" class="btn btn-outline-success">Login</a>
-        <div th:if="${username != null}" class="user-info d-flex flex-column align-items-center w-100 text-center mt-4 mb-3">
-            <a id="username" class="fw-bold text-decoration-none" th:href="@{/user_dashboard}" th:text="${username}"></a>
-            <a id="logout" href="/logout" class="btn btn-outline-danger mt-2">Logout</a>
+    <div class="d-flex flex-column align-items-center gap-3 w-100 d-lg-none">
+        <a id="signup" th:if="${username == null}" href="/signup" class="btn btn-outline-success auth-buttons">Sign Up</a>
+        <a id="login" th:if="${username == null}" href="/login" class="btn btn-outline-success auth-buttons">Login</a>
+        <div th:if="${username != null}" class="user-info d-flex flex-column align-items-center w-100 text-center mt-3 mb-3">
+            <a id="username" class="fw-bold navbar-nav nav-link nav-item" th:if="${username != null}" th:href="@{/user_dashboard}" th:text="${username}"></a>
+            <a id="logout" href="/logout" class="btn btn-outline-danger auth-buttons mt-2">Logout</a>
         </div>
     </div>
 </div>
