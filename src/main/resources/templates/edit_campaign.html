@@ -19,17 +19,14 @@
     <form th:action="@{/edit_campaign}" method="post" class="needs-validation" novalidate>
 
         <div class="mb-3">
-
             <label for="title" class="form-label">Title</label>
             <input type="text" class="form-control" id="title" name="title"
                    th:value="${campaign != null ? campaign.title : ''}"
                    th:disabled="${#strings.trim(campaign.status) == 'ACTIVE'}" required>
-
             <div class="invalid-feedback">
                 Please enter a title for your campaign.
             </div>
         </div>
-
 
         <div class="mb-3">
             <label for="description" class="form-label">Description</label>
@@ -43,8 +40,8 @@
             <div class="mb-3">
                 <label for="startDate" class="form-label">Start Date and Time</label>
                 <input type="text" class="form-control flatpickr" id="startDate" name="startDate"
-                       th:value="${formattedStartDate != null ? formattedStartDate : ''}" th:disabled="${#strings.trim(campaign.status) == 'ACTIVE'}" required>
-
+                       th:value="${formattedStartDate != null ? formattedStartDate : ''}"
+                       th:disabled="${#strings.trim(campaign.status) == 'ACTIVE'}" required>
                 <div class="invalid-feedback">
                     Please enter the start date of your campaign.
                 </div>
@@ -54,7 +51,6 @@
                 <label for="endDate" class="form-label">End Date and Time</label>
                 <input type="text" class="form-control flatpickr" id="endDate" name="endDate"
                        th:value="${formattedEndDate != null ? formattedEndDate : ''}" required>
-
                 <div class="invalid-feedback">
                     Please enter the end date of your campaign.
                 </div>
@@ -103,37 +99,38 @@
         <div class="row d-flex justify-content-between align-items-center">
             <h4>Address Information</h4>
             <div class="col-md-6 mb-3">
-                <p>You can enter your address using the <strong>search bar</strong> OR manually fill in the fields below.</p>
+                <p>You can enter your address using the <strong>search bar</strong> OR manually fill in the fields
+                    below.</p>
             </div>
             <div class="col-md-6 mb-3 d-flex justify-content-between align-items-center">
                 <label for="showlocation" class="form-label mb-0">Show Location (Others will be able to see it)</label>
                 <input type="checkbox" id="showlocation" name="showLocation"
-                       th:checked="${campaign != null and campaign.showLocation}" class="form-check-input ms-2"/>
+                       th:checked="${campaign != null and campaign.showLocation}"
+                       th:disabled="${#strings.trim(campaign.status) == 'ACTIVE'}" class="form-check-input ms-2"/>
             </div>
         </div>
-
 
         <div class="mb-3">
             <label for="address" class="form-label">Search Address (Optional)</label>
             <input type="text" class="form-control" id="address" placeholder="Start typing an address..."
-                   autocomplete="off">
+                   autocomplete="off"
+                   th:disabled="${#strings.trim(campaign.status) == 'ACTIVE'}">
             <ul id="suggestions" class="list-group position-absolute w-100"></ul>
         </div>
-
 
         <div class="row">
             <div class="col-md-6 mb-3">
                 <label for="inputStreet" class="form-label">Street</label>
                 <input type="text" class="form-control validate-address" id="inputStreet" name="street"
                        th:value="${campaign != null and campaign.address != null ? campaign.address.street : ''}"
-                       required>
+                       th:disabled="${#strings.trim(campaign.status) == 'ACTIVE'}" required>
                 <div class="invalid-feedback">Please enter a street.</div>
             </div>
             <div class="col-md-6 mb-3">
                 <label for="inputNumber" class="form-label">Number</label>
                 <input type="text" class="form-control validate-address" id="inputNumber" name="number"
                        th:value="${campaign != null and campaign.address != null ? campaign.address.number : ''}"
-                       required>
+                       th:disabled="${#strings.trim(campaign.status) == 'ACTIVE'}" required>
                 <div class="invalid-feedback">Please enter a number.</div>
             </div>
         </div>
@@ -143,14 +140,14 @@
                 <label for="inputCity" class="form-label">City</label>
                 <input type="text" class="form-control validate-address" id="inputCity" name="city"
                        th:value="${campaign != null and campaign.address != null ? campaign.address.city : ''}"
-                       required>
+                       th:disabled="${#strings.trim(campaign.status) == 'ACTIVE'}" required>
                 <div class="invalid-feedback">Please enter a city.</div>
             </div>
             <div class="col-md-6 mb-3">
                 <label for="inputPostcode" class="form-label">Postcode</label>
                 <input type="text" class="form-control validate-address" id="inputPostcode" name="postcode"
                        th:value="${campaign != null and campaign.address != null ? campaign.address.postcode : ''}"
-                       required>
+                       th:disabled="${#strings.trim(campaign.status) == 'ACTIVE'}" required>
                 <div class="invalid-feedback">Please enter a postcode.</div>
             </div>
         </div>
@@ -158,7 +155,8 @@
         <div class="mb-3">
             <label for="inputCountry" class="form-label">Country</label>
             <input type="text" class="form-control validate-address" id="inputCountry" name="country"
-                   th:value="${campaign != null and campaign.address != null ? campaign.address.country : ''}" required>
+                   th:value="${campaign != null and campaign.address != null ? campaign.address.country : ''}"
+                   th:disabled="${#strings.trim(campaign.status) == 'ACTIVE'}" required>
             <div class="invalid-feedback">Please enter a country.</div>
         </div>
 
@@ -166,7 +164,6 @@
                th:value="${campaign != null and campaign.address != null ? campaign.address.latitude : ''}">
         <input type="hidden" id="longitude" name="longitude"
                th:value="${campaign != null and campaign.address != null ? campaign.address.longitude : ''}">
-
 
         <div id="map" class="mb-3"></div>
 
@@ -182,7 +179,6 @@
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script src="/js/edit_campaign.js"></script>
 <script src="/js/action_notifications.js"></script>
-
 
 </body>
 </html>

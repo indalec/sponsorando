@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Service
 public class AddressService {
 
-
     @Autowired
     private AddressRepository addressRepository;
 
@@ -31,7 +30,7 @@ public class AddressService {
 
     }
 
-    Address getAddress(CampaignForm updatedCampaignDetails, Campaign existingCampaign) {
+    public Address updateAddress(CampaignForm updatedCampaignDetails, Campaign existingCampaign) {
         Address address = new Address();
         address.setId(existingCampaign.getAddress().getId());
         address.setStreet(updatedCampaignDetails.getStreet());
@@ -41,7 +40,8 @@ public class AddressService {
         address.setPostcode(updatedCampaignDetails.getPostcode());
         address.setLatitude(updatedCampaignDetails.getLatitude());
         address.setLongitude(updatedCampaignDetails.getLongitude());
+        address.setCreatedAt(existingCampaign.getAddress().getCreatedAt());
         address.setUpdatedAt(LocalDateTime.now());
-        return address;
+        return addressRepository.save(address);
     }
 }

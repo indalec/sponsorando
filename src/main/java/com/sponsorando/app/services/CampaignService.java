@@ -87,9 +87,9 @@ public class CampaignService {
     public Campaign getCampaignById(Long id) {
         try {
             return campaignRepository.findById(id)
-                .orElseThrow(
-                    () -> new EntityNotFoundException("Campaign not found with id: " + id)
-                );
+                    .orElseThrow(
+                            () -> new EntityNotFoundException("Campaign not found with id: " + id)
+                    );
         } catch (Exception e) {
             throw new RuntimeException("Error retrieving campaign with id: " + id, e);
         }
@@ -129,43 +129,40 @@ public class CampaignService {
 
     public boolean updateCampaign(CampaignForm updatedCampaignDetails) {
         try {
+
             Optional<Campaign> existingCampaignOptional = campaignRepository.findById(updatedCampaignDetails.getCampaignId());
 
-            if (existingCampaignOptional.isPresent()) {
-                Campaign existingCampaign = existingCampaignOptional.get();
-
-                if(existingCampaign.getStatus().toString().equalsIgnoreCase(String.valueOf(CampaignStatus.ACTIVE))) {
-                    existingCampaign.setStartDate(existingCampaign.getStartDate());
-                    existingCampaign.setTitle(existingCampaign.getTitle());
-                }else{
-                    existingCampaign.setStartDate(updatedCampaignDetails.getStartDate());
-                    existingCampaign.setTitle(updatedCampaignDetails.getTitle());
-                }
-
-                existingCampaign.setDescription(updatedCampaignDetails.getDescription());
-
-                if (updatedCampaignDetails.getShowLocation() == null) {
-                    existingCampaign.setShowLocation(false);
-                }else {
-                    existingCampaign.setShowLocation(updatedCampaignDetails.getShowLocation());
-                }
-
-                existingCampaign.setCurrency(updatedCampaignDetails.getCurrency());
-                existingCampaign.setGoalAmount(updatedCampaignDetails.getGoalAmount());
-                existingCampaign.setEndDate(updatedCampaignDetails.getEndDate());
-                existingCampaign.setCategories(updatedCampaignDetails.getCategories());
-
-                existingCampaign.setAddress(addressService.getAddress(updatedCampaignDetails, existingCampaign));
-                existingCampaign.setUpdatedAt(LocalDateTime.now());
-
-                campaignRepository.save(existingCampaign);  
-                return true;  
-            } else {
-                return false;  
+            if (existingCampaignOptional.isEmpty()) {
+                return false;
             }
+
+            Campaign existingCampaign = existingCampaignOptional.get();
+
+            if (!existingCampaign.getStatus().equals(CampaignStatus.ACTIVE)) {
+                existingCampaign.setStartDate(updatedCampaignDetails.getStartDate());
+                existingCampaign.setTitle(updatedCampaignDetails.getTitle());
+            }
+
+            existingCampaign.setDescription(updatedCampaignDetails.getDescription());
+            existingCampaign.setShowLocation(updatedCampaignDetails.getShowLocation() != null ? updatedCampaignDetails.getShowLocation() : false);
+            existingCampaign.setCurrency(updatedCampaignDetails.getCurrency());
+            existingCampaign.setGoalAmount(updatedCampaignDetails.getGoalAmount());
+            existingCampaign.setEndDate(updatedCampaignDetails.getEndDate());
+            existingCampaign.setCategories(updatedCampaignDetails.getCategories());
+            existingCampaign.setUpdatedAt(LocalDateTime.now());
+
+            if (!existingCampaign.getStatus().equals(CampaignStatus.ACTIVE)) {
+                if (addressService.updateAddress(updatedCampaignDetails, existingCampaign) == null) {
+                    return false;
+                }
+            }
+
+            campaignRepository.save(existingCampaign);
+            return true;
+
         } catch (Exception e) {
             e.printStackTrace();
-            return false;  
+            return false;
         }
     }
 
