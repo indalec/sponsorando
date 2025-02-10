@@ -1,12 +1,10 @@
 package com.sponsorando.app.controller;
 
-import com.sponsorando.app.models.Campaign;
-import com.sponsorando.app.models.CampaignCategory;
-import com.sponsorando.app.models.CampaignForm;
-import com.sponsorando.app.models.Currency;
+import com.sponsorando.app.models.*;
 import com.sponsorando.app.repositories.CampaignCategoryRepository;
 import com.sponsorando.app.repositories.CurrencyRepository;
 import com.sponsorando.app.services.CampaignService;
+import com.sponsorando.app.services.UserAccountService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +18,9 @@ import java.util.List;
 
 @Controller
 public class CampaignController {
+
+    @Autowired
+    private UserAccountService userAccountService;
 
     @Autowired
     private CampaignCategoryRepository campaignCategoryRepository;
@@ -121,4 +122,61 @@ public class CampaignController {
         redirectAttributes.addFlashAttribute("currentRole", role);
         return "redirect:/campaigns?page=" + currentPage;
     }
+
+    @GetMapping("/c/{id}")
+    public String viewCampaign(
+            @PathVariable Long id,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            Model model,
+            RedirectAttributes redirectAttributes
+    ) {
+        try {
+            String userEmail = (String) model.getAttribute("username");
+            UserAccount currentUser = userAccountService.getUser(userEmail);
+            if (currentUser != null) {
+                model.addAttribute("currentUserId", currentUser.getId());
+            } else {
+                model.addAttribute("currentUserId", 0);
+            }
+
+            String currentRole = (String) model.getAttribute("currentRole");
+
+            boolean isAdmin = currentRole != null && currentRole.contains("ROLE_ADMIN");
+            boolean isUser = currentRole != null && currentRole.contains("ROLE_USER");
+            boolean isGuest =  currentRole == null || currentRole.isEmpty() || currentRole.contains("ROLE_NONE");
+
+            model.addAttribute("isAdmin", isAdmin);
+            model.addAttribute("isUser", isUser);
+            model.addAttribute("isGuest", isGuest);
+
+
+            Campaign campaign = campaignService.getCampaignById(id);
+            if (campaign != null) {
+                model.addAttribute("campaign", campaign);
+            }
+
+            model.addAttribute("page", page);
+
+            return "view_campaign";
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            String currentRole = (String) model.getAttribute("currentRole");
+            boolean isGuest =  currentRole == null || currentRole.isEmpty() || currentRole.contains("ROLE_NONE");
+
+            if(isGuest) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Unfortunately an error occurred while retrieving the campaign. Please try again.");
+                return "redirect:/discover_campaigns?page=" + page;
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Unfortunately an error occurred while retrieving the campaign. Please try again.");
+                return "redirect:/campaigns?page=" + page;
+            }
+
+
+
+
+
+        }
+    }
+
 }

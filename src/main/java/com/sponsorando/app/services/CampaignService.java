@@ -2,6 +2,7 @@ package com.sponsorando.app.services;
 
 import com.sponsorando.app.models.*;
 import com.sponsorando.app.repositories.CampaignRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -79,11 +80,23 @@ public class CampaignService {
         return (int) Math.ceil((double) totalCampaigns / pageSize);
     }
 
+    public Campaign getCampaignById(Long id) {
+        try {
+            return campaignRepository.findById(id)
+                .orElseThrow(
+                    () -> new EntityNotFoundException("Campaign not found with id: " + id)
+                );
+        } catch (Exception e) {
+            throw new RuntimeException("Error retrieving campaign with id: " + id, e);
+        }
+    }
+
     @Transactional
     public boolean deleteCampaign(Long campaignId) {
 
         try {
             if (imageService.deleteByCampaignId(campaignId)) {
+
                 Campaign campaign = campaignRepository.findById(campaignId).orElseThrow(() -> new RuntimeException("Campaign not found"));
                 campaign.setStatus(CampaignStatus.INACTIVE);
                 campaign.setUpdatedAt(LocalDateTime.now());
