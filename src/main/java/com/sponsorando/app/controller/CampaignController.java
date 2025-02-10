@@ -1,9 +1,6 @@
 package com.sponsorando.app.controller;
 
-import com.sponsorando.app.models.Campaign;
-import com.sponsorando.app.models.CampaignCategory;
-import com.sponsorando.app.models.CampaignForm;
-import com.sponsorando.app.models.Currency;
+import com.sponsorando.app.models.*;
 import com.sponsorando.app.repositories.CampaignCategoryRepository;
 import com.sponsorando.app.repositories.CurrencyRepository;
 import com.sponsorando.app.services.CampaignService;
@@ -12,8 +9,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -64,14 +59,14 @@ public class CampaignController {
 
         String email = (String) model.getAttribute("username");
 
-        if(email != null) {
+        if (email != null) {
 
             try {
                 Campaign campaign = campaignService.createCampaign(campaignForm, email);
-                if(campaign != null) {
+                if (campaign != null) {
                     redirectAttributes.addFlashAttribute("campaign", campaign);
                     redirectAttributes.addFlashAttribute("isCampaignAdded", true);
-                }else{
+                } else {
                     redirectAttributes.addFlashAttribute("isCampaignAdded", false);
                 }
             } catch (Exception e) {
@@ -79,15 +74,14 @@ public class CampaignController {
                 redirectAttributes.addFlashAttribute("isCampaignAdded", false);
             }
         }
-
         return "redirect:/add_campaign";
     }
 
     @GetMapping("/campaigns")
-    public String getAllCampaigns(Model model, @RequestParam(name = "page", defaultValue = "0") int pageNumber, Authentication authentication) {
+    public String getAllCampaigns(Model model, @RequestParam(name = "page", defaultValue = "0") int pageNumber) {
 
-        String currentUser = authentication.getName();
-        String currentRole = authentication.getAuthorities().iterator().next().getAuthority();
+        String currentUser = (String) model.getAttribute("username");
+        String currentRole = (String) model.getAttribute("currentRole");
 
         int pageSize = 5;
         Page<Campaign> page;
@@ -104,20 +98,85 @@ public class CampaignController {
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("currentPage", page.getNumber());
 
-        if (authentication.getAuthorities() != null) {
+        if (currentUser != null && currentRole != null) {
             model.addAttribute("currentUser", currentUser);
             model.addAttribute("currentRole", currentRole);
         }
         return "campaigns";
     }
+
     @GetMapping("/delete_campaign/{id}")
-    public String deleteCampaign(@PathVariable("id") Long id, @RequestParam("page") int currentPage,
-                                 RedirectAttributes redirectAttributes, Authentication authentication) {
+    public String deleteCampaign(@PathVariable("id") Long id, @RequestParam("page") int currentPage, Model model, RedirectAttributes redirectAttributes) {
 
         boolean isCampaignDeleted = campaignService.deleteCampaign(id);
+        String email = (String) model.getAttribute("username");
+        String role = (String) model.getAttribute("currentRole");
+
+        int totalPages = campaignService.getTotalPages(email, role, 5);
+
+        if (totalPages > 0 && currentPage >= totalPages) {
+            currentPage = totalPages - 1;
+        }
+
         redirectAttributes.addFlashAttribute("isCampaignDeleted", isCampaignDeleted);
-        redirectAttributes.addFlashAttribute("currentRole", authentication.getAuthorities().iterator().next().getAuthority());
+        redirectAttributes.addFlashAttribute("currentRole", role);
         return "redirect:/campaigns?page=" + currentPage;
+    }
+
+    @GetMapping("/c/{id}")
+    public String viewCampaign(
+            @PathVariable Long id,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            Model model,
+            RedirectAttributes redirectAttributes
+    ) {
+        try {
+            String userEmail = (String) model.getAttribute("username");
+            UserAccount currentUser = userAccountService.getUser(userEmail);
+            if (currentUser != null) {
+                model.addAttribute("currentUserId", currentUser.getId());
+            } else {
+                model.addAttribute("currentUserId", 0);
+            }
+
+            String currentRole = (String) model.getAttribute("currentRole");
+
+            boolean isAdmin = currentRole != null && currentRole.contains("ROLE_ADMIN");
+            boolean isUser = currentRole != null && currentRole.contains("ROLE_USER");
+            boolean isGuest =  currentRole == null || currentRole.isEmpty() || currentRole.contains("ROLE_NONE");
+
+            model.addAttribute("isAdmin", isAdmin);
+            model.addAttribute("isUser", isUser);
+            model.addAttribute("isGuest", isGuest);
+
+
+            Campaign campaign = campaignService.getCampaignById(id);
+            if (campaign != null) {
+                model.addAttribute("campaign", campaign);
+            }
+
+            model.addAttribute("page", page);
+
+            return "view_campaign";
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            String currentRole = (String) model.getAttribute("currentRole");
+            boolean isGuest =  currentRole == null || currentRole.isEmpty() || currentRole.contains("ROLE_NONE");
+
+            if(isGuest) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Unfortunately an error occurred while retrieving the campaign. Please try again.");
+                return "redirect:/discover_campaigns?page=" + page;
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Unfortunately an error occurred while retrieving the campaign. Please try again.");
+                return "redirect:/campaigns?page=" + page;
+            }
+
+
+
+
+
+        }
     }
 
 }

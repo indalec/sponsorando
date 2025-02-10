@@ -2,6 +2,7 @@ package com.sponsorando.app.services;
 
 import com.sponsorando.app.models.*;
 import com.sponsorando.app.repositories.CampaignRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -63,6 +64,31 @@ public class CampaignService {
     public Page<Campaign> getCampaignsByUserEmail(String email, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return campaignRepository.findByUserAccountEmailAndStatusNot(email, CampaignStatus.INACTIVE, pageable);
+    }
+
+    public int getTotalPages(String email, String role, int pageSize) {
+
+        long totalCampaigns;
+
+        if ("ROLE_ADMIN".equals(role)) {
+            totalCampaigns = campaignRepository.count();
+        } else if ("ROLE_USER".equals(role)) {
+            totalCampaigns = campaignRepository.countByUserAccountEmailAndStatusNot(email, CampaignStatus.INACTIVE);
+        } else {
+            totalCampaigns = 0;
+        }
+        return (int) Math.ceil((double) totalCampaigns / pageSize);
+    }
+
+    public Campaign getCampaignById(Long id) {
+        try {
+            return campaignRepository.findById(id)
+                .orElseThrow(
+                    () -> new EntityNotFoundException("Campaign not found with id: " + id)
+                );
+        } catch (Exception e) {
+            throw new RuntimeException("Error retrieving campaign with id: " + id, e);
+        }
     }
 
     @Transactional
