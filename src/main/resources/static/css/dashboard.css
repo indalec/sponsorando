@@ -28,6 +28,24 @@
     justify-content: space-between;
 }
 
+/* Custom Button Styling for "Manage Campaigns" */
+.btn-custom {
+    background-color: white;  /* White background */
+    color: var(--primary-color); /* Sponsorando green text */
+    font-weight: 600;
+    border: 2px solid var(--primary-color);
+    padding: 10px 15px;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border 0.3s ease-in-out;
+}
+
+/* Hover Effect */
+.btn-custom:hover {
+    background-color: var(--primary-color); /* Sponsorando Green */
+    color: white;
+    border: 2px solid var(--secondary-color);
+}
+
+
 
 @media (max-width: 768px) {
     .dashboard-container .dashboard-card {
