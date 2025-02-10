@@ -14,14 +14,12 @@
 <body>
 <header th:replace="~{fragments/header :: headerSection}" class="container"></header>
 <div class="container mt-5">
-    <div id="successDivAdd" th:if="${isCampaignAdded}" class="alert alert-success" role="alert">Campaign added
-        successfully
-    </div>
-    <h1>Edit Campaign</h1>
-    <form th:action="@{/edit_campaign/{id}(id=${campaign != null ? campaign.id : ''})}" method="post"
-          class="needs-validation" novalidate>
 
-        <div class="mb-3">
+    <h1>Edit Campaign</h1>
+    <form th:action="@{/edit_campaign}" method="post" class="needs-validation" novalidate>
+
+
+    <div class="mb-3">
             <label for="title" class="form-label">Title</label>
             <input type="text" class="form-control" id="title" name="title"
                    th:value="${campaign != null ? campaign.title : ''}" required>
@@ -37,7 +35,7 @@
                 Please enter a description of your campaign.
             </div>
         </div>
-
+        <div class="row">
       <div class="mb-3">
         <label for="startDate" class="form-label">Start Date and Time</label>
         <input type="text" class="form-control flatpickr" id="startDate" name="startDate"
@@ -50,13 +48,15 @@
 
       <div class="mb-3">
             <label for="endDate" class="form-label">End Date and Time</label>
-        <input type="text" class="form-control flatpickr" id="endDate" name="startDate"
-               th:value="${formattedEndDate != null ? formattedEndDate : ''}" required>
+          <input type="text" class="form-control flatpickr" id="endDate" name="endDate"
+                 th:value="${formattedEndDate != null ? formattedEndDate : ''}" required>
 
-        <div class="invalid-feedback">
+          <div class="invalid-feedback">
                 Please enter the end date of your campaign.
             </div>
         </div>
+        </div>
+
         <div class="row align-items-end">
             <div class="col-md-9 mb-3">
                 <label for="goalAmount" class="form-label">Goal Amount</label>
@@ -89,6 +89,28 @@
             </select>
             <div class="invalid-feedback">
                 Please select the categories for your campaign (hold ctrl to multi-select).
+            </div>
+        </div>
+        <input type="hidden" name="page" th:value="${page}" />
+        <input type="hidden" name="campaignId" th:value="${campaign.id}" />
+        <div class="row">
+
+            <div class="col-md-6 mb-3" th:if="${currentRole == 'ROLE_ADMIN'}">
+                <label for="status" class="form-label">Status</label>
+                <select class="form-select" id="status" name="status" required>
+                    <option value="">Select status</option>
+                    <option th:each="status : ${campaignStatuses}"
+                            th:value="${status.name()}"
+                            th:text="${status.name()}"
+                            th:selected="${campaign.status != null and campaign.status == status}">
+                    </option>
+                </select>
+            </div>
+
+
+            <div class="col-md-6 mb-3">
+                <label for="showlocation" class="form-label">Show Location</label>
+                <input type="checkbox" id="showlocation" name="showlocation" th:checked="${campaign != null and campaign.showLocation}" />
             </div>
         </div>
 
@@ -162,7 +184,9 @@
         crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-<script src="/js/add_campaign.js"></script>
+<script src="/js/edit_campaign.js"></script>
 <script src="/js/action_notifications.js"></script>
+
+
 </body>
 </html>

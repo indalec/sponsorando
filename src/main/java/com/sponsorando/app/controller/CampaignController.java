@@ -190,33 +190,63 @@ public class CampaignController {
 
         model.addAttribute("categories", categories);
         model.addAttribute("currencies", currencies);
-
-        String email = (String) model.getAttribute("username");
-        String role = (String) model.getAttribute("currentRole");
-        int pageSize = 5;
-        Page<Campaign> page;
+        model.addAttribute("currentRole", (String) model.getAttribute("currentRole"));
+        model.addAttribute("page", currentPage);
 
         Optional<Campaign> campaign = campaignRepository.findById(id);
 
         if (campaign.isPresent() && campaign.get().getStartDate() != null) {
-            // Format the date to match the format that flatpickr expects (d/m/Y H:i)
-            String formattedStartDate = campaign.get().getStartDate().format(DateTimeFormatter.ofPattern("d/M/yyyy H:mm"));
+
+            String formattedStartDate = campaign.get().getStartDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
             model.addAttribute("formattedStartDate", formattedStartDate);
             model.addAttribute("campaign", campaign.get());
+            System.out.println("formattedStartDate:::"+formattedStartDate);
         }
         if (campaign.isPresent() && campaign.get().getEndDate() != null) {
-            // Format the date to match the format that flatpickr expects (d/m/Y H:i)
-            String formattedEndDate = campaign.get().getEndDate().format(DateTimeFormatter.ofPattern("d/M/yyyy H:mm"));
+
+            String formattedEndDate = campaign.get().getEndDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
             model.addAttribute("formattedEndDate", formattedEndDate);
             model.addAttribute("campaign", campaign.get());
+            System.out.println("formattedEndDate:::"+formattedEndDate);
         }
 
 
 
-
-
-
+        model.addAttribute("campaignStatuses", CampaignStatus.getCampaignStatuses());
 
         return "edit_campaign";
     }
+
+    @PostMapping("/edit_campaign")
+    public String editCampaignSubmit(@ModelAttribute @Valid CampaignForm campaignForm,
+                                     RedirectAttributes redirectAttributes,
+                                     @RequestParam("campaignId") Long campaignId,
+                                     @RequestParam("page") int currentPage, Model model) {
+
+        boolean isCampaignUpdated = false;
+
+        try {
+            isCampaignUpdated = campaignService.updateCampaign(campaignId, campaignForm);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (isCampaignUpdated) {
+            redirectAttributes.addFlashAttribute("isCampaignUpdated", true);
+        } else {
+            redirectAttributes.addFlashAttribute("isCampaignUpdated", false);
+        }
+
+        String email = (String) model.getAttribute("username");
+        String role = (String) model.getAttribute("currentRole");
+
+        int totalPages = campaignService.getTotalPages(email, role, 5);
+
+        if (totalPages > 0 && currentPage >= totalPages) {
+            currentPage = totalPages - 1;
+        }
+        redirectAttributes.addFlashAttribute("currentRole", role);
+        return "redirect:/campaigns?page=" + currentPage;
+    }
+
 }

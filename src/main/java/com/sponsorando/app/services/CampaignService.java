@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CampaignService {
@@ -125,5 +126,35 @@ public class CampaignService {
             return false;
         }
     }
+
+    public boolean updateCampaign(Long campaignId, CampaignForm updatedCampaignDetails) {
+        try {
+            Optional<Campaign> existingCampaignOptional = campaignRepository.findById(campaignId);
+
+            if (existingCampaignOptional.isPresent()) {
+                Campaign existingCampaign = existingCampaignOptional.get();
+                existingCampaign.setTitle(updatedCampaignDetails.getTitle());
+                existingCampaign.setDescription(updatedCampaignDetails.getDescription());
+                existingCampaign.setStatus(updatedCampaignDetails.getStatus());
+                existingCampaign.setShowLocation(updatedCampaignDetails.getShowLocation());
+                existingCampaign.setCurrency(updatedCampaignDetails.getCurrency());
+                existingCampaign.setGoalAmount(updatedCampaignDetails.getGoalAmount());
+                existingCampaign.setStartDate(updatedCampaignDetails.getStartDate());
+                existingCampaign.setEndDate(updatedCampaignDetails.getEndDate());
+                existingCampaign.setCategories(updatedCampaignDetails.getCategories());
+
+                existingCampaign.setAddress(addressService.getAddress(updatedCampaignDetails, existingCampaign));
+
+                campaignRepository.save(existingCampaign);  
+                return true;  
+            } else {
+                return false;  
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;  
+        }
+    }
+
 
 }

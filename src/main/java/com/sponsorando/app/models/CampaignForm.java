@@ -38,6 +38,10 @@ public class CampaignForm {
     @NotEmpty(message = "Please select at least one option")
     private List<CampaignCategory> categories;
 
+    private CampaignStatus status;
+
+    private Boolean showLocation;
+
     @NotBlank(message = "Street is mandatory")
     private String street;
 
@@ -113,6 +117,22 @@ public class CampaignForm {
         this.categories = categories;
     }
 
+    public CampaignStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(CampaignStatus status) {
+        this.status = status;
+    }
+
+    public Boolean getShowLocation() {
+        return showLocation;
+    }
+
+    public void setShowLocation(Boolean showLocation) {
+        this.showLocation = showLocation;
+    }
+
     public String getStreet() {
         return street;
     }
@@ -179,6 +199,8 @@ public class CampaignForm {
                 ", goalAmount=" + goalAmount +
                 ", currency=" + currency +
                 ", categories=" + categories +
+                ", status=" + status +
+                ", showLocation=" + showLocation +
                 ", street='" + street + '\'' +
                 ", number='" + number + '\'' +
                 ", city='" + city + '\'' +
