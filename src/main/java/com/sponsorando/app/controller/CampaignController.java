@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -218,15 +219,22 @@ public class CampaignController {
     }
 
     @PostMapping("/edit_campaign")
-    public String editCampaignSubmit(@ModelAttribute @Valid CampaignForm campaignForm,
-                                     RedirectAttributes redirectAttributes,
-                                     @RequestParam("campaignId") Long campaignId,
-                                     @RequestParam("page") int currentPage, Model model) {
+    public String editCampaignSubmit(@ModelAttribute @Valid CampaignForm campaignForm, BindingResult bindingResult,
+                                     RedirectAttributes redirectAttributes, Model model) {
+        /*if (bindingResult.hasErrors()) {
+            return "edit_campaign";
+
+        }*/
+
+
+
+        String email = (String) model.getAttribute("username");
+        String role = (String) model.getAttribute("currentRole");
 
         boolean isCampaignUpdated = false;
 
         try {
-            isCampaignUpdated = campaignService.updateCampaign(campaignId, campaignForm);
+            isCampaignUpdated = campaignService.updateCampaign(campaignForm);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -237,16 +245,14 @@ public class CampaignController {
             redirectAttributes.addFlashAttribute("isCampaignUpdated", false);
         }
 
-        String email = (String) model.getAttribute("username");
-        String role = (String) model.getAttribute("currentRole");
 
-        int totalPages = campaignService.getTotalPages(email, role, 5);
-
+        /*int totalPages = campaignService.getTotalPages(email, role, 5);
+        int currentPage = campaignForm.getPage();
         if (totalPages > 0 && currentPage >= totalPages) {
             currentPage = totalPages - 1;
-        }
+        }*/
         redirectAttributes.addFlashAttribute("currentRole", role);
-        return "redirect:/campaigns?page=" + currentPage;
+        return "redirect:/campaigns?page=" + campaignForm.getPage();
     }
 
 }

@@ -97,39 +97,47 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    // Initialize Flatpickr for start date picker
-    const startDatePicker = flatpickr("#startDate", {
+    const today = new Date();
+    const todayString = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+
+    const startDateInput = document.getElementById("startDate");
+    const startDateValue = startDateInput.value; // pre-filled date value
+
+    // If the pre-filled date is in the past (before today), set it to today's date
+    if (startDateValue && new Date(startDateValue) < today) {
+        startDateInput.value = todayString; // Set to today's date if pre-filled date is in the past
+    }
+
+    // Initialize Flatpickr for the start date picker
+    const startDatePicker = flatpickr(startDateInput, {
         enableTime: true,
         dateFormat: "d/m/Y H:i",  // Ensure this matches the backend format
         time_24hr: true,
-        minDate: document.getElementById("startDate").value,
-        onReady: function(selectedDates, dateStr, instance) {
-            if (document.getElementById("startDate").value) {
-                instance.setDate(document.getElementById("startDate").value, false, 'd/m/Y H:i');
-            }
-        },
+        minDate: "today", // Disable past dates
+        defaultDate: startDateInput.value, // Use the pre-filled date
         onChange: function(selectedDates, dateStr, instance) {
+            // Update the minimum date for end date based on start date selection
             endDatePicker.set('minDate', dateStr);
         }
     });
 
     // Initialize Flatpickr for end date picker
-    const endDatePicker = flatpickr("#endDate", {
+    const endDateInput = document.getElementById("endDate");
+    const endDateValue = endDateInput.value; // pre-filled date value
+
+
+
+    const endDatePicker = flatpickr(endDateInput, {
         enableTime: true,
         dateFormat: "d/m/Y H:i",  // Match the backend format "dd/MM/yyyy HH:mm"
         time_24hr: true,
-        minDate: document.getElementById("endDate").value,
-        onReady: function(selectedDates, dateStr, instance) {
-            if (document.getElementById("endDate").value) {
-                instance.setDate(document.getElementById("endDate").value, false, 'd/m/Y H:i');
-            }
-        }
+        minDate: "today", // Disable past dates
+        defaultDate: endDateInput.value, // Use the pre-filled date
     });
 
-    const form = document.querySelector('form');
-    const startDateInput = document.getElementById("startDate");
-    const endDateInput = document.getElementById("endDate");
 
+    // Form validation
+    const form = document.querySelector('form');
     function validateDates() {
         const startDate = startDatePicker.selectedDates[0];
         const endDate = endDatePicker.selectedDates[0];

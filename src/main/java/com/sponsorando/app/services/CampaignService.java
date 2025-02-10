@@ -127,23 +127,36 @@ public class CampaignService {
         }
     }
 
-    public boolean updateCampaign(Long campaignId, CampaignForm updatedCampaignDetails) {
+    public boolean updateCampaign(CampaignForm updatedCampaignDetails) {
         try {
-            Optional<Campaign> existingCampaignOptional = campaignRepository.findById(campaignId);
+            Optional<Campaign> existingCampaignOptional = campaignRepository.findById(updatedCampaignDetails.getCampaignId());
 
             if (existingCampaignOptional.isPresent()) {
                 Campaign existingCampaign = existingCampaignOptional.get();
-                existingCampaign.setTitle(updatedCampaignDetails.getTitle());
+
+                if(existingCampaign.getStatus().toString().equalsIgnoreCase(String.valueOf(CampaignStatus.ACTIVE))) {
+                    existingCampaign.setStartDate(existingCampaign.getStartDate());
+                    existingCampaign.setTitle(existingCampaign.getTitle());
+                }else{
+                    existingCampaign.setStartDate(updatedCampaignDetails.getStartDate());
+                    existingCampaign.setTitle(updatedCampaignDetails.getTitle());
+                }
+
                 existingCampaign.setDescription(updatedCampaignDetails.getDescription());
-                existingCampaign.setStatus(updatedCampaignDetails.getStatus());
-                existingCampaign.setShowLocation(updatedCampaignDetails.getShowLocation());
+
+                if (updatedCampaignDetails.getShowLocation() == null) {
+                    existingCampaign.setShowLocation(false);
+                }else {
+                    existingCampaign.setShowLocation(updatedCampaignDetails.getShowLocation());
+                }
+
                 existingCampaign.setCurrency(updatedCampaignDetails.getCurrency());
                 existingCampaign.setGoalAmount(updatedCampaignDetails.getGoalAmount());
-                existingCampaign.setStartDate(updatedCampaignDetails.getStartDate());
                 existingCampaign.setEndDate(updatedCampaignDetails.getEndDate());
                 existingCampaign.setCategories(updatedCampaignDetails.getCategories());
 
                 existingCampaign.setAddress(addressService.getAddress(updatedCampaignDetails, existingCampaign));
+                existingCampaign.setUpdatedAt(LocalDateTime.now());
 
                 campaignRepository.save(existingCampaign);  
                 return true;  

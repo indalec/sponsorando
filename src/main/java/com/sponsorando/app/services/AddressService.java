@@ -7,6 +7,8 @@ import com.sponsorando.app.repositories.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class AddressService {
 
@@ -39,6 +41,7 @@ public class AddressService {
         address.setPostcode(updatedCampaignDetails.getPostcode());
         address.setLatitude(updatedCampaignDetails.getLatitude());
         address.setLongitude(updatedCampaignDetails.getLongitude());
+        address.setUpdatedAt(LocalDateTime.now());
         return address;
     }
 }
