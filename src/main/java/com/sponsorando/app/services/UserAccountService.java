@@ -80,5 +80,26 @@ public class UserAccountService implements UserDetailsService {
         }
     }
 
+    public void updateUser(UserAccount userAccount, String newName, String newPassword) {
+        boolean isUpdated = false;
+
+        if (newName != null && !newName.trim().isEmpty() && !newName.equals(userAccount.getName())) {
+            userAccount.setName(newName);
+            isUpdated = true;
+        }
+
+        if (newPassword != null && !newPassword.trim().isEmpty()) {
+            if (!passwordEncoder.matches(newPassword, userAccount.getPassword())) {
+                userAccount.setPassword(passwordEncoder.encode(newPassword));
+                isUpdated = true;
+            }
+        }
+
+        if (isUpdated) {
+            userAccountRepository.save(userAccount);
+        }
+    }
+
+
 
 }
