@@ -97,6 +97,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
+    // Handle Start Date and End Date pickers
     const today = new Date();
     const todayString = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
 
@@ -121,11 +122,14 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // Initialize Flatpickr for end date picker
+    // Initialize Flatpickr for the end date picker
     const endDateInput = document.getElementById("endDate");
     const endDateValue = endDateInput.value; // pre-filled date value
 
-
+    // Set the initial end date to today's date if it's earlier than today
+    if (endDateValue && new Date(endDateValue) < today) {
+        endDateInput.value = todayString;
+    }
 
     const endDatePicker = flatpickr(endDateInput, {
         enableTime: true,
@@ -133,8 +137,14 @@ document.addEventListener("DOMContentLoaded", function() {
         time_24hr: true,
         minDate: "today", // Disable past dates
         defaultDate: endDateInput.value, // Use the pre-filled date
+        onChange: function(selectedDates, dateStr, instance) {
+            // Ensure end date is always greater than start date
+            if (selectedDates[0] <= startDatePicker.selectedDates[0]) {
+                // If end date is before or equal to start date, reset the end date
+                instance.setDate(startDatePicker.selectedDates[0], true); // Set end date to be the same as start date
+            }
+        }
     });
-
 
     // Form validation
     const form = document.querySelector('form');
