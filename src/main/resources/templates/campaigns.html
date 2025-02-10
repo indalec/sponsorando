@@ -87,7 +87,7 @@
                                         <a class="btn btn-outline-primary btn-sm rounded-1 me-1"
                                            th:href="@{/c/{slug}(slug=${campaign.slug}, page=${currentPage})}">View</a>
                                         <a class="btn btn-outline-secondary btn-sm rounded-1 me-1"
-                                           th:href="@{/edit_campaign/{id}(id=${campaign.id})}">Edit</a>
+                                           th:href="@{/edit_campaign/{id}(id=${campaign.id},page=${currentPage})}">Edit</a>
                                         <button type="button" class="btn btn-outline-danger btn-sm rounded-1"
                                                 th:onclick="'confirmCampaignDelete(\'' + ${campaign.id} + '\', ' + ${currentPage} + ')'">
                                             Delete

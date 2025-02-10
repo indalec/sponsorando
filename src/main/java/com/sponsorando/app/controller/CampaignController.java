@@ -2,6 +2,7 @@ package com.sponsorando.app.controller;
 
 import com.sponsorando.app.models.*;
 import com.sponsorando.app.repositories.CampaignCategoryRepository;
+import com.sponsorando.app.repositories.CampaignRepository;
 import com.sponsorando.app.repositories.CurrencyRepository;
 import com.sponsorando.app.services.CampaignService;
 import com.sponsorando.app.services.UserAccountService;
@@ -14,7 +15,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class CampaignController {
@@ -30,6 +33,9 @@ public class CampaignController {
 
     @Autowired
     private CurrencyRepository currencyRepository;
+
+    @Autowired
+    private CampaignRepository campaignRepository;
 
     @GetMapping("/discover_campaigns")
     public String discoverCampaigns(Model model) {
@@ -171,5 +177,46 @@ public class CampaignController {
                 return "redirect:/campaigns?page=" + page;
             }
         }
+    }
+
+
+    @GetMapping("/edit_campaign/{id}")
+    public String editCampaign(@PathVariable("id") Long id, @RequestParam("page") int currentPage, Model model) {
+
+        System.out.println("Campaign Id = " + id + " Page = " + currentPage);
+
+        List<CampaignCategory> categories = campaignCategoryRepository.findAll();
+        List<Currency> currencies = currencyRepository.findAll();
+
+        model.addAttribute("categories", categories);
+        model.addAttribute("currencies", currencies);
+
+        String email = (String) model.getAttribute("username");
+        String role = (String) model.getAttribute("currentRole");
+        int pageSize = 5;
+        Page<Campaign> page;
+
+        Optional<Campaign> campaign = campaignRepository.findById(id);
+
+        if (campaign.isPresent() && campaign.get().getStartDate() != null) {
+            // Format the date to match the format that flatpickr expects (d/m/Y H:i)
+            String formattedStartDate = campaign.get().getStartDate().format(DateTimeFormatter.ofPattern("d/M/yyyy H:mm"));
+            model.addAttribute("formattedStartDate", formattedStartDate);
+            model.addAttribute("campaign", campaign.get());
+        }
+        if (campaign.isPresent() && campaign.get().getEndDate() != null) {
+            // Format the date to match the format that flatpickr expects (d/m/Y H:i)
+            String formattedEndDate = campaign.get().getEndDate().format(DateTimeFormatter.ofPattern("d/M/yyyy H:mm"));
+            model.addAttribute("formattedEndDate", formattedEndDate);
+            model.addAttribute("campaign", campaign.get());
+        }
+
+
+
+
+
+
+
+        return "edit_campaign";
     }
 }
