@@ -16,9 +16,11 @@ public class UserDashboardController {
     @Autowired
     private UserAccountService userAccountService;
 
-
     @GetMapping("/user_dashboard")
     public String userDashboard(Model model, Principal principal) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
 
         String email = principal.getName();
         UserAccount userAccount = userAccountService.getUser(email);
@@ -27,8 +29,5 @@ public class UserDashboardController {
 
         return "user_dashboard";
     }
-
-
-
 
 }
