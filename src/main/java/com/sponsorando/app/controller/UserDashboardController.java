@@ -3,7 +3,9 @@ package com.sponsorando.app.controller;
 import com.sponsorando.app.models.UserAccount;
 import com.sponsorando.app.services.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,12 +24,25 @@ public class UserDashboardController {
             return "redirect:/login";
         }
 
-        String email = principal.getName();
-        UserAccount userAccount = userAccountService.getUser(email);
+        User authenticatedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        model.addAttribute("userAccount", userAccount);
+        boolean isAdmin = authenticatedUser.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(role -> role.equals("ROLE_ADMIN"));
 
-        return "user_dashboard";
+        boolean isUser = authenticatedUser.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(role -> role.equals("ROLE_USER"));
+
+        if (isAdmin) {
+            return "redirect:/admin";
+        } else if (isUser) {
+            String email = principal.getName();
+            UserAccount userAccount = userAccountService.getUser(email);
+            model.addAttribute("userAccount", userAccount);
+            return "user_dashboard";
+        } else {
+            return "redirect:/access_denied";
+        }
     }
-
 }
