@@ -42,10 +42,12 @@ body {
     padding: 10px 15px;
     color: var(--text-color) !important;
     font-weight: 500;
+    transition: color 0.3s ease-in-out, text-decoration 0.3s ease-in-out;
 }
 
 .nav-link:hover, .nav-link.active {
     color: var(--primary-color) !important;
+    text-decoration: underline !important;
 }
 
 .navbar-auth {
@@ -56,12 +58,17 @@ body {
     white-space: nowrap;
 }
 
-.navbar-auth #username-expanded {
+#username-expanded {
+    color: inherit !important;
     font-weight: bold;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 160px;
-    display: inline-block;
+    text-decoration: none !important;
+    cursor: pointer;
+    transition: color 0.3s ease-in-out, text-decoration 0.3s ease-in-out;
+}
+
+#username-expanded:hover {
+    color: var(--primary-color) !important;
+    text-decoration: underline !important;
 }
 
 .navbar-auth #logout-expanded {
@@ -75,7 +82,7 @@ body {
     padding: 4px !important;
     width: 40px !important;
     height: 40px !important;
-    transition: border 0.2s ease-in-out !important;
+    transition: border 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 .navbar-toggler .navbar-toggler-icon {
@@ -101,6 +108,11 @@ body {
 .btn-outline-success:hover {
     background-color: var(--primary-color);
     color: #fff;
+}
+
+.btn-outline-success,
+.btn-outline-danger {
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border 0.3s ease-in-out;
 }
 
 .hero-section {
