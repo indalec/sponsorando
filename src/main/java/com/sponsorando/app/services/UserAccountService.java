@@ -80,25 +80,30 @@ public class UserAccountService implements UserDetailsService {
         }
     }
 
-    public void updateUser(UserAccount userAccount, String newName, String newPassword) {
-        boolean isUpdated = false;
+    public void updateUserProfile(UserAccount updatedUser) {
+        Optional<UserAccount> existingUserOptional = userAccountRepository.findByEmail(updatedUser.getEmail());
 
-        if (newName != null && !newName.trim().isEmpty() && !newName.equals(userAccount.getName())) {
-            userAccount.setName(newName);
-            isUpdated = true;
-        }
+        if (existingUserOptional.isPresent()) {
+            UserAccount existingUser = existingUserOptional.get();
 
-        if (newPassword != null && !newPassword.trim().isEmpty()) {
-            if (!passwordEncoder.matches(newPassword, userAccount.getPassword())) {
-                userAccount.setPassword(passwordEncoder.encode(newPassword));
-                isUpdated = true;
+            if (updatedUser.getName() != null && !updatedUser.getName().isEmpty()
+                    && !updatedUser.getName().equals(existingUser.getName())) {
+                existingUser.setName(updatedUser.getName());
             }
-        }
 
-        if (isUpdated) {
-            userAccountRepository.save(userAccount);
+            if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
+                existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+            }
+
+            if (updatedUser.getImageUrl() != null && !updatedUser.getImageUrl().isEmpty()
+                    && !updatedUser.getImageUrl().equals(existingUser.getImageUrl())) {
+                existingUser.setImageUrl(updatedUser.getImageUrl());
+            }
+
+            userAccountRepository.save(existingUser);
         }
     }
+
 
 
 
