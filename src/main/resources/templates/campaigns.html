@@ -85,7 +85,7 @@
                                 <div class="d-flex flex-column align-items-center">
                                     <div class="btn-group mb-1" role="group">
                                         <a class="btn btn-outline-primary btn-sm rounded-1 me-1"
-                                           th:href="@{/c/{id}(id=${campaign.id}, page=${currentPage})}">View</a>
+                                           th:href="@{/c/{slug}(slug=${campaign.slug}, page=${currentPage})}">View</a>
                                         <a class="btn btn-outline-secondary btn-sm rounded-1 me-1"
                                            th:href="@{/edit_campaign/{id}(id=${campaign.id})}">Edit</a>
                                         <button type="button" class="btn btn-outline-danger btn-sm rounded-1"

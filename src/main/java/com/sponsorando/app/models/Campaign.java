@@ -1,6 +1,7 @@
 package com.sponsorando.app.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sponsorando.app.utils.SlugUtil;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -8,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "campaigns")
+@Table(name = "campaigns", uniqueConstraints = {@UniqueConstraint(columnNames = {"slug"})})
 public class Campaign {
 
     @Id
@@ -16,6 +17,9 @@ public class Campaign {
     private Long id;
 
     private String title;
+
+    @Column(unique = true)
+    private String slug;
 
     private String description;
 
@@ -76,6 +80,22 @@ public class Campaign {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @PrePersist
+    @PreUpdate
+    public void generateSlug() {
+        if (this.slug == null || this.slug.isEmpty()) {
+            this.slug = SlugUtil.generateSlug(this.title,true, 50);
+        }
+    }
+
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
     }
 
     public String getDescription() {
@@ -195,6 +215,7 @@ public class Campaign {
         return "Campaign{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
+                ", slug='" + slug + '\'' +
                 ", description='" + description + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +

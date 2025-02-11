@@ -2,6 +2,7 @@ package com.sponsorando.app.services;
 
 import com.sponsorando.app.models.*;
 import com.sponsorando.app.repositories.CampaignRepository;
+import com.sponsorando.app.utils.SlugUtil;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,6 +35,7 @@ public class CampaignService {
         UserAccount userAccount = userAccountService.getUser(email);
         Campaign campaign = new Campaign();
         campaign.setTitle(campaignForm.getTitle());
+        campaign.setSlug(SlugUtil.generateSlug(campaignForm.getTitle(),true,100));
         campaign.setDescription(campaignForm.getDescription());
         campaign.setStartDate(campaignForm.getStartDate());
         campaign.setEndDate(campaignForm.getEndDate());
@@ -80,6 +82,7 @@ public class CampaignService {
         return (int) Math.ceil((double) totalCampaigns / pageSize);
     }
 
+    @Transactional(readOnly = true)
     public Campaign getCampaignById(Long id) {
         try {
             return campaignRepository.findById(id)
@@ -88,6 +91,18 @@ public class CampaignService {
                 );
         } catch (Exception e) {
             throw new RuntimeException("Error retrieving campaign with id: " + id, e);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Campaign getCampaignBySlug(String slug) {
+        try {
+            return campaignRepository.findBySlug(slug)
+                    .orElseThrow(
+                            () -> new EntityNotFoundException("Campaign not found with slug: " + slug)
+                    );
+        } catch (Exception e) {
+            throw new RuntimeException("Error retrieving campaign with slug: " + slug, e);
         }
     }
 
