@@ -39,6 +39,7 @@ public class SecurityConfig {
                             .requestMatchers("/admin/**").hasRole("ADMIN")
                             .requestMatchers("/c/**").permitAll()
                             .requestMatchers("/discover_campaigns/**").permitAll()
+                            .requestMatchers("/update_profile").authenticated()
                             .anyRequest().permitAll();
                 }
         );
