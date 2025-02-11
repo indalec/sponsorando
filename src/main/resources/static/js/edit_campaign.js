@@ -58,7 +58,16 @@ document.addEventListener("DOMContentLoaded", function () {
         let data = await response.json();
 
         if (data.length > 0) {
+
             updateMap(data[0].lat, data[0].lon);
+            addressInput.classList.remove("is-invalid");
+            addressInput.nextElementSibling.textContent = "";
+        } else {
+
+            addressInput.classList.add("is-invalid");
+            const errorMessage = addressInput.nextElementSibling;
+            errorMessage.textContent = "Invalid address, please check the entered details.";
+            errorMessage.style.color = "red";
         }
     }
 
@@ -256,4 +265,5 @@ document.addEventListener("DOMContentLoaded", function () {
             validateAddress();
         });
     });
+
 });
