@@ -184,8 +184,6 @@ public class CampaignController {
     @GetMapping("/edit_campaign/{id}")
     public String editCampaign(@PathVariable("id") Long id, @RequestParam("page") int currentPage, Model model) {
 
-        System.out.println("Campaign Id = " + id + " Page = " + currentPage);
-
         List<CampaignCategory> categories = campaignCategoryRepository.findAll();
         List<Currency> currencies = currencyRepository.findAll();
 
@@ -211,24 +209,15 @@ public class CampaignController {
             System.out.println("formattedEndDate:::"+formattedEndDate);
         }
 
-
-
         model.addAttribute("campaignStatuses", CampaignStatus.getCampaignStatuses());
 
         return "edit_campaign";
     }
 
     @PostMapping("/edit_campaign")
-    public String editCampaignSubmit(@ModelAttribute @Valid CampaignForm campaignForm, BindingResult bindingResult,
+    public String editCampaignSubmit(@ModelAttribute @Valid CampaignForm campaignForm,
                                      RedirectAttributes redirectAttributes, Model model) {
-        /*if (bindingResult.hasErrors()) {
-            return "edit_campaign";
 
-        }*/
-
-
-
-        String email = (String) model.getAttribute("username");
         String role = (String) model.getAttribute("currentRole");
 
         boolean isCampaignUpdated = false;
@@ -245,12 +234,6 @@ public class CampaignController {
             redirectAttributes.addFlashAttribute("isCampaignUpdated", false);
         }
 
-
-        /*int totalPages = campaignService.getTotalPages(email, role, 5);
-        int currentPage = campaignForm.getPage();
-        if (totalPages > 0 && currentPage >= totalPages) {
-            currentPage = totalPages - 1;
-        }*/
         redirectAttributes.addFlashAttribute("currentRole", role);
         return "redirect:/campaigns?page=" + campaignForm.getPage();
     }
