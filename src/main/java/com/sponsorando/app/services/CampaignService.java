@@ -141,6 +141,7 @@ public class CampaignService {
             if (!existingCampaign.getStatus().equals(CampaignStatus.ACTIVE)) {
                 existingCampaign.setStartDate(updatedCampaignDetails.getStartDate());
                 existingCampaign.setTitle(updatedCampaignDetails.getTitle());
+                existingCampaign.setSlug(SlugUtil.generateSlug(updatedCampaignDetails.getTitle(),true,100));
             }
 
             existingCampaign.setDescription(updatedCampaignDetails.getDescription());
@@ -165,6 +166,5 @@ public class CampaignService {
             return false;
         }
     }
-
 
 }

@@ -24,9 +24,6 @@ import java.util.Optional;
 public class CampaignController {
 
     @Autowired
-    private UserAccountService userAccountService;
-
-    @Autowired
     private CampaignCategoryRepository campaignCategoryRepository;
 
     @Autowired
@@ -37,6 +34,9 @@ public class CampaignController {
 
     @Autowired
     private CampaignRepository campaignRepository;
+
+    @Autowired
+    private UserAccountService userAccountService;
 
     @GetMapping("/discover_campaigns")
     public String discoverCampaigns(Model model) {
@@ -197,6 +197,7 @@ public class CampaignController {
         if (campaign.isPresent() && campaign.get().getStartDate() != null) {
 
             String formattedStartDate = campaign.get().getStartDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+
             model.addAttribute("formattedStartDate", formattedStartDate);
             model.addAttribute("campaign", campaign.get());
             System.out.println("formattedStartDate:::"+formattedStartDate);
@@ -204,19 +205,23 @@ public class CampaignController {
         if (campaign.isPresent() && campaign.get().getEndDate() != null) {
 
             String formattedEndDate = campaign.get().getEndDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+
             model.addAttribute("formattedEndDate", formattedEndDate);
             model.addAttribute("campaign", campaign.get());
             System.out.println("formattedEndDate:::"+formattedEndDate);
         }
-
         model.addAttribute("campaignStatuses", CampaignStatus.getCampaignStatuses());
-
         return "edit_campaign";
     }
 
     @PostMapping("/edit_campaign")
     public String editCampaignSubmit(@ModelAttribute @Valid CampaignForm campaignForm,
-                                     RedirectAttributes redirectAttributes, Model model) {
+                                     RedirectAttributes redirectAttributes, Model model, BindingResult bindingResult) {
+
+        if(bindingResult.hasErrors()) {
+            return "edit_campaign";
+        }
+        System.out.println(campaignForm);
 
         String role = (String) model.getAttribute("currentRole");
 
