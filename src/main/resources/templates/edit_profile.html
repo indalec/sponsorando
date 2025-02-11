@@ -12,10 +12,9 @@
             crossorigin="anonymous"></script>
 </head>
 <body class="d-flex flex-column min-vh-100">
-
 <header th:replace="~{fragments/header :: headerSection}"></header>
 
-<div class="container mt-5">
+<div class="container mt-5 flex-grow-1"> <!-- Ensures content expands -->
     <h1 class="text-center">Edit Profile</h1>
 
     <form th:action="@{/update_profile}" method="post" class="mt-4 w-50 mx-auto">
@@ -48,7 +47,7 @@
     </form>
 </div>
 
-<footer th:replace="~{fragments/footer :: footerSection}"></footer>
-
+<footer th:replace="~{fragments/footer :: footerSection}" class="mt-auto"></footer>
 </body>
+
 </html>
