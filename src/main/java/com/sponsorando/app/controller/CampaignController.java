@@ -123,9 +123,9 @@ public class CampaignController {
         return "redirect:/campaigns?page=" + currentPage;
     }
 
-    @GetMapping("/c/{id}")
+    @GetMapping("/c/{slug}")
     public String viewCampaign(
-            @PathVariable Long id,
+            @PathVariable String slug,
             @RequestParam(value = "page", defaultValue = "0") int page,
             Model model,
             RedirectAttributes redirectAttributes
@@ -149,8 +149,7 @@ public class CampaignController {
             model.addAttribute("isUser", isUser);
             model.addAttribute("isGuest", isGuest);
 
-
-            Campaign campaign = campaignService.getCampaignById(id);
+            Campaign campaign = campaignService.getCampaignBySlug(slug);
             if (campaign != null) {
                 model.addAttribute("campaign", campaign);
             }
@@ -171,12 +170,6 @@ public class CampaignController {
                 redirectAttributes.addFlashAttribute("errorMessage", "Unfortunately an error occurred while retrieving the campaign. Please try again.");
                 return "redirect:/campaigns?page=" + page;
             }
-
-
-
-
-
         }
     }
-
 }
