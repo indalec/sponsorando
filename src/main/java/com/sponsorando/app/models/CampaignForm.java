@@ -38,6 +38,12 @@ public class CampaignForm {
     @NotEmpty(message = "Please select at least one option")
     private List<CampaignCategory> categories;
 
+    private Boolean showLocation;
+
+    private int page;
+
+    private Long campaignId;
+
     @NotBlank(message = "Street is mandatory")
     private String street;
 
@@ -113,6 +119,14 @@ public class CampaignForm {
         this.categories = categories;
     }
 
+    public Boolean getShowLocation() {
+        return showLocation;
+    }
+
+    public void setShowLocation(Boolean showLocation) {
+        this.showLocation = showLocation;
+    }
+
     public String getStreet() {
         return street;
     }
@@ -169,6 +183,22 @@ public class CampaignForm {
         this.longitude = longitude;
     }
 
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public Long getCampaignId() {
+        return campaignId;
+    }
+
+    public void setCampaignId(Long campaignId) {
+        this.campaignId = campaignId;
+    }
+
     @Override
     public String toString() {
         return "CampaignForm{" +
@@ -179,6 +209,8 @@ public class CampaignForm {
                 ", goalAmount=" + goalAmount +
                 ", currency=" + currency +
                 ", categories=" + categories +
+                ", showLocation=" + showLocation +
+                ", showLocation=" + showLocation +
                 ", street='" + street + '\'' +
                 ", number='" + number + '\'' +
                 ", city='" + city + '\'' +
