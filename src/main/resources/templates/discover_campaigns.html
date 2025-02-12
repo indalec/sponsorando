@@ -7,7 +7,7 @@
         <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
     </head>
     <body>
-        <header th:replace="~{fragments/header :: headerSection}" class="container"></header>
+    <header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}" class="container mb-4"></header>
         <main>
             <div class="container mt-5">
                 <div id="errorMessage" th:if="${errorMessage}" class="alert alert-danger d-flex align-items-center justify-content-center mx-auto mt-3 mb-5 fade show text-wrap w-75 w-md-50 text-wrap" role="alert">

@@ -7,7 +7,7 @@
     <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
 </head>
 <body>
-<header th:replace="~{fragments/header :: headerSection}" class="container"></header>
+<header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}" class="container mb-4"></header>
 <div class="container mt-5">
     <div id="successDivDelete" th:if="${isCampaignDeleted}" class="alert alert-success text-center w-50 mx-auto mt-5" role="alert">
         <span th:text="${currentRole == 'ROLE_ADMIN' ? 'Campaign deactivated successfully' : 'Campaign deleted successfully'}"></span>
@@ -20,6 +20,24 @@
             <span th:text="${errorMessage}"></span>
         </div>
     </div>
+    <div th:if="${isCampaignUpdated != null}">
+        <div th:if="${isCampaignUpdated}">
+            <div id="successDivUpdate" th:if="${isCampaignUpdated}" class="alert alert-success text-center w-50 mx-auto mt-3" role="alert">
+                <span>Campaign updated successfully</span>
+            </div>
+        </div>
+        <div th:if="${!isCampaignUpdated}">
+            <div id="errorMessageUpdate" th:if="${!isCampaignUpdated}" class="alert alert-danger d-flex align-items-center justify-content-center mx-auto mt-3 mb-5 fade show text-wrap w-75 w-md-50 text-wrap" role="alert">
+                <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Danger:" width="20" height="20" fill="currentColor">
+                    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                </svg>
+                <div style="line-height: 1.2;">
+                    <span>Failed to update campaign!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <h1 th:text="${currentRole == 'ROLE_ADMIN' ? 'Campaigns' : 'Your Campaigns'}"></h1>
     <form th:action="@{/campaigns}" method="post" class="mt-5">
         <div class="card shadow-sm">
@@ -83,9 +101,9 @@
                                 <div class="d-flex flex-column align-items-center">
                                     <div class="btn-group mb-1" role="group">
                                         <a class="btn btn-outline-primary btn-sm rounded-1 me-1"
-                                           th:href="@{/c/{slug}(slug=${campaign.slug}, page=${currentPage})}">View</a>
+                                           th:href="@{/view_campaign/{id}(id=${campaign.id})}">View</a>
                                         <a class="btn btn-outline-secondary btn-sm rounded-1 me-1"
-                                           th:href="@{/edit_campaign/{id}(id=${campaign.id})}">Edit</a>
+                                           th:href="@{/edit_campaign/{id}(id=${campaign.id},page=${currentPage})}">Edit</a>
                                         <button type="button" class="btn btn-outline-danger btn-sm rounded-1"
                                                 th:onclick="'confirmCampaignDelete(\'' + ${campaign.id} + '\', ' + ${currentPage} + ')'">
                                             Delete
@@ -145,5 +163,6 @@
     }
 </script>
 <script src="/js/action_notifications.js"></script>
+
 </body>
 </html>

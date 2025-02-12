@@ -9,7 +9,7 @@
 </head>
 
 <body>
-<header th:replace="~{fragments/header :: headerSection}" class="container"></header>
+<header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}" class="container mb-4"></header>
 <div class="container flex-grow-1">
     <div id="showInfoMessage" th:if="${showInfoMessage}" class="alert alert-info d-flex align-items-center alert-dismissible fade show w-50 mx-auto" role="alert">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-info-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Info:">

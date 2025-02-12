@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CampaignService {
@@ -86,9 +87,9 @@ public class CampaignService {
     public Campaign getCampaignById(Long id) {
         try {
             return campaignRepository.findById(id)
-                .orElseThrow(
-                    () -> new EntityNotFoundException("Campaign not found with id: " + id)
-                );
+                    .orElseThrow(
+                            () -> new EntityNotFoundException("Campaign not found with id: " + id)
+                    );
         } catch (Exception e) {
             throw new RuntimeException("Error retrieving campaign with id: " + id, e);
         }
@@ -121,6 +122,46 @@ public class CampaignService {
                 return false;
             }
         } catch (RuntimeException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateCampaign(CampaignForm updatedCampaignDetails) {
+        try {
+
+            Optional<Campaign> existingCampaignOptional = campaignRepository.findById(updatedCampaignDetails.getCampaignId());
+
+            if (existingCampaignOptional.isEmpty()) {
+                return false;
+            }
+
+            Campaign existingCampaign = existingCampaignOptional.get();
+
+            if (!existingCampaign.getStatus().equals(CampaignStatus.ACTIVE)) {
+                existingCampaign.setStartDate(updatedCampaignDetails.getStartDate());
+                existingCampaign.setTitle(updatedCampaignDetails.getTitle());
+                existingCampaign.setSlug(SlugUtil.generateSlug(updatedCampaignDetails.getTitle(),true,100));
+            }
+
+            existingCampaign.setDescription(updatedCampaignDetails.getDescription());
+            existingCampaign.setShowLocation(updatedCampaignDetails.getShowLocation() != null ? updatedCampaignDetails.getShowLocation() : false);
+            existingCampaign.setCurrency(updatedCampaignDetails.getCurrency());
+            existingCampaign.setGoalAmount(updatedCampaignDetails.getGoalAmount());
+            existingCampaign.setEndDate(updatedCampaignDetails.getEndDate());
+            existingCampaign.setCategories(updatedCampaignDetails.getCategories());
+            existingCampaign.setUpdatedAt(LocalDateTime.now());
+
+            if (!existingCampaign.getStatus().equals(CampaignStatus.ACTIVE)) {
+                if (addressService.updateAddress(updatedCampaignDetails, existingCampaign) == null) {
+                    return false;
+                }
+            }
+
+            campaignRepository.save(existingCampaign);
+            return true;
+
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }

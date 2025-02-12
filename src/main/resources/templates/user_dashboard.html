@@ -10,7 +10,7 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
 
-<header th:replace="~{fragments/header :: headerSection}" class="container"></header>
+<header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}" class="container mb-4"></header>
 
 <div class="container mt-5 dashboard-container flex-grow-1">
     <h1 class="text-center">Welcome, <span th:text="${userAccount.getName()}"></span>!</h1>
