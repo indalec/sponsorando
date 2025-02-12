@@ -3,6 +3,7 @@ package com.sponsorando.app.controller;
 import com.sponsorando.app.models.UserAccount;
 import com.sponsorando.app.models.UserEditForm;
 import com.sponsorando.app.services.UserAccountService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -40,11 +41,15 @@ public class EditProfileController {
 
 
     @PostMapping("/update_profile")
-    public String updateProfile(@Validated(UserEditForm.ValidationGroups.PasswordCheck.class) @ModelAttribute("userEditForm") UserEditForm userEditForm,
-                                BindingResult result, Model model) {
+    public String updateProfile(@Validated({UserEditForm.ValidationGroups.PasswordCheck.class,
+                                        UserEditForm.ValidationGroups.NameCheck.class,
+                                        UserEditForm.ValidationGroups.EmailCheck.class})
+                                @ModelAttribute("userEditForm") UserEditForm userEditForm,
+                                BindingResult result,
+                                Model model) {
 
         if (result.hasErrors()) {
-            model.addAttribute("userForm", userEditForm);
+            model.addAttribute("userEditForm", userEditForm);
             return "edit_profile";
         }
 
@@ -62,7 +67,6 @@ public class EditProfileController {
 
         //TODO: implement image storage here
 
-        // Save the updated user
         userAccountService.updateUserProfile(currentUsername, userEditForm);
 
         return "redirect:/user_dashboard";

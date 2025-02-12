@@ -1,27 +1,29 @@
 package com.sponsorando.app.models;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import org.springframework.web.multipart.MultipartFile;
 
 public class UserEditForm {
 
+    public interface ValidationGroups {
+        interface NameCheck {}
+        interface EmailCheck {}
+        interface PasswordCheck {}
+
+    }
     private Long id;
 
-    @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
+    @NotEmpty(message = "Name cannot be empty", groups = ValidationGroups.NameCheck.class)
+    @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters", groups = ValidationGroups.NameCheck.class)
     private String name;
 
-    @Email(message = "Invalid email format")
+    @NotEmpty(message = "Email cannot be empty", groups = ValidationGroups.EmailCheck.class)
+    @Email(message = "Invalid email format", groups = ValidationGroups.EmailCheck.class)
     private String email;
 
     @Pattern(regexp = "^$|.{8,}", message = "Password must be at least 8 characters long",
             groups = ValidationGroups.PasswordCheck.class)
     private String password;
-
-    public interface ValidationGroups {
-        interface PasswordCheck {}
-    }
 
     private MultipartFile imageUrl;
 
