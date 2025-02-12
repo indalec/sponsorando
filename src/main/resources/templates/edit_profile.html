@@ -4,20 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Edit Profile | Sponsorando</title>
-    <link href="/css/main.css" type="text/css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"></script>
+    <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
 </head>
 <body class="d-flex flex-column min-vh-100">
-<header th:replace="~{fragments/header :: headerSection}"></header>
+<header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}" class="container mb-4"></header>
 
 <div class="container mt-5 flex-grow-1">
     <h1 class="text-center">Edit Profile</h1>
 
-    <form th:action="@{/update_profile}" method="post" th:object="${userForm}" class="mt-4 w-50 mx-auto" onsubmit="return validatePasswords()">
+    <form th:action="@{/update_profile}" method="post" th:object="${userEditForm}" class="mt-4 w-50 mx-auto" onsubmit="return validatePasswords()">
         <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 
         <!-- Full Name Field -->
@@ -27,27 +22,23 @@
             <small class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></small>
         </div>
 
-        <!-- Email Address Field -->
         <div class="mb-3">
             <label for="email" class="form-label">Email Address</label>
             <input type="email" class="form-control" id="email" name="email" th:field="*{email}">
         </div>
 
-        <!-- New Password Field -->
         <div class="mb-3">
             <label for="password" class="form-label">New Password</label>
             <input type="password" class="form-control" id="password" name="password" th:field="*{password}" placeholder="Enter new password">
             <small class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></small>
         </div>
 
-        <!-- Confirm Password Field -->
         <div class="mb-3">
             <label for="confirmPassword" class="form-label">Confirm Password</label>
             <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password">
             <small class="text-danger" id="passwordError"></small>
         </div>
 
-        <!-- Buttons -->
         <div class="text-center mt-4 d-flex justify-content-center gap-3">
             <button type="submit" class="btn btn-outline-success btn-sm rounded-1 px-4">Save Changes</button>
             <a href="/user_dashboard" class="btn btn-outline-danger btn-sm rounded-1 px-4">Cancel</a>
@@ -64,15 +55,16 @@
         let confirmPassword = document.getElementById("confirmPassword").value;
         let passwordError = document.getElementById("passwordError");
 
-        if (password !== confirmPassword) {
+        if (password && password !== confirmPassword) {
             passwordError.textContent = "Passwords do not match!";
             passwordError.style.display = "block";
-            return false; // Prevent form submission
+            return false;
         }
 
         passwordError.style.display = "none";
         return true;
     }
+
 </script>
 
 </body>

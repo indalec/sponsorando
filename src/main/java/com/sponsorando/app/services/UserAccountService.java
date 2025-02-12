@@ -3,7 +3,10 @@ package com.sponsorando.app.services;
 import com.sponsorando.app.models.*;
 import com.sponsorando.app.repositories.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,8 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.security.Principal;
 import java.util.Optional;
 
 @Service
@@ -101,11 +102,14 @@ public class UserAccountService implements UserDetailsService {
             }
 
             // TODO: Implement image storage logic when ready
-            // if (form.getImageUrl() != null && !form.getImageUrl().isEmpty()) {
-            //     existingUser.setImageUrl(saveFile(form.getImageUrl()));
-            // }
+
 
             userAccountRepository.save(existingUser);
+
+            // Update Security Context (when user email changed)
+            UserDetails userDetails = loadUserByUsername(existingUser.getEmail());
+            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
     }
 
