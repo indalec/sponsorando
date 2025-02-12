@@ -80,25 +80,28 @@ public class UserAccountService implements UserDetailsService {
         }
     }
 
-    public void updateUserProfile(UserAccount updatedUser) {
-        Optional<UserAccount> existingUserOptional = userAccountRepository.findByEmail(updatedUser.getEmail());
+    public void updateUserProfile(UserForm updatedUserForm) {
+        Optional<UserAccount> UserOptional = userAccountRepository.findByEmail(updatedUserForm.getEmail());
 
-        if (existingUserOptional.isPresent()) {
-            UserAccount existingUser = existingUserOptional.get();
+        if (UserOptional.isPresent()) {
+            UserAccount existingUser = UserOptional.get();
 
-            if (updatedUser.getName() != null && !updatedUser.getName().isEmpty()
-                    && !updatedUser.getName().equals(existingUser.getName())) {
-                existingUser.setName(updatedUser.getName());
+            if (updatedUserForm.getName() != null && !updatedUserForm.getName().isEmpty()
+                    && !updatedUserForm.getName().equals(existingUser.getName())) {
+                existingUser.setName(updatedUserForm.getName());
             }
 
-            if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
-                existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+            if (updatedUserForm.getPassword() != null && !updatedUserForm.getPassword().isEmpty()) {
+                existingUser.setPassword(passwordEncoder.encode(updatedUserForm.getPassword()));
+            } else {
+                updatedUserForm.setPassword(existingUser.getPassword()); // Keep the old password
             }
 
-            if (updatedUser.getImageUrl() != null && !updatedUser.getImageUrl().isEmpty()
-                    && !updatedUser.getImageUrl().equals(existingUser.getImageUrl())) {
-                existingUser.setImageUrl(updatedUser.getImageUrl());
-            }
+            // TODO: implement when images are implemented in the project
+//            if (updatedUserForm.getImageUrl() != null && !updatedUserForm.getImageUrl().isEmpty()
+//                    && !updatedUserForm.getImageUrl().equals(existingUser.getImageUrl())) {
+//                existingUser.setImageUrl(updatedUserForm.getImageUrl());
+//            }
 
             userAccountRepository.save(existingUser);
         }
