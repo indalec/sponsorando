@@ -1,6 +1,7 @@
 package com.sponsorando.app.controller;
 
 import com.sponsorando.app.models.UserAccount;
+import com.sponsorando.app.models.UserEditForm;
 import com.sponsorando.app.models.UserForm;
 import com.sponsorando.app.services.UserAccountService;
 import jakarta.validation.Valid;
@@ -43,29 +44,32 @@ public class EditProfileController {
 
 
     @PostMapping("/update_profile")
-    public String updateProfile(@Valid @ModelAttribute("userForm") UserForm userForm,
+    public String updateProfile(@Valid @ModelAttribute("userEditForm") UserEditForm userEditForm,
                                 BindingResult result, Model model) {
 
-        // If validation fails, return to form with errors
         if (result.hasErrors()) {
-            model.addAttribute("userForm", userForm);
+            model.addAttribute("userForm", userEditForm);
             return "edit_profile";
         }
 
-        // Fetch the existing user from DB
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         UserAccount existingUser = userAccountService.getUser(currentUsername);
 
-        // ✅ Keep password unchanged if user didn't modify it
-        if (userForm.getPassword() == null || userForm.getPassword().isBlank()) {
-            userForm.setPassword(existingUser.getPassword());
+        // Update fields
+        existingUser.setName(userEditForm.getName());
+        existingUser.setEmail(userEditForm.getEmail());
+
+        // Only update password if it's provided
+        if (userEditForm.getPassword() != null && !userEditForm.getPassword().isBlank()) {
+            existingUser.setPassword(userEditForm.getPassword());
         }
 
-        // Update user profile
-        userAccountService.updateUserProfile(userForm);
+        //TODO: implement image storage here
 
-        // Redirect to dashboard after successful update
+        // Save the updated user
+        userAccountService.updateUserProfile(currentUsername, userEditForm);
+
         return "redirect:/user_dashboard";
     }
 

@@ -1,9 +1,6 @@
 package com.sponsorando.app.services;
 
-import com.sponsorando.app.models.ImageForm;
-import com.sponsorando.app.models.Role;
-import com.sponsorando.app.models.UserAccount;
-import com.sponsorando.app.models.UserForm;
+import com.sponsorando.app.models.*;
 import com.sponsorando.app.repositories.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -80,28 +77,33 @@ public class UserAccountService implements UserDetailsService {
         }
     }
 
-    public void updateUserProfile(UserForm updatedUserForm) {
-        Optional<UserAccount> UserOptional = userAccountRepository.findByEmail(updatedUserForm.getEmail());
+    public void updateUserProfile(String currentEmail, UserEditForm form) {
+        Optional<UserAccount> optionalUser = userAccountRepository.findByEmail(currentEmail);
 
-        if (UserOptional.isPresent()) {
-            UserAccount existingUser = UserOptional.get();
+        if (optionalUser.isPresent()) {
+            UserAccount existingUser = optionalUser.get();
 
-            if (updatedUserForm.getName() != null && !updatedUserForm.getName().isEmpty()
-                    && !updatedUserForm.getName().equals(existingUser.getName())) {
-                existingUser.setName(updatedUserForm.getName());
+            // Update name if it's provided
+            if (form.getName() != null && !form.getName().isEmpty() &&
+                    !form.getName().equals(existingUser.getName())) {
+                existingUser.setName(form.getName());
             }
 
-            if (updatedUserForm.getPassword() != null && !updatedUserForm.getPassword().isEmpty()) {
-                existingUser.setPassword(passwordEncoder.encode(updatedUserForm.getPassword()));
-            } else {
-                updatedUserForm.setPassword(existingUser.getPassword()); // Keep the old password
+            // Update email if it's provided and different
+            if (form.getEmail() != null && !form.getEmail().isEmpty() &&
+                    !form.getEmail().equals(existingUser.getEmail())) {
+                existingUser.setEmail(form.getEmail());
             }
 
-            // TODO: implement when images are implemented in the project
-//            if (updatedUserForm.getImageUrl() != null && !updatedUserForm.getImageUrl().isEmpty()
-//                    && !updatedUserForm.getImageUrl().equals(existingUser.getImageUrl())) {
-//                existingUser.setImageUrl(updatedUserForm.getImageUrl());
-//            }
+            // Update password if provided
+            if (form.getPassword() != null && !form.getPassword().isEmpty()) {
+                existingUser.setPassword(passwordEncoder.encode(form.getPassword()));
+            }
+
+            // TODO: Implement image storage logic when ready
+            // if (form.getImageUrl() != null && !form.getImageUrl().isEmpty()) {
+            //     existingUser.setImageUrl(saveFile(form.getImageUrl()));
+            // }
 
             userAccountRepository.save(existingUser);
         }
