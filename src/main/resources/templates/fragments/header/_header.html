@@ -11,18 +11,18 @@
             </button>
             <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
                 <ul class="navbar-nav ms-auto d-flex align-items-center">
-                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                    <li class="nav-item"><a th:if="${username != null}" class="nav-link" href="/campaigns">Campaigns</a>
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="/discover_campaigns">Discover Campaigns</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/add_campaign">Start a Campaign</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/about">About Us</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/contact">Contact Us</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/faq">Help</a></li>
-                </ul>
+                    <ul class="navbar-nav ms-auto d-flex align-items-center">
+                        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/discover_campaigns">Discover Campaigns</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/add_campaign">Start a Campaign</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/about">About Us</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/contact">Contact Us</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/faq">Help</a></li>
+                    </ul>
 
+                </ul>
                 <div class="navbar-auth d-flex align-items-center gap-3 d-none d-lg-flex"
-                     th:replace="fragments/_auth-buttons :: authButtons"></div>
+                     th:replace="~{fragments/_auth-buttons :: authButtons}"></div>
             </div>
 
             <div class="offcanvas offcanvas-end custom-menu" id="offcanvasNavbar"
@@ -34,16 +34,13 @@
                 <div class="offcanvas-body d-flex flex-column align-items-center text-center">
                     <ul class="navbar-nav w-100">
                         <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                        <li class="nav-item"><a th:if="${username != null}" class="nav-link"
-                                                href="/campaigns">Campaigns</a></li>
                         <li class="nav-item"><a class="nav-link" href="/discover_campaigns">Discover Campaigns</a></li>
                         <li class="nav-item"><a class="nav-link" href="/add_campaign">Start a Campaign</a></li>
                         <li class="nav-item"><a class="nav-link" href="/about">About Us</a></li>
                         <li class="nav-item"><a class="nav-link" href="/contact">Contact Us</a></li>
                         <li class="nav-item"><a class="nav-link" href="/faq">Help</a></li>
                     </ul>
-
-                    <div class="auth-buttons w-100 mt-4 mb-3" th:replace="fragments/_auth-buttons :: authButtons"></div>
+                    <div class="auth-buttons w-100 mt-4 mb-3" th:replace="~{fragments/_auth-buttons :: authButtons}"></div>
                 </div>
             </div>
         </div>

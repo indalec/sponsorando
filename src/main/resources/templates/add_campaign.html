@@ -10,7 +10,7 @@
     <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
 </head>
 <body>
-<header th:replace="~{fragments/header :: headerSection}" class="container"></header>
+<header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}" class="container mb-4"></header>
 <div class="container mt-5">
     <div id="successDivAdd" th:if="${isCampaignAdded}" class="alert alert-success" role="alert">Campaign added successfully</div>
     <h1>Create New Campaign</h1>

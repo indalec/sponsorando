@@ -7,7 +7,7 @@
     <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
 </head>
 <body>
-<header th:replace="~{fragments/header :: headerSection}" class="container"></header>
+<header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}" class="container mb-4"></header>
 <div class="container mt-5">
     <div id="successDivDelete" th:if="${isCampaignDeleted}" class="alert alert-success text-center w-50 mx-auto mt-5" role="alert">
         <span th:text="${currentRole == 'ROLE_ADMIN' ? 'Campaign deactivated successfully' : 'Campaign deleted successfully'}"></span>

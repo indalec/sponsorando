@@ -7,7 +7,7 @@
         <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
     </head>
     <body>
-        <header th:replace="~{fragments/header :: headerSection}" class="container"></header>
+    <header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}" class="container mb-4"></header>
         <main>
             <div class="container mt-5">
                 <h2 class="text-center">About Us</h2>
