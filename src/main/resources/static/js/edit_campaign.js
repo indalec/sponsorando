@@ -121,9 +121,14 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-
     const today = new Date();
     const todayString = today.toISOString().split('T')[0];
+
+// Round the current time to the nearest multiple of 5 minutes
+    const roundedMinutes = Math.ceil(today.getMinutes() / 5) * 5;
+    today.setMinutes(roundedMinutes);
+    today.setSeconds(0); // Set seconds to 0 for clean time
+    today.setMilliseconds(0); // Set milliseconds to 0 for clean time
 
     const startDateInput = document.getElementById("startDate");
     const startDateValue = startDateInput.value;
@@ -138,11 +143,43 @@ document.addEventListener("DOMContentLoaded", function () {
         time_24hr: true,
         minDate: "today",
         defaultDate: startDateInput.value,
-        onChange: function (selectedDates, dateStr, instance) {
+        minuteIncrement: 5,
+        onReady: function (selectedDates, dateStr, instance) {
 
+            const currentTime = `${today.getHours()}:${today.getMinutes().toString().padStart(2, '0')}`;
+            if (instance.input.value && new Date(instance.input.value).toISOString().split('T')[0] === todayString) {
+                instance.set("minTime", currentTime);
+            }
+        },
+        onChange: function (selectedDates, dateStr, instance) {
+            if (selectedDates.length > 0) {
+                const selectedDate = selectedDates[0];
+                const currentDate = new Date(); // Get the current date and time
+
+                // Add 1 hour to the current time
+                currentDate.setHours(currentDate.getHours() + 1);
+
+                // If the selected date is before 1 hour from now, update it to 1 hour ahead
+                if (selectedDate.getTime() < currentDate.getTime()) {
+                    selectedDate.setTime(currentDate.getTime()); // Set the selected date to 1 hour from now
+                    instance.setDate(selectedDate, true); // Update the date picker with the adjusted time
+                }
+
+                // If today, set the minimum time to the current time
+                if (selectedDate.toISOString().split('T')[0] === todayString) {
+                    const currentTime = `${currentDate.getHours()}:${currentDate.getMinutes().toString().padStart(2, '0')}`;
+                    instance.set("minTime", currentTime);
+                } else {
+                    instance.set("minTime", null); // No minTime restriction for future dates
+                }
+            }
+            // Adjust the end date picker to reflect the selected start date
             endDatePicker.set('minDate', dateStr);
         }
+
     });
+
+
 
     const endDateInput = document.getElementById("endDate");
     const endDateValue = endDateInput.value;
@@ -157,15 +194,13 @@ document.addEventListener("DOMContentLoaded", function () {
         time_24hr: true,
         minDate: "today",
         defaultDate: endDateInput.value,
+        minuteIncrement: 5,
         onChange: function (selectedDates, dateStr, instance) {
-
             if (selectedDates[0] <= startDatePicker.selectedDates[0]) {
-
                 instance.setDate(startDatePicker.selectedDates[0], true);
             }
         }
     });
-
 
     const form = document.querySelector('form');
 
@@ -177,15 +212,18 @@ document.addEventListener("DOMContentLoaded", function () {
             return false;
         }
 
-        if (endDate <= startDate) {
+        // Compare both date and time (using getTime to include the exact time)
+        if (endDate.getTime() <= startDate.getTime()) {
             endDateInput.classList.add("is-invalid");
-            endDateInput.nextElementSibling.textContent = "End date must be later than the start date.";
+            endDateInput.nextElementSibling.textContent = "End date and time must be later than the start date and time.";
             return false;
         } else {
             endDateInput.classList.remove("is-invalid");
             return true;
         }
     }
+
+
 
     endDateInput.addEventListener('change', validateDates);
 
@@ -265,5 +303,4 @@ document.addEventListener("DOMContentLoaded", function () {
             validateAddress();
         });
     });
-
 });

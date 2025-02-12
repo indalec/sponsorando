@@ -19,7 +19,7 @@ public class CampaignForm {
     private String description;
 
     @NotNull(message = "Please insert the date the campaign starts")
-
+    @FutureOrPresent(message = "Date cannot be in the past")
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime startDate;
 
