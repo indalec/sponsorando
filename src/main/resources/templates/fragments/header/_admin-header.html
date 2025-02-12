@@ -1,0 +1,45 @@
+<header th:fragment="headerSectionAdmin" class="container">
+    <link rel="stylesheet" th:href="@{/css/burger.css}">
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container d-flex align-items-center justify-content-between flex-nowrap">
+            <a class="navbar-brand" href="/">
+                <img src="/images/title.svg" alt="Logo" width="150" height="auto">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+                    aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+                <ul class="navbar-nav ms-auto d-flex align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="/admin">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/campaigns">Campaigns</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/donations">Donations</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/payments">Payments</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/users">Users</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/faq">Help</a></li>
+                </ul>
+                <div class="navbar-auth d-flex align-items-center gap-3 d-none d-lg-flex"
+                     th:replace="~{fragments/_auth-buttons :: authButtons}"></div>
+            </div>
+
+            <div class="offcanvas offcanvas-end custom-menu" id="offcanvasNavbar"
+                 aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Sponsorando</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body d-flex flex-column align-items-center text-center">
+                    <ul class="navbar-nav w-100">
+                        <li class="nav-item"><a class="nav-link" href="/admin">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/campaigns">Campaigns</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/donations">Donations</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/payments">Payments</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/users">Users</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/faq">Help</a></li>
+                    </ul>
+                    <div class="auth-buttons w-100 mt-4 mb-3" th:replace="~{fragments/_auth-buttons :: authButtons}"></div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>

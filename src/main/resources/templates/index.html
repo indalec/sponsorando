@@ -7,7 +7,7 @@
     <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
 </head>
 <body>
-<header th:replace="~{fragments/header :: headerSection}" class="container"></header>
+<header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}" class="container mb-4"></header>
 <div class="container">
     <div id="successDivAdd" th:if="${isSignedUp}" class="alert alert-success" role="alert">🎉 Registration successful! Welcome aboard.</div>
     <section class="hero-section" style="background-image: url('/images/hero.jpg'); background-size: cover;">
