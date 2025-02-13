@@ -17,6 +17,7 @@ public interface CampaignRepository extends JpaRepository<Campaign, Long > {
     Page<Campaign> findByUserAccountEmailAndStatusNot(String email, CampaignStatus status, Pageable pageable);
     long countByUserAccountEmailAndStatusNot(String email, CampaignStatus status);
     Optional<Campaign> findBySlug(String slug);
+
     @Query("SELECT c FROM Campaign c " +
             "JOIN c.categories cat " +
             "WHERE c.status = :status " +
@@ -28,8 +29,6 @@ public interface CampaignRepository extends JpaRepository<Campaign, Long > {
             @Param("category") String category,
             Pageable pageable);
 
-
     Page<Campaign> findByStatus(CampaignStatus status, Pageable pageable);
-
 
 }

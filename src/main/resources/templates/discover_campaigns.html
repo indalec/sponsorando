@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Discover Campaigns - Sponsorando</title>
     <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 </head>
 <body>
 <header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}"
@@ -32,6 +34,19 @@
                    aria-label="Search" th:value="${searchQuery}">
         </div>
     </form>
+
+    <form class="d-flex justify-content-end mt-5" th:action="@{/discover_campaigns}" method="get">
+        <div class="d-flex align-items-center">
+            <label for="sortByUrgency" id="campaignCountLabel" class="form-label mb-0 me-2" style="white-space: nowrap;"
+                   th:text="${campaigns.size() + ' campaigns sorted by:'}"></label>
+            <select id="sortByUrgency" class="form-select" name="sortBy" aria-label="Sort by urgency">
+                <option value="mostUrgent" th:selected="${sortBy == 'mostUrgent'}">Most Urgent</option>
+                <option value="fewestDaysLeft" th:selected="${sortBy == 'fewestDaysLeft'}">Fewest Days Left</option>
+                <option value="newest" th:selected="${sortBy == 'newest'}">Newest</option>
+            </select>
+        </div>
+    </form>
+
     <div id="noCampaignsMessage" th:if="${campaigns == null or campaigns.isEmpty()}"
          class="alert alert-warning text-center w-75 w-md-50 mx-auto mt-5">
         <strong>No campaigns available at the moment.</strong>

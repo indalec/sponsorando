@@ -41,20 +41,23 @@ public class CampaignController {
     @GetMapping("/discover_campaigns")
     public String discoverCampaigns(Model model,
                                     @RequestParam(name = "page", defaultValue = "0") int pageNumber,
-                                    @RequestParam(name = "searchQuery", required = false) String searchQuery) {
-        int pageSize = 5;
+                                    @RequestParam(name = "searchQuery", required = false) String searchQuery,
+                                    @RequestParam(name = "sortBy", defaultValue = "mostUrgent") String sortBy) {
+
+        int pageSize = 9;
         Page<Campaign> page;
 
         if (searchQuery != null && !searchQuery.isEmpty()) {
-            page = campaignService.getActiveCampaignsByTitleOrCategory(searchQuery, pageNumber, pageSize);
+            page = campaignService.getActiveCampaignsByTitleOrCategory(searchQuery, sortBy, pageNumber, pageSize);
         } else {
-            page = campaignService.getCampaignsByStatus(pageNumber, pageSize);
+            page = campaignService.getCampaignsByStatus(sortBy, pageNumber, pageSize);
         }
 
         model.addAttribute("campaigns", page.getContent());
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("currentPage", page.getNumber());
         model.addAttribute("searchQuery", searchQuery);
+        model.addAttribute("sortBy", sortBy);
 
         return "discover_campaigns";
     }
@@ -105,7 +108,7 @@ public class CampaignController {
         String currentUser = (String) model.getAttribute("username");
         String currentRole = (String) model.getAttribute("currentRole");
 
-        int pageSize = 5;
+        int pageSize = 10;
         Page<Campaign> page;
 
         if ("ROLE_ADMIN".equals(currentRole)) {
