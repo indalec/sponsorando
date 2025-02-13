@@ -39,10 +39,25 @@ public class CampaignController {
     private UserAccountService userAccountService;
 
     @GetMapping("/discover_campaigns")
-    public String discoverCampaigns(Model model) {
+    public String discoverCampaigns(Model model,
+                                    @RequestParam(name = "page", defaultValue = "0") int pageNumber,
+                                    @RequestParam(name = "searchQuery", required = false) String searchQuery) {
+        int pageSize = 5;
+        Page<Campaign> page;
 
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            page = campaignService.getActiveCampaignsByTitle(searchQuery, pageNumber, pageSize);
+        } else {
+            page = campaignService.getCampaignsByStatus(pageNumber, pageSize);
+        }
+
+        model.addAttribute("campaigns", page.getContent());
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("currentPage", page.getNumber());
+        model.addAttribute("searchQuery", searchQuery);  // Keep the search query in the model
         return "discover_campaigns";
     }
+
 
     @GetMapping("/add_campaign")
     @PreAuthorize("isAuthenticated()")
@@ -183,6 +198,7 @@ public class CampaignController {
 
     @GetMapping("/edit_campaign/{id}")
     public String editCampaign(@PathVariable("id") Long id, @RequestParam("page") int currentPage, Model model) {
+        System.out.println("checkkkkkkkkkkkkk");
 
         List<CampaignCategory> categories = campaignCategoryRepository.findAll();
         List<Currency> currencies = currencyRepository.findAll();

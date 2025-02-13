@@ -15,5 +15,9 @@ public interface CampaignRepository extends JpaRepository<Campaign, Long > {
     Page<Campaign> findByUserAccountEmailAndStatusNot(String email, CampaignStatus status, Pageable pageable);
     long countByUserAccountEmailAndStatusNot(String email, CampaignStatus status);
     Optional<Campaign> findBySlug(String slug);
+    Page<Campaign> findByStatusAndTitle(CampaignStatus status, String title, Pageable pageable);
+
+    Page<Campaign> findByStatus(CampaignStatus status, Pageable pageable);
+
 
 }

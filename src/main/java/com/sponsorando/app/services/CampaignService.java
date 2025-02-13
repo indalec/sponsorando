@@ -64,6 +64,17 @@ public class CampaignService {
         return campaignRepository.findAll(pageable);
     }
 
+    public Page<Campaign> getActiveCampaignsByTitle(String title, int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return campaignRepository.findByStatusAndTitle(CampaignStatus.ACTIVE, title, pageable);
+    }
+
+    public Page<Campaign> getCampaignsByStatus(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return campaignRepository.findByStatus(CampaignStatus.ACTIVE, pageable);
+    }
+
+
     public Page<Campaign> getCampaignsByUserEmail(String email, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return campaignRepository.findByUserAccountEmailAndStatusNot(email, CampaignStatus.INACTIVE, pageable);
