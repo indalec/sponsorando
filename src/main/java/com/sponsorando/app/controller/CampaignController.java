@@ -46,7 +46,7 @@ public class CampaignController {
         Page<Campaign> page;
 
         if (searchQuery != null && !searchQuery.isEmpty()) {
-            page = campaignService.getActiveCampaignsByTitle(searchQuery, pageNumber, pageSize);
+            page = campaignService.getActiveCampaignsByTitleOrCategory(searchQuery, pageNumber, pageSize);
         } else {
             page = campaignService.getCampaignsByStatus(pageNumber, pageSize);
         }
@@ -54,10 +54,10 @@ public class CampaignController {
         model.addAttribute("campaigns", page.getContent());
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("currentPage", page.getNumber());
-        model.addAttribute("searchQuery", searchQuery);  // Keep the search query in the model
+        model.addAttribute("searchQuery", searchQuery);
+
         return "discover_campaigns";
     }
-
 
     @GetMapping("/add_campaign")
     @PreAuthorize("isAuthenticated()")
