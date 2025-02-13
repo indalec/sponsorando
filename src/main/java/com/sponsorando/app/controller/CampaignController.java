@@ -201,7 +201,6 @@ public class CampaignController {
 
     @GetMapping("/edit_campaign/{id}")
     public String editCampaign(@PathVariable("id") Long id, @RequestParam("page") int currentPage, Model model) {
-        System.out.println("checkkkkkkkkkkkkk");
 
         List<CampaignCategory> categories = campaignCategoryRepository.findAll();
         List<Currency> currencies = currencyRepository.findAll();
