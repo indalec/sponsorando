@@ -38,7 +38,7 @@ public class CampaignController {
     @Autowired
     private UserAccountService userAccountService;
 
-    @GetMapping("/discover_campaigns")
+    @GetMapping("/discover-campaigns")
     public String discoverCampaigns(Model model,
                                     @RequestParam(name = "page", defaultValue = "0") int pageNumber,
                                     @RequestParam(name = "searchQuery", required = false) String searchQuery,
@@ -190,7 +190,7 @@ public class CampaignController {
 
             if(isGuest) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Unfortunately an error occurred while retrieving the campaign. Please try again.");
-                return "redirect:/discover_campaigns?page=" + page;
+                return "redirect:/discover-campaigns?page=" + page;
             } else {
                 redirectAttributes.addFlashAttribute("errorMessage", "Unfortunately an error occurred while retrieving the campaign. Please try again.");
                 return "redirect:/campaigns?page=" + page;

@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
         let sortBy = sortSelect.value;
         let currentPage = 0;
 
-        let url = `/discover_campaigns?searchQuery=${encodeURIComponent(searchQuery)}&sortBy=${encodeURIComponent(sortBy)}&page=${currentPage}`;
+        let url = `/discover-campaigns?searchQuery=${encodeURIComponent(searchQuery)}&sortBy=${encodeURIComponent(sortBy)}&page=${currentPage}`;
 
         fetch(url, {
             method: "GET",

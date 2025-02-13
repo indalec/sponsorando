@@ -42,8 +42,6 @@ public class SecurityConfig {
                             .requestMatchers("/donations/**").hasRole("ADMIN")
                             .requestMatchers("/payments/**").hasRole("ADMIN")
                             .requestMatchers("/users/**").hasRole("ADMIN")
-                            .requestMatchers("/c/**").permitAll()
-                            .requestMatchers("/discover_campaigns/**").permitAll()
                             .anyRequest().permitAll();
                 }
         );
