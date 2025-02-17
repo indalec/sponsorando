@@ -66,26 +66,26 @@ public class CampaignService {
     }
 
     public Page<Campaign> getActiveCampaignsByTitleOrCategory(String searchQuery, String sortBy, int pageNumber, int pageSize) {
+
         Pageable pageable = PageRequest.of(pageNumber, pageSize, getSortOrder(sortBy));
-        return campaignRepository.findByStatusAndTitleContainingIgnoreCaseOrStatusAndCategoryContainingIgnoreCase(
-                CampaignStatus.ACTIVE, searchQuery, searchQuery, pageable);
+        return campaignRepository.findByStatusAndTitleContainingIgnoreCaseOrCategoryContainingIgnoreCase(
+                CampaignStatus.ACTIVE, searchQuery, pageable, sortBy);
     }
 
     public Page<Campaign> getCampaignsByStatus(String sortBy, int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, getSortOrder(sortBy));
-        return campaignRepository.findByStatus(CampaignStatus.ACTIVE, pageable);
-    }
 
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return campaignRepository.findByStatus(CampaignStatus.ACTIVE, pageable, sortBy);
+    }
     private Sort getSortOrder(String sortBy) {
-        switch (sortBy) {
-            case "mostUrgent":
-            case "fewestDaysLeft":
-                return Sort.by(Sort.Direction.ASC, "endDate");
-            case "newest":
-                return Sort.by(Sort.Direction.DESC, "startDate");
-            default:
-                return Sort.by(Sort.Direction.ASC, "endDate");
-        }
+        return switch (sortBy) {
+            case "mostUrgent", "default" -> Sort.unsorted();
+            case "fewestDaysLeft" -> Sort.by(Sort.Direction.ASC, "endDate");
+            case "newest" -> Sort.by(Sort.Direction.DESC, "startDate");
+            case "lowestCostToComplete" -> Sort.unsorted();
+            case "mostDonors" -> Sort.unsorted();
+            default -> Sort.unsorted();
+        };
     }
 
     public Page<Campaign> getCampaignsByUserEmail(String email, int pageNumber, int pageSize) {
