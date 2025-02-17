@@ -38,6 +38,7 @@ public class SecurityConfig {
                             .requestMatchers("/delete_campaign/**").authenticated()
                             .requestMatchers("/edit_campaign/**").authenticated()
                             .requestMatchers("/edit_campaign").authenticated()
+                            .requestMatchers("/update_profile").authenticated()
                             .requestMatchers("/admin/**").hasRole("ADMIN")
                             .requestMatchers("/donations/**").hasRole("ADMIN")
                             .requestMatchers("/payments/**").hasRole("ADMIN")
