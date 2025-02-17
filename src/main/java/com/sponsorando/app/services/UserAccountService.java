@@ -84,19 +84,16 @@ public class UserAccountService implements UserDetailsService {
         if (optionalUser.isPresent()) {
             UserAccount existingUser = optionalUser.get();
 
-            // Update name if it's provided
             if (form.getName() != null && !form.getName().isEmpty() &&
                     !form.getName().equals(existingUser.getName())) {
                 existingUser.setName(form.getName());
             }
 
-            // Update email if it's provided and different
             if (form.getEmail() != null && !form.getEmail().isEmpty() &&
                     !form.getEmail().equals(existingUser.getEmail())) {
                 existingUser.setEmail(form.getEmail());
             }
 
-            // Update password if provided
             if (form.getPassword() != null && !form.getPassword().isEmpty()) {
                 existingUser.setPassword(passwordEncoder.encode(form.getPassword()));
             }
@@ -106,7 +103,6 @@ public class UserAccountService implements UserDetailsService {
 
             userAccountRepository.save(existingUser);
 
-            // Update Security Context (when user email changed)
             UserDetails userDetails = loadUserByUsername(existingUser.getEmail());
             Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
