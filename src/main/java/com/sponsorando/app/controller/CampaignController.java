@@ -53,6 +53,7 @@ public class CampaignController {
             page = campaignService.getCampaignsByStatus(sortBy, pageNumber, pageSize);
         }
 
+        System.out.println("Data:::"+page.getContent());
         model.addAttribute("campaigns", page.getContent());
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("currentPage", page.getNumber());
