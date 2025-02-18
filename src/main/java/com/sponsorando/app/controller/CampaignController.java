@@ -38,8 +38,27 @@ public class CampaignController {
     @Autowired
     private UserAccountService userAccountService;
 
-    @GetMapping("/discover_campaigns")
-    public String discoverCampaigns(Model model) {
+    @GetMapping("/discover-campaigns")
+    public String discoverCampaigns(Model model,
+                                    @RequestParam(name = "page", defaultValue = "0") int pageNumber,
+                                    @RequestParam(name = "searchQuery", required = false) String searchQuery,
+                                    @RequestParam(name = "sortBy", defaultValue = "mostUrgent") String sortBy) {
+
+        int pageSize = 9;
+        Page<Campaign> page;
+
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            page = campaignService.getActiveCampaignsByTitleOrCategory(searchQuery, sortBy, pageNumber, pageSize);
+        } else {
+            page = campaignService.getCampaignsByStatus(sortBy, pageNumber, pageSize);
+        }
+
+        System.out.println("Data:::"+page.getContent());
+        model.addAttribute("campaigns", page.getContent());
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("currentPage", page.getNumber());
+        model.addAttribute("searchQuery", searchQuery);
+        model.addAttribute("sortBy", sortBy);
 
         return "discover_campaigns";
     }
@@ -90,7 +109,7 @@ public class CampaignController {
         String currentUser = (String) model.getAttribute("username");
         String currentRole = (String) model.getAttribute("currentRole");
 
-        int pageSize = 5;
+        int pageSize = 10;
         Page<Campaign> page;
 
         if ("ROLE_ADMIN".equals(currentRole)) {
@@ -172,7 +191,7 @@ public class CampaignController {
 
             if(isGuest) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Unfortunately an error occurred while retrieving the campaign. Please try again.");
-                return "redirect:/discover_campaigns?page=" + page;
+                return "redirect:/discover-campaigns?page=" + page;
             } else {
                 redirectAttributes.addFlashAttribute("errorMessage", "Unfortunately an error occurred while retrieving the campaign. Please try again.");
                 return "redirect:/campaigns?page=" + page;
