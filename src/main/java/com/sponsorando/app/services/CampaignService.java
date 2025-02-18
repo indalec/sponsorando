@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +37,7 @@ public class CampaignService {
         UserAccount userAccount = userAccountService.getUser(email);
         Campaign campaign = new Campaign();
         campaign.setTitle(campaignForm.getTitle());
-        campaign.setSlug(SlugUtil.generateSlug(campaignForm.getTitle(),true,100));
+        campaign.setSlug(SlugUtil.generateSlug(campaignForm.getTitle(), true, 100));
         campaign.setDescription(campaignForm.getDescription());
         campaign.setStartDate(campaignForm.getStartDate());
         campaign.setEndDate(campaignForm.getEndDate());
@@ -62,6 +63,30 @@ public class CampaignService {
     public Page<Campaign> getCampaigns(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return campaignRepository.findAll(pageable);
+    }
+
+    public Page<Campaign> getActiveCampaignsByTitleOrCategory(String searchQuery, String sortBy, int pageNumber, int pageSize) {
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, getSortOrder(sortBy));
+        return campaignRepository.findByStatusAndTitleContainingIgnoreCaseOrCategoryContainingIgnoreCase(
+                CampaignStatus.ACTIVE, searchQuery, pageable, sortBy);
+    }
+
+    public Page<Campaign> getCampaignsByStatus(String sortBy, int pageNumber, int pageSize) {
+
+        System.out.println("Check getCampaignsByStatus"+sortBy);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return campaignRepository.findByStatus(CampaignStatus.ACTIVE, pageable, sortBy);
+    }
+    private Sort getSortOrder(String sortBy) {
+        return switch (sortBy) {
+            case "mostUrgent", "default" -> Sort.unsorted();
+            case "fewestDaysLeft" -> Sort.by(Sort.Direction.ASC, "endDate");
+            case "newest" -> Sort.by(Sort.Direction.DESC, "startDate");
+            case "lowestCostToComplete" -> Sort.unsorted();
+            case "mostDonors" -> Sort.unsorted();
+            default -> Sort.unsorted();
+        };
     }
 
     public Page<Campaign> getCampaignsByUserEmail(String email, int pageNumber, int pageSize) {
@@ -141,7 +166,7 @@ public class CampaignService {
             if (!existingCampaign.getStatus().equals(CampaignStatus.ACTIVE)) {
                 existingCampaign.setStartDate(updatedCampaignDetails.getStartDate());
                 existingCampaign.setTitle(updatedCampaignDetails.getTitle());
-                existingCampaign.setSlug(SlugUtil.generateSlug(updatedCampaignDetails.getTitle(),true,100));
+                existingCampaign.setSlug(SlugUtil.generateSlug(updatedCampaignDetails.getTitle(), true, 100));
             }
 
             existingCampaign.setDescription(updatedCampaignDetails.getDescription());
