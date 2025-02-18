@@ -5,34 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Our Team - Sponsorando</title>
     <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
-    <style>
-        .member-img {
-            width: 200px;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 3px solid var(--primary-color);
-            margin: 1rem auto;
-        }
-        .linkedin-btn {
-            padding: 0.25rem 0.75rem;
-            font-size: 0.85rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            width: fit-content;
-            margin: 0.5rem auto;
-        }
-        .linkedin-icon {
-            width: 20px;
-            height: 20px;
-        }
-        .member-role {
-            color: var(--primary-color);
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-    </style>
+    <link href="/css/team.css" type="text/css" rel="stylesheet">
 </head>
 <body>
 <header th:replace="~{fragments/header :: headerSection}" class="container"></header>
@@ -145,26 +118,7 @@
         </div>
     </div>
 </main>
-
 <footer th:replace="~{fragments/footer :: footerSection}" role="contentinfo" class="footer"></footer>
-<!-- To randomize the order of the members -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const teamContainer = document.querySelector('.row.row-cols-1');
-        const members = Array.from(teamContainer.children);
-
-        // Fisher-Yates shuffle algorithm
-        for (let i = members.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [members[i], members[j]] = [members[j], members[i]];
-        }
-
-        // Clear and re-append shuffled members
-        while (teamContainer.firstChild) {
-            teamContainer.removeChild(teamContainer.firstChild);
-        }
-        members.forEach(member => teamContainer.appendChild(member));
-    });
-</script>
+<script src="/js/team.js"></script>
 </body>
 </html>
