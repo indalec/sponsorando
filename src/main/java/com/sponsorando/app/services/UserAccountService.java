@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -109,7 +111,36 @@ public class UserAccountService implements UserDetailsService {
         }
     }
 
+    public List<UserAccount> getAllUsers(){
+        return userAccountRepository.findAll();
+    }
 
+    public UserAccount getUserById(Long id) {
+        return userAccountRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public void toggleUserStatus(Long id) {
+        UserAccount user = getUserById(id);
+        user.setEnabled(!user.getEnabled());
+        userAccountRepository.save(user);
+    }
+
+    public void deleteUser(Long id) {
+        UserAccount user = getUserById(id);
+        user.setEnabled(false);
+        userAccountRepository.save(user);
+    }
+
+    public void changeUserRole(Long id, String role) {
+        UserAccount user = getUserById(id);
+        if ("ADMIN".equalsIgnoreCase(role)) {
+            user.setRole(Role.ADMIN);
+        } else {
+            user.setRole(Role.USER);
+        }
+        userAccountRepository.save(user);
+    }
 
 
 }

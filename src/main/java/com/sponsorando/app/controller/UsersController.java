@@ -4,6 +4,7 @@ import com.sponsorando.app.models.UserAccount;
 import com.sponsorando.app.models.UserEditForm;
 import com.sponsorando.app.services.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,9 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 public class UsersController {
@@ -76,12 +77,35 @@ public class UsersController {
         return "redirect:/user_dashboard";
     }
 
+    @GetMapping("/users/api")
+    public ResponseEntity<List<UserAccount>> getAllUsers(){
+        return ResponseEntity.ok(userAccountService.getAllUsers());
+    }
 
+    @GetMapping("/users/{id}")
+    public ResponseEntity<UserAccount> getUserById(@PathVariable Long id){
+        return ResponseEntity.ok(userAccountService.getUserById(id));
+    }
 
+    @PostMapping("/users/toggle-status")
+    public String toggleUserStatus(@RequestParam(name = "userId", required = true) Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("User ID cannot be null.");
+        }
+        userAccountService.toggleUserStatus(id);
+        return "redirect:/users";
+    }
 
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+        userAccountService.deleteUser(id);
+        return ResponseEntity.ok("User deleted successfully.");
+    }
 
-
-
-
+    @PostMapping("/users/change-role/{id}")
+    public ResponseEntity<String> changeUserRole(@PathVariable Long id, @RequestParam String role) {
+        userAccountService.changeUserRole(id, role);
+        return ResponseEntity.ok("User role updated.");
+    }
 
 }
