@@ -9,12 +9,9 @@
     <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
 </head>
 <body class="d-flex flex-column min-vh-100">
-
 <header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}" class="container mb-4"></header>
-
+<h1 class="text-center">Welcome, <span th:text="${userAccount.getName()}"></span>!</h1>
 <div class="container mt-5 dashboard-container flex-grow-1">
-    <h1 class="text-center">Welcome, <span th:text="${userAccount.getName()}"></span>!</h1>
-
     <div class="row mt-4">
         <div class="col-md-4">
             <div class="dashboard-card card shadow-sm">
