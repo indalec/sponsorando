@@ -1,18 +1,123 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Our Team - Sponsorando</title>
     <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
+    <style>
+        .team-member {
+            margin-bottom: 2rem;
+        }
+        .member-img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid var(--primary-color);
+            margin: 1rem auto;
+        }
+        .linkedin-btn {
+            margin-top: 1rem;
+            transition: transform 0.3s ease;
+        }
+        .linkedin-btn:hover {
+            transform: translateY(-2px);
+        }
+    </style>
 </head>
 <body>
 <header th:replace="~{fragments/header :: headerSection}" class="container"></header>
-<main>
-    <div class="container mt-5">
-        <h2 class="text-center">Our Team</h2>
+
+<main class="container my-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 mb-3">Meet Our Team</h1>
+        <p class="lead">The passionate minds behind Sponsorando's vision</p>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">
+        <!-- Sunanda Kodavali -->
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm text-center p-3">
+                <img src="https://source.unsplash.com/200x200/?portrait,woman,indian"
+                     class="member-img"
+                     alt="Sunanda Kodavali">
+                <h3 class="mb-2">Sunanda Kodavali</h3>
+                <p class="text-muted mb-3">Tech Lead</p>
+                <a href="[LINKEDIN-URL-SUNANDA]"
+                   class="btn btn-outline-primary linkedin-btn"
+                   target="_blank">
+                    <i class="fab fa-linkedin me-2"></i>Connect
+                </a>
+            </div>
+        </div>
+
+        <!-- Robin Hagolani -->
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm text-center p-3">
+                <img src="https://source.unsplash.com/200x200/?portrait,man,professional"
+                     class="member-img"
+                     alt="Robin Hagolani">
+                <h3 class="mb-2">Robin Hagolani</h3>
+                <p class="text-muted mb-3">Business Strategy</p>
+                <a href="[LINKEDIN-URL-ROBIN]"
+                   class="btn btn-outline-primary linkedin-btn"
+                   target="_blank">
+                    <i class="fab fa-linkedin me-2"></i>Connect
+                </a>
+            </div>
+        </div>
+
+        <!-- Desirée Valdés -->
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm text-center p-3">
+                <img src="https://source.unsplash.com/200x200/?portrait,woman,spanish"
+                     class="member-img"
+                     alt="Desirée Valdés">
+                <h3 class="mb-2">Desirée Valdés</h3>
+                <p class="text-muted mb-3">Marketing Director</p>
+                <a href="[LINKEDIN-URL-DESIRE]"
+                   class="btn btn-outline-primary linkedin-btn"
+                   target="_blank">
+                    <i class="fab fa-linkedin me-2"></i>Connect
+                </a>
+            </div>
+        </div>
+
+        <!-- Lana Liashenko -->
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm text-center p-3">
+                <img src="https://source.unsplash.com/200x200/?portrait,woman,european"
+                     class="member-img"
+                     alt="Lana Liashenko">
+                <h3 class="mb-2">Lana Liashenko</h3>
+                <p class="text-muted mb-3">UX/UI Designer</p>
+                <a href="[LINKEDIN-URL-LANA]"
+                   class="btn btn-outline-primary linkedin-btn"
+                   target="_blank">
+                    <i class="fab fa-linkedin me-2"></i>Connect
+                </a>
+            </div>
+        </div>
+
+        <!-- Indaleci Valenzuela -->
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm text-center p-3">
+                <img src="https://source.unsplash.com/200x200/?portrait,man,latin"
+                     class="member-img"
+                     alt="Indaleci Valenzuela">
+                <h3 class="mb-2">Indaleci Valenzuela</h3>
+                <p class="text-muted mb-3">Operations Manager</p>
+                <a href="[LINKEDIN-URL-INDALE]"
+                   class="btn btn-outline-primary linkedin-btn"
+                   target="_blank">
+                    <i class="fab fa-linkedin me-2"></i>Connect
+                </a>
+            </div>
+        </div>
     </div>
 </main>
+
 <footer th:replace="~{fragments/footer :: footerSection}" role="contentinfo" class="footer"></footer>
 </body>
 </html>
