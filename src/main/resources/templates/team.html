@@ -15,13 +15,22 @@
             margin: 1rem auto;
         }
         .linkedin-btn {
-            padding: 0.4rem 1rem;
-            font-size: 0.9rem;
-            transition: transform 0.3s ease;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: fit-content;
+            margin: 0.5rem auto;
         }
-        .linkedin-btn i {
-            font-size: 1.1rem;
-            margin-right: 0.5rem;
+        .linkedin-icon {
+            width: 20px;
+            height: 20px;
+        }
+        .member-role {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
         }
     </style>
 </head>
@@ -42,15 +51,20 @@
                      class="member-img"
                      alt="Sunanda Kodavali">
                 <h3 class="mb-2">Sunanda Kodavali</h3>
-                <p class="text-muted mb-2">Tech Lead | Full-stack developer passionate about scalable architecture and clean code</p>
+                <h4 class="member-role">Tech Lead</h4>
+                <p class="text-muted mb-2">Full-stack developer passionate about scalable architecture and clean code</p>
                 <a href="https://www.linkedin.com/in/sunanda-kodavali/"
-                   class="btn btn-outline-primary linkedin-btn btn-sm px-3 d-inline-flex align-items-center"
+                   class="btn btn-outline-primary linkedin-btn"
                    target="_blank">
-                    <i class="fab fa-linkedin"></i>LinkedIn
+                    <svg class="linkedin-icon" viewBox="0 0 24 24">
+                        <path fill="#0288D1" d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+                    </svg>
+                    Connect
                 </a>
             </div>
         </div>
 
+        <!-- Repeat same structure for other members -->
         <!-- Robin Hagolani -->
         <div class="col">
             <div class="card h-100 border-0 shadow-sm text-center p-3">
@@ -58,11 +72,15 @@
                      class="member-img"
                      alt="Robin Hagolani">
                 <h3 class="mb-2">Robin Hagolani</h3>
-                <p class="text-muted mb-2">Business Strategist | Driving growth through innovative partnerships and market analysis</p>
+                <h4 class="member-role">Business Strategist</h4>
+                <p class="text-muted mb-2">Driving growth through innovative partnerships and market analysis</p>
                 <a href="https://www.linkedin.com/in/robinhagolani/"
-                   class="btn btn-outline-primary linkedin-btn btn-sm px-3 d-inline-flex align-items-center"
+                   class="btn btn-outline-primary linkedin-btn"
                    target="_blank">
-                    <i class="fab fa-linkedin"></i>LinkedIn
+                    <svg class="linkedin-icon" viewBox="0 0 24 24">
+                        <path fill="#0288D1" d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+                    </svg>
+                    Connect
                 </a>
             </div>
         </div>
@@ -74,11 +92,15 @@
                      class="member-img"
                      alt="Desirée Valdés">
                 <h3 class="mb-2">Desirée Valdés</h3>
-                <p class="text-muted mb-2">Marketing Director | Crafting compelling brand stories that resonate with global audiences</p>
+                <h4 class="member-role">Marketing Director</h4>
+                <p class="text-muted mb-2">Crafting compelling brand stories that resonate with global audiences</p>
                 <a href="https://www.linkedin.com/in/desiree-valdes/"
-                   class="btn btn-outline-primary linkedin-btn btn-sm px-3 d-inline-flex align-items-center"
+                   class="btn btn-outline-primary linkedin-btn"
                    target="_blank">
-                    <i class="fab fa-linkedin"></i>LinkedIn
+                    <svg class="linkedin-icon" viewBox="0 0 24 24">
+                        <path fill="#0288D1" d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+                    </svg>
+                    Connect
                 </a>
             </div>
         </div>
@@ -90,11 +112,15 @@
                      class="member-img"
                      alt="Lana Liashenko">
                 <h3 class="mb-2">Lana Liashenko</h3>
-                <p class="text-muted mb-2">UX/UI Designer | Creating intuitive interfaces that enhance user engagement and satisfaction</p>
+                <h4 class="member-role">UX/UI Designer</h4>
+                <p class="text-muted mb-2">Creating intuitive interfaces that enhance user engagement</p>
                 <a href="https://www.linkedin.com/in/lanaliashenko/"
-                   class="btn btn-outline-primary linkedin-btn btn-sm px-3 d-inline-flex align-items-center"
+                   class="btn btn-outline-primary linkedin-btn"
                    target="_blank">
-                    <i class="fab fa-linkedin"></i>LinkedIn
+                    <svg class="linkedin-icon" viewBox="0 0 24 24">
+                        <path fill="#0288D1" d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+                    </svg>
+                    Connect
                 </a>
             </div>
         </div>
@@ -106,11 +132,15 @@
                      class="member-img"
                      alt="Indaleci Valenzuela">
                 <h3 class="mb-2">Indaleci Valenzuela</h3>
-                <p class="text-muted mb-2">Operations Manager | Optimizing workflows to ensure seamless project execution and delivery</p>
+                <h4 class="member-role">Operations Manager</h4>
+                <p class="text-muted mb-2">Optimizing workflows for seamless project execution and delivery</p>
                 <a href="https://www.linkedin.com/in/daleci/"
-                   class="btn btn-outline-primary linkedin-btn btn-sm px-3 d-inline-flex align-items-center"
+                   class="btn btn-outline-primary linkedin-btn"
                    target="_blank">
-                    <i class="fab fa-linkedin"></i>LinkedIn
+                    <svg class="linkedin-icon" viewBox="0 0 24 24">
+                        <path fill="#0288D1" d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+                    </svg>
+                    Connect
                 </a>
             </div>
         </div>
