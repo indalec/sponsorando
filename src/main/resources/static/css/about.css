@@ -2,7 +2,7 @@
     display: flex;
     gap: 2rem;
     align-items: center;
-    padding: 3rem 0;
+    padding: 3rem 2rem;
     margin: 2rem 0;
 }
 
@@ -14,6 +14,7 @@
 .image-content {
     flex: 1;
     min-width: 300px;
+    padding: 1rem;
 }
 
 .image-content img {
@@ -55,6 +56,10 @@
     padding: 2rem;
     margin: 3rem 0;
     text-align: center;
+}
+
+.usp-section img {
+    margin: 0 1rem;
 }
 
 @media (max-width: 768px) {
