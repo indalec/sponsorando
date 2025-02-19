@@ -94,4 +94,9 @@ public class AppController {
     public String faq() {
         return "faq";
     }
+
+    @GetMapping("/team")
+    public String team() {
+        return "team";
+    }
 }

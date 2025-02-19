@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Our Team - Sponsorando</title>
+    <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
+    <link href="/css/team.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<header th:replace="~{fragments/header :: headerSection}" class="container"></header>
+
+<main class="container my-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 mb-3">Meet Our Team</h1>
+        <p class="lead">The passionate minds behind Sponsorando's vision</p>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">
+        <!-- Sunanda Kodavali -->
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm text-center p-3">
+                <img src="/images/team/Sunanda-Kodavali.jpeg" class="member-img" alt="Sunanda Kodavali">
+                <h3 class="mb-2">Sunanda Kodavali</h3>
+                <h4 class="member-role">Tech Lead</h4>
+                <p class="text-muted mb-2">Full-stack developer passionate about scalable architecture and clean code</p>
+                <a href="https://www.linkedin.com/in/sunanda-kodavali/"
+                   class="btn btn-outline-primary linkedin-btn"
+                   target="_blank">
+                    <span th:replace="~{fragments/_icons :: linkedin-icon}"></span>
+                    Connect
+                </a>
+            </div>
+        </div>
+
+        <!-- Robin Hagolani -->
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm text-center p-3">
+                <img src="/images/team/Robin-Hagolani.jpeg" class="member-img" alt="Robin Hagolani">
+                <h3 class="mb-2">Robin Hagolani</h3>
+                <h4 class="member-role">Business Strategist</h4>
+                <p class="text-muted mb-2">Driving growth through innovative partnerships and market analysis</p>
+                <a href="https://www.linkedin.com/in/robinhagolani/"
+                   class="btn btn-outline-primary linkedin-btn"
+                   target="_blank">
+                    <span th:replace="~{fragments/_icons :: linkedin-icon}"></span>
+                    Connect
+                </a>
+            </div>
+        </div>
+
+        <!-- Desirée Valdés -->
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm text-center p-3">
+                <img src="/images/team/Desiree-Valdes.jpeg" class="member-img" alt="Desirée Valdés">
+                <h3 class="mb-2">Desirée Valdés</h3>
+                <h4 class="member-role">Marketing Director</h4>
+                <p class="text-muted mb-2">Crafting compelling brand stories that resonate with global audiences</p>
+                <a href="https://www.linkedin.com/in/desiree-valdes/"
+                   class="btn btn-outline-primary linkedin-btn"
+                   target="_blank">
+                    <span th:replace="~{fragments/_icons :: linkedin-icon}"></span>
+                    Connect
+                </a>
+            </div>
+        </div>
+
+        <!-- Lana Liashenko -->
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm text-center p-3">
+                <img src="/images/team/Lana-Liashenko.jpeg" class="member-img" alt="Lana Liashenko">
+                <h3 class="mb-2">Lana Liashenko</h3>
+                <h4 class="member-role">UX/UI Designer</h4>
+                <p class="text-muted mb-2">Creating intuitive interfaces that enhance user engagement</p>
+                <a href="https://www.linkedin.com/in/lanaliashenko/"
+                   class="btn btn-outline-primary linkedin-btn"
+                   target="_blank">
+                    <span th:replace="~{fragments/_icons :: linkedin-icon}"></span>
+                    Connect
+                </a>
+            </div>
+        </div>
+
+        <!-- Indaleci Valenzuela -->
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm text-center p-3">
+                <img src="/images/team/Indaleci-Valenzuela.jpeg" class="member-img" alt="Indaleci Valenzuela">
+                <h3 class="mb-2">Indaleci Valenzuela</h3>
+                <h4 class="member-role">Operations Manager</h4>
+                <p class="text-muted mb-2">Optimizing workflows for seamless project execution and delivery</p>
+                <a href="https://www.linkedin.com/in/daleci/"
+                   class="btn btn-outline-primary linkedin-btn"
+                   target="_blank">
+                    <span th:replace="~{fragments/_icons :: linkedin-icon}"></span>
+                    Connect
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/footer :: footerSection}" role="contentinfo" class="footer"></footer>
+<script src="/js/team.js"></script>
+</body>
+</html>

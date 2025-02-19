@@ -1,0 +1,26 @@
+        .member-img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid var(--primary-color);
+            margin: 1rem auto;
+        }
+        .linkedin-btn {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: fit-content;
+            margin: 0.5rem auto;
+        }
+        .linkedin-icon {
+            width: 20px;
+            height: 20px;
+        }
+        .member-role {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
