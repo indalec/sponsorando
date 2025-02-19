@@ -3,6 +3,7 @@ package com.sponsorando.app.services;
 import com.sponsorando.app.models.*;
 import com.sponsorando.app.repositories.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -39,12 +40,17 @@ public class UserAccountService implements UserDetailsService {
                         () -> new UsernameNotFoundException(email)
                 );
 
+        if (!userAccount.getEnabled()) {
+            throw new DisabledException("This account has been disabled. Please contact an administrator.");
+        }
+
         String role = userAccount.getRole().name();
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role);
 
         UserDetails userDetails =  User
                 .withUsername(userAccount.getEmail())
                 .password(userAccount.getPassword())
+                .disabled(!userAccount.getEnabled())
                 .authorities(authority)
                 .build();
 
