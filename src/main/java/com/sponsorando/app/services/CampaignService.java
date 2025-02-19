@@ -74,10 +74,11 @@ public class CampaignService {
 
     public Page<Campaign> getCampaignsByStatus(String sortBy, int pageNumber, int pageSize) {
 
-        System.out.println("Check getCampaignsByStatus"+sortBy);
+        System.out.println("Check getCampaignsByStatus" + sortBy);
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return campaignRepository.findByStatus(CampaignStatus.ACTIVE, pageable, sortBy);
     }
+
     private Sort getSortOrder(String sortBy) {
         return switch (sortBy) {
             case "mostUrgent", "default" -> Sort.unsorted();
@@ -163,12 +164,9 @@ public class CampaignService {
 
             Campaign existingCampaign = existingCampaignOptional.get();
 
-            if (!existingCampaign.getStatus().equals(CampaignStatus.ACTIVE)) {
-                existingCampaign.setStartDate(updatedCampaignDetails.getStartDate());
-                existingCampaign.setTitle(updatedCampaignDetails.getTitle());
-                existingCampaign.setSlug(SlugUtil.generateSlug(updatedCampaignDetails.getTitle(), true, 100));
-            }
-
+            existingCampaign.setStartDate(updatedCampaignDetails.getStartDate());
+            existingCampaign.setTitle(updatedCampaignDetails.getTitle());
+            existingCampaign.setSlug(SlugUtil.generateSlug(updatedCampaignDetails.getTitle(), true, 100));
             existingCampaign.setDescription(updatedCampaignDetails.getDescription());
             existingCampaign.setShowLocation(updatedCampaignDetails.getShowLocation() != null ? updatedCampaignDetails.getShowLocation() : false);
             existingCampaign.setCurrency(updatedCampaignDetails.getCurrency());
@@ -176,13 +174,7 @@ public class CampaignService {
             existingCampaign.setEndDate(updatedCampaignDetails.getEndDate());
             existingCampaign.setCategories(updatedCampaignDetails.getCategories());
             existingCampaign.setUpdatedAt(LocalDateTime.now());
-
-            if (!existingCampaign.getStatus().equals(CampaignStatus.ACTIVE)) {
-                if (addressService.updateAddress(updatedCampaignDetails, existingCampaign) == null) {
-                    return false;
-                }
-            }
-
+            addressService.updateAddress(updatedCampaignDetails, existingCampaign);
             campaignRepository.save(existingCampaign);
             return true;
 
