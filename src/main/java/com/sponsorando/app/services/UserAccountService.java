@@ -1,6 +1,7 @@
 package com.sponsorando.app.services;
 
 import com.sponsorando.app.models.*;
+import com.sponsorando.app.repositories.CampaignRepository;
 import com.sponsorando.app.repositories.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.DisabledException;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +29,9 @@ public class UserAccountService implements UserDetailsService {
 
     @Autowired
     private UserAccountRepository userAccountRepository;
+
+    @Autowired
+    private CampaignRepository campaignRepository;
 
     @Autowired
     private ImageService imageService;
@@ -126,10 +131,26 @@ public class UserAccountService implements UserDetailsService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
+    @Transactional
     public void toggleUserStatus(Long id) {
         UserAccount user = getUserById(id);
         user.setEnabled(!user.getEnabled());
         userAccountRepository.save(user);
+
+        // Update related campaigns based on the new user status
+        // TODO: status FROZEN ist just for testing purpose. Change logic if project gets to production phase.
+        CampaignStatus newStatus = user.getEnabled() ? CampaignStatus.ACTIVE : CampaignStatus.FROZEN;
+        updateCampaignStatus(user, newStatus);
+    }
+
+    private void updateCampaignStatus(UserAccount userAccount, CampaignStatus status) {
+        List<Campaign> campaigns = campaignRepository.findByUserAccount(userAccount);
+        System.out.println(campaigns);
+        for (Campaign campaign : campaigns) {
+            campaign.setStatus(status);
+            System.out.println(campaign.getTitle() + " was set to status: " + campaign.getStatus());
+            campaignRepository.save(campaign);
+        }
     }
 
     public void deleteUser(Long id) {

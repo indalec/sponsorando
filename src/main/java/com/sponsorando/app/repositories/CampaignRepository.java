@@ -2,6 +2,7 @@ package com.sponsorando.app.repositories;
 
 import com.sponsorando.app.models.Campaign;
 import com.sponsorando.app.models.CampaignStatus;
+import com.sponsorando.app.models.UserAccount;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -74,4 +76,5 @@ public interface CampaignRepository extends JpaRepository<Campaign, Long> {
             Pageable pageable,
             @Param("sortBy") String sortBy);
 
+    List<Campaign> findByUserAccount(UserAccount userAccount);
 }

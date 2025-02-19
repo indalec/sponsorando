@@ -5,6 +5,7 @@ public enum CampaignStatus {
     DRAFT,
     ACTIVE,
     INACTIVE,
+    FROZEN,
     COMPLETED;
 
     public static CampaignStatus[] getCampaignStatuses() {
