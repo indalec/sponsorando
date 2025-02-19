@@ -55,14 +55,14 @@
         <p><strong>Email:</strong> <span id="panelUserEmail"></span></p>
         <p><strong>Role:</strong> <span id="panelUserRole"></span></p>
         <p><strong>Status:</strong> <span id="panelUserStatus"></span></p>
-        <input type="hidden" id="panelUserId"> <!-- Store user ID safely -->
+        <input type="hidden" id="panelUserId">
 
         <form id="toggleUserStatusForm" th:action="@{/users/toggle-status}" method="post">
             <input type="hidden" id="userIdInput" name="userId" th:value="''">
             <button id="toggleUserStatusBtn" class="btn w-100 mb-2" type="button" onclick="toggleUserStatus()">Loading...</button>
         </form>
 
-        <button class="btn btn-danger w-100" onclick="deleteUser()">Delete User</button>
+        <button class="btn btn-danger w-100 disabled" onclick="deleteUser()">Delete User</button>
     </div>
 </div>
 

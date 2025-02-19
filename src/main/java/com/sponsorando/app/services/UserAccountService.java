@@ -139,7 +139,7 @@ public class UserAccountService implements UserDetailsService {
         userAccountRepository.save(user);
 
         // Update related campaigns based on the new user status
-        // TODO: status FROZEN ist just for testing purpose. Change logic if project gets to production phase.
+        // TODO: status FROZEN is just for testing purpose. Change logic if project gets to production phase.
         CampaignStatus newStatus = user.getEnabled() ? CampaignStatus.ACTIVE : CampaignStatus.FROZEN;
         updateCampaignStatus(user, newStatus);
     }
