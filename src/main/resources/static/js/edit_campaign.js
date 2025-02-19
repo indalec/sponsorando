@@ -158,8 +158,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 currentDate.setHours(currentDate.getHours() + 1);
 
-                console.log("check"+currentDate);
-
                 if (selectedDate.getTime() < currentDate.getTime()) {
                     selectedDate.setTime(currentDate.getTime());
                     instance.setDate(selectedDate, true);
@@ -251,7 +249,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const currentDate = new Date();
             if (!startDate || startDate.getTime() <= currentDate.getTime()) {
-                console.log("Start date must be at least 1 hour in the future.");
+
                 startDateInput.classList.add("is-invalid");
                 startDateInput.nextElementSibling.textContent = "Start date and time must be at least 1 hour in the future.";
                 return false;
@@ -261,16 +259,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         const endDate = endDatePicker.selectedDates[0];
-        console.log("Start Date: ", startDate);
-        console.log("End Date: ", endDate);
 
         if (!startDate || !endDate) {
-            console.log("Invalid dates detected.");
             return false;
         }
 
         if (endDate.getTime() <= startDate.getTime()) {
-            console.log("End date and time are not later than the start date and time.");
             endDateInput.classList.add("is-invalid");
             endDateInput.nextElementSibling.textContent = "End date and time must be later than the start date and time.";
             return false;
@@ -347,8 +341,6 @@ document.addEventListener("DOMContentLoaded", function () {
         Array.from(forms).forEach(form => {
             form.addEventListener('submit', event => {
 
-                console.log(form.checkValidity());
-                console.log(validateDates());
                 if (!form.checkValidity() || !validateDates()) {
                     event.preventDefault()
                     event.stopPropagation()

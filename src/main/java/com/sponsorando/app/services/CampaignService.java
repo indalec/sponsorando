@@ -74,7 +74,6 @@ public class CampaignService {
 
     public Page<Campaign> getCampaignsByStatus(String sortBy, int pageNumber, int pageSize) {
 
-        System.out.println("Check getCampaignsByStatus" + sortBy);
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return campaignRepository.findByStatus(CampaignStatus.ACTIVE, pageable, sortBy);
     }
