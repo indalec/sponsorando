@@ -136,6 +136,7 @@ public class UserAccountService implements UserDetailsService {
     public void toggleUserStatus(Long id) {
         UserAccount user = getUserById(id);
         user.setEnabled(!user.getEnabled());
+        user.setUpdatedAt(LocalDateTime.now());
         userAccountRepository.save(user);
 
         // Update related campaigns based on the new user status
