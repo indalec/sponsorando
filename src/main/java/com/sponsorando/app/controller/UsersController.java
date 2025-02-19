@@ -1,7 +1,10 @@
 package com.sponsorando.app.controller;
 
+import com.sponsorando.app.models.CampaignStatus;
 import com.sponsorando.app.models.UserAccount;
 import com.sponsorando.app.models.UserEditForm;
+import com.sponsorando.app.models.UserPanelDetailsDto;
+import com.sponsorando.app.repositories.CampaignRepository;
 import com.sponsorando.app.services.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +26,8 @@ public class UsersController {
     private UserAccountService userAccountService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private CampaignRepository campaignRepository;
 
     @GetMapping("/users")
     public String users() {
@@ -83,8 +88,35 @@ public class UsersController {
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<UserAccount> getUserById(@PathVariable Long id){
-        return ResponseEntity.ok(userAccountService.getUserById(id));
+    public ResponseEntity<UserPanelDetailsDto> getUserById(@PathVariable Long id) {
+        UserAccount user = userAccountService.getUserById(id);
+        UserPanelDetailsDto dto = new UserPanelDetailsDto();
+
+        dto.setId(user.getId());
+        dto.setUsername(user.getName());
+        dto.setEmail(user.getEmail());
+        dto.setRole(user.getRole());
+        dto.setEnabled(user.getEnabled());
+
+        // Fetch campaign statistics
+        int totalCampaigns = campaignRepository.countByUserAccount(user);
+        dto.setTotalCampaigns(totalCampaigns);
+        int draftCampaigns = campaignRepository.countByUserAccountAndStatus(user, CampaignStatus.DRAFT); // Assuming you have a DRAFT status
+        dto.setDraftCampaigns(draftCampaigns);
+        int activeCampaigns = campaignRepository.countByUserAccountAndStatus(user, CampaignStatus.ACTIVE);
+        dto.setActiveCampaigns(activeCampaigns);
+        int inactiveCampaigns = campaignRepository.countByUserAccountAndStatus(user, CampaignStatus.INACTIVE);
+        dto.setInactiveCampaigns(inactiveCampaigns);
+        int frozenCampaigns = campaignRepository.countByUserAccountAndStatus(user, CampaignStatus.FROZEN); // Assuming you have a FROZEN status
+        dto.setFrozenCampaigns(frozenCampaigns);
+        int completedCampaigns = campaignRepository.countByUserAccountAndStatus(user, CampaignStatus.COMPLETED); // Assuming you have a COMPLETED status
+        dto.setCompletedCampaigns(completedCampaigns);
+
+        // Placeholder values for donations
+        dto.setTotalDonationsCollectedInEuro(0.0);
+        dto.setTotalDonationsGivenInEuro(0.0);
+
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping("/users/toggle-status")

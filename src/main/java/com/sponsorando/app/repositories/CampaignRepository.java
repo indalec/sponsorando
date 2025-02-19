@@ -77,4 +77,8 @@ public interface CampaignRepository extends JpaRepository<Campaign, Long> {
             @Param("sortBy") String sortBy);
 
     List<Campaign> findByUserAccount(UserAccount userAccount);
+
+    int countByUserAccount(UserAccount user);
+
+    int countByUserAccountAndStatus(UserAccount userAccount, CampaignStatus campaignStatus);
 }

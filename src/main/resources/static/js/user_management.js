@@ -7,13 +7,26 @@ function openUserDetails(event, element) {
     fetch(`/users/${userId}`)
         .then(response => response.json())
         .then(data => {
-            document.getElementById("panelUserName").innerText = data.name;
+            // Populate user information
+            document.getElementById("panelUserName").innerText = data.username;
             document.getElementById("panelUserEmail").innerText = data.email;
-            document.getElementById("panelUserRole").innerText = data.role;
+            document.getElementById("panelUserRole").innerText = data.role; // Assuming role is an object with a 'name' property
             document.getElementById("panelUserStatus").innerText = data.enabled ? 'ACTIVE' : 'SUSPENDED';
             document.getElementById("panelUserId").value = data.id;
 
+            // Populate campaign statistics
+            document.getElementById("panelTotalCampaigns").innerText = data.totalCampaigns;
+            document.getElementById("panelDraftCampaigns").innerText = data.draftCampaigns;
+            document.getElementById("panelActiveCampaigns").innerText = data.activeCampaigns;
+            document.getElementById("panelInactiveCampaigns").innerText = data.inactiveCampaigns;
+            document.getElementById("panelFrozenCampaigns").innerText = data.frozenCampaigns;
+            document.getElementById("panelCompletedCampaigns").innerText = data.completedCampaigns;
 
+            // Populate donation information TODO
+            document.getElementById("panelDonationsCollected").innerText = data.totalDonationsCollectedInEuro ? data.totalDonationsCollectedInEuro.toFixed(2) : '0.00';
+            document.getElementById("panelDonationsGiven").innerText = data.totalDonationsGivenInEuro ? data.totalDonationsGivenInEuro.toFixed(2) : '0.00';
+
+            // Update toggle button
             let toggleButton = document.getElementById("toggleUserStatusBtn");
             if (data.enabled) {
                 toggleButton.innerText = "Deactivate User";
@@ -40,7 +53,6 @@ function toggleUserStatus() {
     userIdInput.value = userId;
     form.submit();
 }
-
 
 function deleteUser() {
     let userId = document.getElementById("panelUserId").value;

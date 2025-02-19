@@ -45,26 +45,70 @@
 </div>
 
 <!-- Bootstrap Offcanvas Side Panel -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="userDetailsPanel">
+<div id="userDetailsPanel" class="offcanvas offcanvas-end" tabindex="-1">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title">User Details</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        <p><strong>Name:</strong> <span id="panelUserName"></span></p>
-        <p><strong>Email:</strong> <span id="panelUserEmail"></span></p>
-        <p><strong>Role:</strong> <span id="panelUserRole"></span></p>
-        <p><strong>Status:</strong> <span id="panelUserStatus"></span></p>
-        <input type="hidden" id="panelUserId">
+        <dl>
+            <dt>Name:</dt>
+            <dd><span id="panelUserName"></span></dd>
 
-        <form id="toggleUserStatusForm" th:action="@{/users/toggle-status}" method="post">
-            <input type="hidden" id="userIdInput" name="userId" th:value="''">
-            <button id="toggleUserStatusBtn" class="btn w-100 mb-2" type="button" onclick="toggleUserStatus()">Loading...</button>
+            <dt>Email:</dt>
+            <dd><span id="panelUserEmail"></span></dd>
+
+            <dt>Role:</dt>
+            <dd><span id="panelUserRole"></span></dd>
+
+            <dt>Status:</dt>
+            <dd><span id="panelUserStatus"></span></dd>
+        </dl>
+
+        <hr>
+
+        <h6>Campaign Statistics</h6>
+        <dl>
+            <dt>Total Campaigns:</dt>
+            <dd><span id="panelTotalCampaigns"></span></dd>
+
+            <dt>Draft Campaigns:</dt>
+            <dd><span id="panelDraftCampaigns"></span></dd>
+
+            <dt>Active Campaigns:</dt>
+            <dd><span id="panelActiveCampaigns"></span></dd>
+
+            <dt>Inactive Campaigns:</dt>
+            <dd><span id="panelInactiveCampaigns"></span></dd>
+
+            <dt>Frozen Campaigns:</dt>
+            <dd><span id="panelFrozenCampaigns"></span></dd>
+
+            <dt>Completed Campaigns:</dt>
+            <dd><span id="panelCompletedCampaigns"></span></dd>
+        </dl>
+
+        <hr>
+
+        <h6>Donation Information</h6>
+        <dl>
+            <dt>Total Donations Collected (€):</dt>
+            <dd><span id="panelDonationsCollected"></span></dd>
+
+            <dt>Total Donations Given (€):</dt>
+            <dd><span id="panelDonationsGiven"></span></dd>
+        </dl>
+
+        <input type="hidden" id="panelUserId">
+        <form id="toggleUserStatusForm" action="/users/toggle-status" method="post">
+            <input type="hidden" id="userIdInput" name="userId">
+            <button id="toggleUserStatusBtn" class="btn w-100 mb-2" type="button" onclick="toggleUserStatus()">Toggle Status</button>
         </form>
 
         <button class="btn btn-danger w-100 disabled" onclick="deleteUser()">Delete User</button>
     </div>
 </div>
+
 
 <footer th:replace="~{fragments/footer :: footerSection}" role="contentinfo" class="footer mt-auto"></footer>
 <script src="/js/user_management.js"></script>
