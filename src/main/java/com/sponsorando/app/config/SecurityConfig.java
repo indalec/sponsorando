@@ -55,7 +55,6 @@ public class SecurityConfig {
                 .loginProcessingUrl("/login")
                 .successHandler(customAuthenticationSuccessHandler)
                 .failureHandler(customAuthenticationFailureHandler)
-                .failureUrl("/login?error=true")
                 .permitAll()
         );
 
