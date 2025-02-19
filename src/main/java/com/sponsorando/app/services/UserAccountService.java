@@ -1,12 +1,12 @@
 package com.sponsorando.app.services;
 
-import com.sponsorando.app.models.ImageForm;
-import com.sponsorando.app.models.Role;
-import com.sponsorando.app.models.UserAccount;
-import com.sponsorando.app.models.UserForm;
+import com.sponsorando.app.models.*;
 import com.sponsorando.app.repositories.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,8 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.security.Principal;
 import java.util.Optional;
 
 @Service
@@ -79,6 +77,39 @@ public class UserAccountService implements UserDetailsService {
             return null;
         }
     }
+
+    public void updateUserProfile(String currentEmail, UserEditForm form) {
+        Optional<UserAccount> optionalUser = userAccountRepository.findByEmail(currentEmail);
+
+        if (optionalUser.isPresent()) {
+            UserAccount existingUser = optionalUser.get();
+
+            if (form.getName() != null && !form.getName().isEmpty() &&
+                    !form.getName().equals(existingUser.getName())) {
+                existingUser.setName(form.getName());
+            }
+
+            if (form.getEmail() != null && !form.getEmail().isEmpty() &&
+                    !form.getEmail().equals(existingUser.getEmail())) {
+                existingUser.setEmail(form.getEmail());
+            }
+
+            if (form.getPassword() != null && !form.getPassword().isEmpty()) {
+                existingUser.setPassword(passwordEncoder.encode(form.getPassword()));
+            }
+
+            // TODO: Implement image storage logic when ready
+
+
+            userAccountRepository.save(existingUser);
+
+            UserDetails userDetails = loadUserByUsername(existingUser.getEmail());
+            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        }
+    }
+
+
 
 
 }

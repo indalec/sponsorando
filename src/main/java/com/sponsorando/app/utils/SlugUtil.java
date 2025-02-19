@@ -45,8 +45,6 @@ public class SlugUtil {
         if (appendUuid) {
             if (slug.length() < 2) {
                 slug.append("-").append(UUID.randomUUID().toString(), 0, (MIN_LENGTH_UUID * 2));
-            } else if (slug.substring(0,6).equals(DEFAULT_SLUG) ) {
-                slug.append("-").append(UUID.randomUUID().toString(), 0, MIN_LENGTH_UUID);
             } else {
                 slug.append("-").append(UUID.randomUUID().toString(), 0, MIN_LENGTH_UUID);
             }

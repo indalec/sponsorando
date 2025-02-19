@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CampaignService {
@@ -35,7 +37,7 @@ public class CampaignService {
         UserAccount userAccount = userAccountService.getUser(email);
         Campaign campaign = new Campaign();
         campaign.setTitle(campaignForm.getTitle());
-        campaign.setSlug(SlugUtil.generateSlug(campaignForm.getTitle(),true,100));
+        campaign.setSlug(SlugUtil.generateSlug(campaignForm.getTitle(), true, 100));
         campaign.setDescription(campaignForm.getDescription());
         campaign.setStartDate(campaignForm.getStartDate());
         campaign.setEndDate(campaignForm.getEndDate());
@@ -63,6 +65,30 @@ public class CampaignService {
         return campaignRepository.findAll(pageable);
     }
 
+    public Page<Campaign> getActiveCampaignsByTitleOrCategory(String searchQuery, String sortBy, int pageNumber, int pageSize) {
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, getSortOrder(sortBy));
+        return campaignRepository.findByStatusAndTitleContainingIgnoreCaseOrCategoryContainingIgnoreCase(
+                CampaignStatus.ACTIVE, searchQuery, pageable, sortBy);
+    }
+
+    public Page<Campaign> getCampaignsByStatus(String sortBy, int pageNumber, int pageSize) {
+
+        System.out.println("Check getCampaignsByStatus"+sortBy);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return campaignRepository.findByStatus(CampaignStatus.ACTIVE, pageable, sortBy);
+    }
+    private Sort getSortOrder(String sortBy) {
+        return switch (sortBy) {
+            case "mostUrgent", "default" -> Sort.unsorted();
+            case "fewestDaysLeft" -> Sort.by(Sort.Direction.ASC, "endDate");
+            case "newest" -> Sort.by(Sort.Direction.DESC, "startDate");
+            case "lowestCostToComplete" -> Sort.unsorted();
+            case "mostDonors" -> Sort.unsorted();
+            default -> Sort.unsorted();
+        };
+    }
+
     public Page<Campaign> getCampaignsByUserEmail(String email, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return campaignRepository.findByUserAccountEmailAndStatusNot(email, CampaignStatus.INACTIVE, pageable);
@@ -86,9 +112,9 @@ public class CampaignService {
     public Campaign getCampaignById(Long id) {
         try {
             return campaignRepository.findById(id)
-                .orElseThrow(
-                    () -> new EntityNotFoundException("Campaign not found with id: " + id)
-                );
+                    .orElseThrow(
+                            () -> new EntityNotFoundException("Campaign not found with id: " + id)
+                    );
         } catch (Exception e) {
             throw new RuntimeException("Error retrieving campaign with id: " + id, e);
         }
@@ -121,6 +147,46 @@ public class CampaignService {
                 return false;
             }
         } catch (RuntimeException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateCampaign(CampaignForm updatedCampaignDetails) {
+        try {
+
+            Optional<Campaign> existingCampaignOptional = campaignRepository.findById(updatedCampaignDetails.getCampaignId());
+
+            if (existingCampaignOptional.isEmpty()) {
+                return false;
+            }
+
+            Campaign existingCampaign = existingCampaignOptional.get();
+
+            if (!existingCampaign.getStatus().equals(CampaignStatus.ACTIVE)) {
+                existingCampaign.setStartDate(updatedCampaignDetails.getStartDate());
+                existingCampaign.setTitle(updatedCampaignDetails.getTitle());
+                existingCampaign.setSlug(SlugUtil.generateSlug(updatedCampaignDetails.getTitle(), true, 100));
+            }
+
+            existingCampaign.setDescription(updatedCampaignDetails.getDescription());
+            existingCampaign.setShowLocation(updatedCampaignDetails.getShowLocation() != null ? updatedCampaignDetails.getShowLocation() : false);
+            existingCampaign.setCurrency(updatedCampaignDetails.getCurrency());
+            existingCampaign.setGoalAmount(updatedCampaignDetails.getGoalAmount());
+            existingCampaign.setEndDate(updatedCampaignDetails.getEndDate());
+            existingCampaign.setCategories(updatedCampaignDetails.getCategories());
+            existingCampaign.setUpdatedAt(LocalDateTime.now());
+
+            if (!existingCampaign.getStatus().equals(CampaignStatus.ACTIVE)) {
+                if (addressService.updateAddress(updatedCampaignDetails, existingCampaign) == null) {
+                    return false;
+                }
+            }
+
+            campaignRepository.save(existingCampaign);
+            return true;
+
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }

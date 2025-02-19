@@ -36,9 +36,13 @@ public class SecurityConfig {
                             .requestMatchers("/campaigns").authenticated()
                             .requestMatchers("/add_campaign").authenticated()
                             .requestMatchers("/delete_campaign/**").authenticated()
+                            .requestMatchers("/edit_campaign/**").authenticated()
+                            .requestMatchers("/edit_campaign").authenticated()
+                            .requestMatchers("/update_profile").authenticated()
                             .requestMatchers("/admin/**").hasRole("ADMIN")
-                            .requestMatchers("/c/**").permitAll()
-                            .requestMatchers("/discover_campaigns/**").permitAll()
+                            .requestMatchers("/donations/**").hasRole("ADMIN")
+                            .requestMatchers("/payments/**").hasRole("ADMIN")
+                            .requestMatchers("/users/**").hasRole("ADMIN")
                             .anyRequest().permitAll();
                 }
         );

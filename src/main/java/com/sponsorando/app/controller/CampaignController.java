@@ -2,6 +2,7 @@ package com.sponsorando.app.controller;
 
 import com.sponsorando.app.models.*;
 import com.sponsorando.app.repositories.CampaignCategoryRepository;
+import com.sponsorando.app.repositories.CampaignRepository;
 import com.sponsorando.app.repositories.CurrencyRepository;
 import com.sponsorando.app.services.CampaignService;
 import com.sponsorando.app.services.UserAccountService;
@@ -11,16 +12,16 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class CampaignController {
-
-    @Autowired
-    private UserAccountService userAccountService;
 
     @Autowired
     private CampaignCategoryRepository campaignCategoryRepository;
@@ -31,8 +32,33 @@ public class CampaignController {
     @Autowired
     private CurrencyRepository currencyRepository;
 
-    @GetMapping("/discover_campaigns")
-    public String discoverCampaigns(Model model) {
+    @Autowired
+    private CampaignRepository campaignRepository;
+
+    @Autowired
+    private UserAccountService userAccountService;
+
+    @GetMapping("/discover-campaigns")
+    public String discoverCampaigns(Model model,
+                                    @RequestParam(name = "page", defaultValue = "0") int pageNumber,
+                                    @RequestParam(name = "searchQuery", required = false) String searchQuery,
+                                    @RequestParam(name = "sortBy", defaultValue = "mostUrgent") String sortBy) {
+
+        int pageSize = 9;
+        Page<Campaign> page;
+
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            page = campaignService.getActiveCampaignsByTitleOrCategory(searchQuery, sortBy, pageNumber, pageSize);
+        } else {
+            page = campaignService.getCampaignsByStatus(sortBy, pageNumber, pageSize);
+        }
+
+        System.out.println("Data:::"+page.getContent());
+        model.addAttribute("campaigns", page.getContent());
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("currentPage", page.getNumber());
+        model.addAttribute("searchQuery", searchQuery);
+        model.addAttribute("sortBy", sortBy);
 
         return "discover_campaigns";
     }
@@ -83,7 +109,7 @@ public class CampaignController {
         String currentUser = (String) model.getAttribute("username");
         String currentRole = (String) model.getAttribute("currentRole");
 
-        int pageSize = 5;
+        int pageSize = 10;
         Page<Campaign> page;
 
         if ("ROLE_ADMIN".equals(currentRole)) {
@@ -165,11 +191,75 @@ public class CampaignController {
 
             if(isGuest) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Unfortunately an error occurred while retrieving the campaign. Please try again.");
-                return "redirect:/discover_campaigns?page=" + page;
+                return "redirect:/discover-campaigns?page=" + page;
             } else {
                 redirectAttributes.addFlashAttribute("errorMessage", "Unfortunately an error occurred while retrieving the campaign. Please try again.");
                 return "redirect:/campaigns?page=" + page;
             }
         }
     }
+
+
+    @GetMapping("/edit_campaign/{id}")
+    public String editCampaign(@PathVariable("id") Long id, @RequestParam("page") int currentPage, Model model) {
+
+        List<CampaignCategory> categories = campaignCategoryRepository.findAll();
+        List<Currency> currencies = currencyRepository.findAll();
+
+        model.addAttribute("categories", categories);
+        model.addAttribute("currencies", currencies);
+        model.addAttribute("currentRole", (String) model.getAttribute("currentRole"));
+        model.addAttribute("page", currentPage);
+
+        Optional<Campaign> campaign = campaignRepository.findById(id);
+
+        if (campaign.isPresent() && campaign.get().getStartDate() != null) {
+
+            String formattedStartDate = campaign.get().getStartDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+
+            model.addAttribute("formattedStartDate", formattedStartDate);
+            model.addAttribute("campaign", campaign.get());
+            System.out.println("formattedStartDate:::"+formattedStartDate);
+        }
+        if (campaign.isPresent() && campaign.get().getEndDate() != null) {
+
+            String formattedEndDate = campaign.get().getEndDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+
+            model.addAttribute("formattedEndDate", formattedEndDate);
+            model.addAttribute("campaign", campaign.get());
+            System.out.println("formattedEndDate:::"+formattedEndDate);
+        }
+        model.addAttribute("campaignStatuses", CampaignStatus.getCampaignStatuses());
+        return "edit_campaign";
+    }
+
+    @PostMapping("/edit_campaign")
+    public String editCampaignSubmit(@ModelAttribute @Valid CampaignForm campaignForm,
+                                     RedirectAttributes redirectAttributes, Model model, BindingResult bindingResult) {
+
+        if(bindingResult.hasErrors()) {
+            return "edit_campaign";
+        }
+        System.out.println(campaignForm);
+
+        String role = (String) model.getAttribute("currentRole");
+
+        boolean isCampaignUpdated = false;
+
+        try {
+            isCampaignUpdated = campaignService.updateCampaign(campaignForm);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (isCampaignUpdated) {
+            redirectAttributes.addFlashAttribute("isCampaignUpdated", true);
+        } else {
+            redirectAttributes.addFlashAttribute("isCampaignUpdated", false);
+        }
+
+        redirectAttributes.addFlashAttribute("currentRole", role);
+        return "redirect:/campaigns?page=" + campaignForm.getPage();
+    }
+
 }

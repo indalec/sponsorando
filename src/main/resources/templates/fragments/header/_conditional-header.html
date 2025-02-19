@@ -1,0 +1,15 @@
+<header th:fragment="headerSectionConditional" class="container" th:with="currentRole=${roles != null and !roles.isEmpty() ? roles[0].authority : 'NONE'}">
+
+    <div th:if="${currentRole == 'ROLE_ADMIN'}">
+        <div th:replace="~{fragments/header/_admin-header :: headerSectionAdmin}" class="container"></div>
+    </div>
+
+    <div th:if="${currentRole == 'ROLE_USER'}">
+        <div th:replace="~{fragments/header/_user-header :: headerSectionUser}" class="container"></div>
+    </div>
+
+    <div th:if="${currentRole == 'NONE'}">
+        <div th:replace="~{fragments/header/_header :: headerSection}" class="container"></div>
+    </div>
+
+</header>
