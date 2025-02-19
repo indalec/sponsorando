@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -148,6 +149,7 @@ public class UserAccountService implements UserDetailsService {
         System.out.println(campaigns);
         for (Campaign campaign : campaigns) {
             campaign.setStatus(status);
+            campaign.setUpdatedAt(LocalDateTime.now());
             System.out.println(campaign.getTitle() + " was set to status: " + campaign.getStatus());
             campaignRepository.save(campaign);
         }
