@@ -1,9 +1,6 @@
 package com.sponsorando.app.models;
 
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import jdk.jfr.Unsigned;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -19,7 +16,6 @@ public class CampaignForm {
     private String description;
 
     @NotNull(message = "Please insert the date the campaign starts")
-    @FutureOrPresent(message = "Date cannot be in the past")
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime startDate;
 
@@ -41,6 +37,8 @@ public class CampaignForm {
     private Boolean showLocation;
 
     private int page;
+
+    private String status;
 
     private Long campaignId;
 
@@ -199,6 +197,14 @@ public class CampaignForm {
         this.campaignId = campaignId;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "CampaignForm{" +
@@ -210,7 +216,9 @@ public class CampaignForm {
                 ", currency=" + currency +
                 ", categories=" + categories +
                 ", showLocation=" + showLocation +
-                ", showLocation=" + showLocation +
+                ", page=" + page +
+                ", status='" + status + '\'' +
+                ", campaignId=" + campaignId +
                 ", street='" + street + '\'' +
                 ", number='" + number + '\'' +
                 ", city='" + city + '\'' +
