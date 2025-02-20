@@ -4,6 +4,9 @@ import com.sponsorando.app.models.*;
 import com.sponsorando.app.repositories.CampaignRepository;
 import com.sponsorando.app.repositories.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -124,9 +127,10 @@ public class UserAccountService implements UserDetailsService {
         }
     }
 
-    public List<UserAccount> getAllUsers(String sortField, String sortDir) {
+    public Page<UserAccount> getAllUsers(String sortField, String sortDir, int page, int size) {
         Sort sort = Sort.by(Sort.Direction.fromString(sortDir), sortField);
-        return userAccountRepository.findAll(sort);
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return userAccountRepository.findAll(pageable);
     }
 
     public UserAccount getUserById(Long id) {
@@ -158,11 +162,7 @@ public class UserAccountService implements UserDetailsService {
         }
     }
 
-    public void deleteUser(Long id) {
-        UserAccount user = getUserById(id);
-        user.setEnabled(false);
-        userAccountRepository.save(user);
-    }
+
 
 
 

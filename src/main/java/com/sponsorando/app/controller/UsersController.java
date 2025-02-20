@@ -7,6 +7,7 @@ import com.sponsorando.app.models.UserPanelDetailsDto;
 import com.sponsorando.app.repositories.CampaignRepository;
 import com.sponsorando.app.services.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,7 +18,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @Controller
 public class UsersController {
@@ -30,20 +30,32 @@ public class UsersController {
     private CampaignRepository campaignRepository;
 
     @GetMapping("/users")
-    public String users(@RequestParam(defaultValue = "id") String sort,
+    public String users(@RequestParam(defaultValue = "0") int page,
+                        @RequestParam(defaultValue = "10") int size,
+                        @RequestParam(defaultValue = "id") String sort,
                         @RequestParam(defaultValue = "asc") String order,
                         Model model) {
         try {
-            List<UserAccount> users = userAccountService.getAllUsers(sort, order);
-            model.addAttribute("users", users);
+            Page<UserAccount> userPage = userAccountService.getAllUsers(sort, order, page, size);
+
+            model.addAttribute("users", userPage.getContent());
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", userPage.getTotalPages());
+            model.addAttribute("totalItems", userPage.getTotalElements());
             model.addAttribute("sortField", sort);
             model.addAttribute("sortDir", order);
+            model.addAttribute("reverseSortDir", order.equals("asc") ? "desc" : "asc");
         } catch (IllegalArgumentException ex) {
-            System.out.println("Ocurred the following error" + ex);
-            List<UserAccount> users = userAccountService.getAllUsers("id", "asc");
-            model.addAttribute("users", users);
+
+            Page<UserAccount> defaultUserPage = userAccountService.getAllUsers("id", "asc", 0, size);
+
+            model.addAttribute("users", defaultUserPage.getContent());
+            model.addAttribute("currentPage", 0);
+            model.addAttribute("totalPages", defaultUserPage.getTotalPages());
+            model.addAttribute("totalItems", defaultUserPage.getTotalElements());
             model.addAttribute("sortField", "id");
             model.addAttribute("sortDir", "asc");
+            model.addAttribute("reverseSortDir", "desc");
         }
 
         return "users";
@@ -144,11 +156,7 @@ public class UsersController {
         return "redirect:/users";
     }
 
-    @DeleteMapping("/users/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
-        userAccountService.deleteUser(id);
-        return ResponseEntity.ok("User deleted successfully.");
-    }
+
 
 
 }

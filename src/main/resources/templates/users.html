@@ -15,25 +15,25 @@
             <thead>
             <tr>
                 <th>
-                    <a th:href="@{/users(sort='id', order=${sortField == 'id' && sortDir == 'asc' ? 'desc' : 'asc'})}">ID
+                    <a th:href="@{/users(page=${currentPage}, size=${size}, sort='id', order=${sortField == 'id' && sortDir == 'asc' ? 'desc' : 'asc'})}">ID
                         <span th:if="${sortField == 'id' && sortDir == 'asc'}">↑</span>
                         <span th:if="${sortField == 'id' && sortDir == 'desc'}">↓</span>
                     </a>
                 </th>
                 <th>
-                    <a th:href="@{/users(sort='name', order=${sortField == 'name' && sortDir == 'asc' ? 'desc' : 'asc'})}">Name
+                    <a th:href="@{/users(page=${currentPage}, size=${size}, sort='name', order=${sortField == 'name' && sortDir == 'asc' ? 'desc' : 'asc'})}">Name
                         <span th:if="${sortField == 'name' && sortDir == 'asc'}">↑</span>
                         <span th:if="${sortField == 'name' && sortDir == 'desc'}">↓</span>
                     </a>
                 </th>
                 <th>
-                    <a th:href="@{/users(sort='email', order=${sortField == 'email' && sortDir == 'asc' ? 'desc' : 'asc'})}">Email
+                    <a th:href="@{/users(page=${currentPage}, size=${size}, sort='email', order=${sortField == 'email' && sortDir == 'asc' ? 'desc' : 'asc'})}">Email
                         <span th:if="${sortField == 'email' && sortDir == 'asc'}">↑</span>
                         <span th:if="${sortField == 'email' && sortDir == 'desc'}">↓</span>
                     </a>
                 </th>
                 <th>
-                    <a th:href="@{/users(sort='role', order=${sortField == 'role' && sortDir == 'asc' ? 'desc' : 'asc'})}">Role
+                    <a th:href="@{/users(page=${currentPage}, size=${size}, sort='role', order=${sortField == 'role' && sortDir == 'asc' ? 'desc' : 'asc'})}">Role
                         <span th:if="${sortField == 'role' && sortDir == 'asc'}">↑</span>
                         <span th:if="${sortField == 'role' && sortDir == 'desc'}">↓</span>
                     </a>
@@ -49,8 +49,8 @@
                 <td th:text="${user.email}"></td>
                 <td th:text="${user.role}"></td>
                 <td>
-                    <span th:text="${user.enabled ? 'ACTIVE' : 'INACTIVE'}" class="badge"
-                          th:classappend="${user.enabled ? 'bg-success' : 'bg-danger'}"></span>
+                            <span th:text="${user.enabled ? 'ACTIVE' : 'INACTIVE'}" class="badge"
+                                  th:classappend="${user.enabled ? 'bg-success' : 'bg-danger'}"></span>
                 </td>
                 <td>
                     <button class="btn btn-outline-primary btn-sm show-panel-btn" th:data-user-id="${user.id}">Manage</button>
@@ -58,8 +58,22 @@
             </tr>
             </tbody>
         </table>
-
     </div>
+
+    <!-- Pagination -->
+    <nav aria-label="User Pagination" th:if="${totalPages > 1}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+                <a class="page-link" th:href="@{/users(page=${currentPage - 1}, size=${size}, sort=${sortField}, order=${sortDir})}">Previous</a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i ? 'active' : ''}">
+                <a class="page-link" th:href="@{/users(page=${i}, size=${size}, sort=${sortField}, order=${sortDir})}" th:text="${i + 1}"></a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}">
+                <a class="page-link" th:href="@{/users(page=${currentPage + 1}, size=${size}, sort=${sortField}, order=${sortDir})}">Next</a>
+            </li>
+        </ul>
+    </nav>
 </div>
 
 <!-- Bootstrap Offcanvas Side Panel -->
@@ -72,62 +86,45 @@
         <dl>
             <dt>Name:</dt>
             <dd><span id="panelUserName"></span></dd>
-
             <dt>Email:</dt>
             <dd><span id="panelUserEmail"></span></dd>
-
             <dt>Role:</dt>
             <dd><span id="panelUserRole"></span></dd>
-
             <dt>Status:</dt>
             <dd><span id="panelUserStatus"></span></dd>
         </dl>
-
         <hr>
-
         <h6>Campaign Statistics</h6>
         <dl>
             <dt>Total Campaigns:</dt>
             <dd><span id="panelTotalCampaigns"></span></dd>
-
             <dt>Draft Campaigns:</dt>
             <dd><span id="panelDraftCampaigns"></span></dd>
-
             <dt>Active Campaigns:</dt>
             <dd><span id="panelActiveCampaigns"></span></dd>
-
             <dt>Inactive Campaigns:</dt>
             <dd><span id="panelInactiveCampaigns"></span></dd>
-
             <dt>Frozen Campaigns:</dt>
             <dd><span id="panelFrozenCampaigns"></span></dd>
-
             <dt>Completed Campaigns:</dt>
             <dd><span id="panelCompletedCampaigns"></span></dd>
         </dl>
-
         <hr>
-
         <h6>Donation Information</h6>
         <dl>
             <dt>Total Donations Collected (€):</dt>
             <dd><span id="panelDonationsCollected"></span></dd>
-
             <dt>Total Donations Given (€):</dt>
             <dd><span id="panelDonationsGiven"></span></dd>
         </dl>
-
         <input type="hidden" id="panelUserId">
         <form id="toggleUserStatusForm" action="/users/toggle-status" method="post">
             <input type="hidden" id="userIdInput" name="userId">
             <button id="toggleUserStatusBtn" class="btn w-100 mb-2" type="button" onclick="toggleUserStatus()">Toggle Status</button>
         </form>
-
         <button class="btn btn-danger w-100 disabled" onclick="deleteUser()">Delete User</button>
     </div>
 </div>
-
-
 <footer th:replace="~{fragments/footer :: footerSection}" role="contentinfo" class="footer mt-auto"></footer>
 <script src="/js/user_management.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
