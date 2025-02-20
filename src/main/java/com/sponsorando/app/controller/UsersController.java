@@ -156,13 +156,22 @@ public class UsersController {
     }
 
     @PostMapping("/users/toggle-status")
-    public String toggleUserStatus(@RequestParam(name = "userId", required = true) Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("User ID cannot be null.");
+    public String toggleUserStatus(
+            @RequestParam Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "asc") String order,
+            @RequestParam(required = false) String search
+    ) {
+        userAccountService.toggleUserStatus(userId);
+        String redirectUrl = "redirect:/users?page=" + page + "&sort=" + sort + "&order=" + order;
+
+        if (search != null && !search.isEmpty()) {
+            redirectUrl += "&search=" + search;
         }
-        userAccountService.toggleUserStatus(id);
-        return "redirect:/users";
+        return redirectUrl;
     }
+
 
 
 

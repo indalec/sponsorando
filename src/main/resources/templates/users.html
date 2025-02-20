@@ -19,31 +19,31 @@
             <thead>
             <tr>
                 <th>
-                    <a th:href="@{/users(page=${currentPage}, size=${size}, sort='id', order=${sortField == 'id' && sortDir == 'asc' ? 'desc' : 'asc'})}">ID
+                    <a th:href="@{/users(page=${currentPage}, size=${size}, sort='id', order=${sortField == 'id' && sortDir == 'asc' ? 'desc' : 'asc'}, search=${search})}">ID
                         <span th:if="${sortField == 'id' && sortDir == 'asc'}">↑</span>
                         <span th:if="${sortField == 'id' && sortDir == 'desc'}">↓</span>
                     </a>
                 </th>
                 <th>
-                    <a th:href="@{/users(page=${currentPage}, size=${size}, sort='name', order=${sortField == 'name' && sortDir == 'asc' ? 'desc' : 'asc'})}">Name
+                    <a th:href="@{/users(page=${currentPage}, size=${size}, sort='name', order=${sortField == 'name' && sortDir == 'asc' ? 'desc' : 'asc'}, search=${search})}">Name
                         <span th:if="${sortField == 'name' && sortDir == 'asc'}">↑</span>
                         <span th:if="${sortField == 'name' && sortDir == 'desc'}">↓</span>
                     </a>
                 </th>
                 <th>
-                    <a th:href="@{/users(page=${currentPage}, size=${size}, sort='email', order=${sortField == 'email' && sortDir == 'asc' ? 'desc' : 'asc'})}">Email
+                    <a th:href="@{/users(page=${currentPage}, size=${size}, sort='email', order=${sortField == 'email' && sortDir == 'asc' ? 'desc' : 'asc'}, search=${search})}">Email
                         <span th:if="${sortField == 'email' && sortDir == 'asc'}">↑</span>
                         <span th:if="${sortField == 'email' && sortDir == 'desc'}">↓</span>
                     </a>
                 </th>
                 <th>
-                    <a th:href="@{/users(page=${currentPage}, size=${size}, sort='role', order=${sortField == 'role' && sortDir == 'asc' ? 'desc' : 'asc'})}">Role
+                    <a th:href="@{/users(page=${currentPage}, size=${size}, sort='role', order=${sortField == 'role' && sortDir == 'asc' ? 'desc' : 'asc'}, search=${search})}">Role
                         <span th:if="${sortField == 'role' && sortDir == 'asc'}">↑</span>
                         <span th:if="${sortField == 'role' && sortDir == 'desc'}">↓</span>
                     </a>
                 </th>
                 <th>
-                    <a th:href="@{/users(page=${currentPage}, size=${size}, sort='enabled', order=${sortField == 'enabled' && sortDir == 'asc' ? 'desc' : 'asc'})}">Status
+                    <a th:href="@{/users(page=${currentPage}, size=${size}, sort='enabled', order=${sortField == 'enabled' && sortDir == 'asc' ? 'desc' : 'asc'}, search=${search})}">Status
                         <span th:if="${sortField == 'enabled' && sortDir == 'asc'}">↑</span>
                         <span th:if="${sortField == 'enabled' && sortDir == 'desc'}">↓</span>
                     </a>
@@ -73,13 +73,13 @@
     <nav aria-label="User Pagination" th:if="${totalPages > 1}">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
-                <a class="page-link" th:href="@{/users(page=${currentPage - 1}, size=${size}, sort=${sortField}, order=${sortDir})}">Previous</a>
+                <a class="page-link" th:href="@{/users(page=${currentPage - 1}, size=${size}, sort=${sortField}, order=${sortDir}, search=${search})}">Previous</a>
             </li>
             <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i ? 'active' : ''}">
-                <a class="page-link" th:href="@{/users(page=${i}, size=${size}, sort=${sortField}, order=${sortDir})}" th:text="${i + 1}"></a>
+                <a class="page-link" th:href="@{/users(page=${i}, size=${size}, sort=${sortField}, order=${sortDir}, search=${search})}" th:text="${i + 1}"></a>
             </li>
             <li class="page-item" th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}">
-                <a class="page-link" th:href="@{/users(page=${currentPage + 1}, size=${size}, sort=${sortField}, order=${sortDir})}">Next</a>
+                <a class="page-link" th:href="@{/users(page=${currentPage + 1}, size=${size}, sort=${sortField}, order=${sortDir}, search=${search})}">Next</a>
             </li>
         </ul>
     </nav>
@@ -129,7 +129,10 @@
         <input type="hidden" id="panelUserId">
         <form id="toggleUserStatusForm" th:action="@{/users/toggle-status}" method="post">
             <input type="hidden" id="userIdInput" name="userId">
-
+            <input type="hidden" id="currentPageInput" name="page" th:value="${currentPage}" />
+            <input type="hidden" id="sortFieldInput" name="sort" th:value="${sortField}" />
+            <input type="hidden" id="sortDirInput" name="order" th:value="${sortDir}" />
+            <input type="hidden" id="searchInputHidden" name="search" th:value="${search}" />
             <button id="toggleUserStatusBtn" class="btn w-100 mb-2" type="button" onclick="toggleUserStatus()">Toggle Status</button>
         </form>
         <button class="btn btn-danger w-100 disabled" onclick="deleteUser()">Delete User</button>

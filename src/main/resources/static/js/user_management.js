@@ -60,9 +60,17 @@ document.addEventListener("DOMContentLoaded", function() {
             currentUrl.searchParams.delete('search');
             currentUrl.searchParams.set('page', '0');
         }
-            window.location.href = currentUrl.toString();
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentSort = urlParams.get('sort');
+        const currentOrder = urlParams.get('order');
+        if(currentSort) {
+            currentUrl.searchParams.set('sort', currentSort);
+        }
+        if(currentOrder) {
+            currentUrl.searchParams.set('order', currentOrder);
+        }
+        window.location.href = currentUrl.toString();
     }
-
 
     if (searchButton) {
         searchButton.addEventListener('click', performSearch);
@@ -97,5 +105,6 @@ function toggleUserStatus() {
     userIdInput.value = userId;
     form.submit();
 }
+
 
 
