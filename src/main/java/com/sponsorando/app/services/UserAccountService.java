@@ -141,26 +141,41 @@ public class UserAccountService implements UserDetailsService {
     @Transactional
     public void toggleUserStatus(Long id) {
         UserAccount user = getUserById(id);
-        user.setEnabled(!user.getEnabled());
+        boolean enabled = !user.getEnabled();
+        user.setEnabled(enabled);
         user.setUpdatedAt(LocalDateTime.now());
         userAccountRepository.save(user);
 
         // Update related campaigns based on the new user status
         // TODO: status FROZEN is just for testing purpose. Change logic if project gets to production phase.
-        CampaignStatus newStatus = user.getEnabled() ? CampaignStatus.ACTIVE : CampaignStatus.FROZEN;
-        updateCampaignStatusFromOneUserWhenAccountDisabled(user, newStatus);
+        updateCampaignStatusFromOneUserWhenAccountDisabled(user, enabled);
     }
 
-    private void updateCampaignStatusFromOneUserWhenAccountDisabled(UserAccount userAccount, CampaignStatus status) {
+    private void updateCampaignStatusFromOneUserWhenAccountDisabled(UserAccount userAccount, boolean enabled) {
         List<Campaign> campaigns = campaignRepository.findByUserAccount(userAccount);
-        System.out.println(campaigns);
+        System.out.println("Campaigns found for user: " + campaigns);
+
         for (Campaign campaign : campaigns) {
-            campaign.setStatus(status);
-            campaign.setUpdatedAt(LocalDateTime.now());
-            System.out.println(campaign.getTitle() + " was set to status: " + campaign.getStatus());
-            campaignRepository.save(campaign);
+            if (enabled) {
+
+                if (campaign.getStatus() == CampaignStatus.FROZEN) {
+                    campaign.setStatus(CampaignStatus.ACTIVE);
+                    campaign.setUpdatedAt(LocalDateTime.now());
+                    System.out.println("Campaign '" + campaign.getTitle() + "' set to ACTIVE");
+                    campaignRepository.save(campaign);
+                }
+            } else {
+
+                if (campaign.getStatus() == CampaignStatus.ACTIVE) {
+                    campaign.setStatus(CampaignStatus.FROZEN);
+                    campaign.setUpdatedAt(LocalDateTime.now());
+                    System.out.println("Campaign '" + campaign.getTitle() + "' set to FROZEN");
+                    campaignRepository.save(campaign);
+                }
+            }
         }
     }
+
 
     public Page<UserAccount> searchUsers(String search, String sortField, String sortDir, int page, int size) {
         Sort sort = Sort.by(Sort.Direction.fromString(sortDir), sortField);
