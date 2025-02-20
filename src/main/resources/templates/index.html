@@ -22,7 +22,7 @@
             <a href="#" class="btn btn-primary btn-lg">Start a Campaign</a>
         </div>
     </section>
-    <div class="container mt-5">
+    <div class="container my-5">
         <h2 class="text-center mb-4">Featured Campaigns</h2>
         <div id="noCampaignsMessage" th:if="${campaigns == null or campaigns.isEmpty()}"
              class="alert alert-warning text-center w-75 w-md-50 mx-auto mt-5">
@@ -63,7 +63,7 @@
             </div>
         </div>
         <section class="section my-5">
-            <h4 class="mb-4">Locations</h4>
+            <h2 class="text-center mb-4">Locations</h2>
             <div id="map" class="container-fluid px-0 rounded shadow" style="height: 400px;"></div>
         </section>
     </div>
