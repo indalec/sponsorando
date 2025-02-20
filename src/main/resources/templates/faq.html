@@ -1,18 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Help - Sponsorando</title>
-        <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
-    </head>
-    <body>
-    <header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}" class="container mb-4"></header>
-        <main>
-            <div class="container mt-5">
-                <h2 class="text-center">FAQ</h2>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Help - Sponsorando</title>
+    <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
+    <link href="/css/faq.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}" class="container mb-4"></header>
+<main>
+    <div class="container mt-5 mb-5">
+        <h1 class="text-center mb-4">Frequently Asked Questions</h1>
+        <p class="lead text-center mb-5">Find answers to common questions about Sponsorando and our unique Altruistic Sponsoring model.</p>
+
+        <div class="accordion sponsorando-accordion" id="faqAccordion">
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading1">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
+                        What is Sponsorando?
+                    </button>
+                </h2>
+                <div id="collapse1" class="accordion-collapse collapse" aria-labelledby="heading1"
+                     data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Sponsorando is a platform that connects sponsors with creators and social initiatives,
+                        fostering partnerships that create positive impact beyond just marketing exposure.
+                        Unlike traditional sponsorship, Sponsorando promotes <strong>Altruistic Sponsoring</strong>.
+                    </div>
+                </div>
             </div>
-        </main>
-        <footer th:replace="~{fragments/footer :: footerSection}" role="contentinfo" class="footer"></footer>
-    </body>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading2">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+                        What is Altruistic Sponsoring?
+                    </button>
+                </h2>
+                <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="heading2"
+                     data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Altruistic Sponsoring is a new sponsorship model where the primary reward isn’t marketing exposure but meaningful impact. Instead of focusing on ROI like brand visibility or sales, sponsors support projects driven by shared values, emotional satisfaction, and social good. It’s about fostering real change through empathy, trust, and human connection. Sponsors receive updates on how their contributions transform lives, creating a deep sense of fulfillment. By prioritizing purpose over profit, Altruistic Sponsoring shifts the narrative—turning sponsorship into a force for genuine progress rather than just a business transaction. It’s sponsorship with heart, making a lasting difference.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading3">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
+                        How does Sponsorando work?
+                    </button>
+                </h2>
+                <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="heading3"
+                     data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Sponsors browse projects aligned with their values, contribute funds, and track the impact of their sponsorship in real time. Creators receive support to bring their ideas to life.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading4">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
+                        Who can become a sponsor?
+                    </button>
+                </h2>
+                <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="heading4"
+                     data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Anyone—from individuals to businesses and organizations—who wants to support meaningful projects can become a sponsor.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading5">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse5" aria-expanded="false" aria-controls="collapse5">
+                        What types of projects can be sponsored?
+                    </button>
+                </h2>
+                <div id="collapse5" class="accordion-collapse collapse" aria-labelledby="heading5"
+                     data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Projects range from artistic endeavors and educational programs to social causes and community initiatives.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading6">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse6" aria-expanded="false" aria-controls="collapse6">
+                        How can I start a campaign on Sponsorando?
+                    </button>
+                </h2>
+                <div id="collapse6" class="accordion-collapse collapse" aria-labelledby="heading6"
+                     data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Creators can start a campaign by signing up, submitting their project details, and sharing how sponsorship will make an impact.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading8">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse8" aria-expanded="false" aria-controls="collapse8">
+                        How do sponsors track their impact?
+                    </button>
+                </h2>
+                <div id="collapse8" class="accordion-collapse collapse" aria-labelledby="heading8"
+                     data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Sponsors receive updates from creators and can track progress through our transparency tools.
+                    </div>
+                </div>
+                <div id="collapse9" class="accordion-collapse collapse" aria-labelledby="heading9"
+                     data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Tax deductibility depends on your country’s regulations. We recommend consulting a tax professional.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading10">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse10" aria-expanded="false" aria-controls="collapse10">
+                        Can I support multiple projects?
+                    </button>
+                </h2>
+                <div id="collapse10" class="accordion-collapse collapse" aria-labelledby="heading10"
+                     data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Yes! Sponsors can support multiple initiatives and diversify their impact.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading11">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse11" aria-expanded="false" aria-controls="collapse11">
+                        How can I contact Sponsorando for more information?
+                    </button>
+                </h2>
+                <div id="collapse11" class="accordion-collapse collapse" aria-labelledby="heading11"
+                     data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        You can reach us through our
+                        <a href="/contact" target="_blank"><strong>Contact Us</strong></a> page for inquiries or support.
+                    </div>
+                </div>
+            </div>
+        </div>
+</main>
+<footer th:replace="~{fragments/footer :: footerSection}" role="contentinfo" class="footer"></footer>
+<script src="/js/faq.js"></script>
+</body>
 </html>
