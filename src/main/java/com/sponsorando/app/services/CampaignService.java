@@ -183,4 +183,15 @@ public class CampaignService {
         }
     }
 
+    public Campaign updateCampaignCollectedAmount(Long id, Double netAmount) {
+        Campaign campaign = campaignRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Campaign not found with id: " + id));
+
+        Double currentAmount = campaign.getCollectedAmount();
+        Double newAmount = (currentAmount != null ? currentAmount : 0) + netAmount;
+        campaign.setCollectedAmount(newAmount);
+        campaign.setUpdatedAt(LocalDateTime.now());
+
+        return campaignRepository.save(campaign);
+    }
 }

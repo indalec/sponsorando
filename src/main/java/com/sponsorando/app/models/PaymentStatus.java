@@ -1,7 +1,7 @@
 package com.sponsorando.app.models;
 
 public enum PaymentStatus {
-    SUCCEDED,
+    SUCCEEDED,
     FAILED,
     PENDING;
 

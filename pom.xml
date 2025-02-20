@@ -76,6 +76,12 @@
 			<version>RELEASE</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.stripe/stripe-java -->
+		<dependency>
+			<groupId>com.stripe</groupId>
+			<artifactId>stripe-java</artifactId>
+			<version>28.3.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>

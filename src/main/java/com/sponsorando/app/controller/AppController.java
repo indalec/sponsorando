@@ -31,8 +31,12 @@ public class AppController {
             @RequestParam(required = false) String redirect,
             Model model
     ) {
-        if ("add_campaign".equals(redirect)) {
+        if ("add-campaign".equals(redirect)) {
             model.addAttribute("showInfoMessage", true);
+            model.addAttribute("message", "Please login to start a campaign");
+        } else if ("donate-now".equals(redirect)) {
+            model.addAttribute("showInfoMessage", true);
+            model.addAttribute("message", "Please login to make a donation");
         }
         return "login";
     }

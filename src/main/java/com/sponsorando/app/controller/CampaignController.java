@@ -3,8 +3,8 @@ package com.sponsorando.app.controller;
 import com.sponsorando.app.models.*;
 import com.sponsorando.app.repositories.CampaignCategoryRepository;
 import com.sponsorando.app.repositories.CampaignRepository;
-import com.sponsorando.app.repositories.CurrencyRepository;
 import com.sponsorando.app.services.CampaignService;
+import com.sponsorando.app.services.CurrencyService;
 import com.sponsorando.app.services.UserAccountService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class CampaignController {
     private CampaignService campaignService;
 
     @Autowired
-    private CurrencyRepository currencyRepository;
+    private CurrencyService currencyService;
 
     @Autowired
     private CampaignRepository campaignRepository;
@@ -63,12 +63,12 @@ public class CampaignController {
         return "discover_campaigns";
     }
 
-    @GetMapping("/add_campaign")
+    @GetMapping("/add-campaign")
     @PreAuthorize("isAuthenticated()")
     public String addCampaign(Model model) {
 
         List<CampaignCategory> categories = campaignCategoryRepository.findAll();
-        List<Currency> currencies = currencyRepository.findAll();
+        List<Currency> currencies = currencyService.getCurrencies();
 
         model.addAttribute("categories", categories);
         model.addAttribute("currencies", currencies);
@@ -76,7 +76,7 @@ public class CampaignController {
         return "add_campaign";
     }
 
-    @PostMapping("/add_campaign")
+    @PostMapping("/add-campaign")
     public String addCampaign(
             @ModelAttribute @Valid CampaignForm campaignForm,
             RedirectAttributes redirectAttributes,
@@ -100,7 +100,7 @@ public class CampaignController {
                 redirectAttributes.addFlashAttribute("isCampaignAdded", false);
             }
         }
-        return "redirect:/add_campaign";
+        return "redirect:/add-campaign";
     }
 
     @GetMapping("/campaigns")
@@ -204,7 +204,7 @@ public class CampaignController {
     public String editCampaign(@PathVariable("id") Long id, @RequestParam("page") int currentPage, Model model) {
 
         List<CampaignCategory> categories = campaignCategoryRepository.findAll();
-        List<Currency> currencies = currencyRepository.findAll();
+        List<Currency> currencies = currencyService.getCurrencies();
 
         model.addAttribute("categories", categories);
         model.addAttribute("currencies", currencies);
@@ -261,5 +261,4 @@ public class CampaignController {
         redirectAttributes.addFlashAttribute("currentRole", role);
         return "redirect:/campaigns?page=" + campaignForm.getPage();
     }
-
 }

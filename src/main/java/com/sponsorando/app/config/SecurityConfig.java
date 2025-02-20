@@ -34,7 +34,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> {
                     auth
                             .requestMatchers("/campaigns").authenticated()
-                            .requestMatchers("/add_campaign").authenticated()
+                            .requestMatchers("/add-campaign").authenticated()
                             .requestMatchers("/delete_campaign/**").authenticated()
                             .requestMatchers("/edit_campaign/**").authenticated()
                             .requestMatchers("/edit_campaign").authenticated()
@@ -43,6 +43,7 @@ public class SecurityConfig {
                             .requestMatchers("/donations/**").hasRole("ADMIN")
                             .requestMatchers("/payments/**").hasRole("ADMIN")
                             .requestMatchers("/users/**").hasRole("ADMIN")
+                            .requestMatchers("/api/stripe-public-key").hasRole("USER")
                             .anyRequest().permitAll();
                 }
         );
@@ -62,8 +63,10 @@ public class SecurityConfig {
                             public void commence(HttpServletRequest request, HttpServletResponse response,
                                                  AuthenticationException authException) throws IOException, ServletException {
                                 String requestURI = request.getRequestURI();
-                                if (requestURI.contains("/add_campaign")) {
-                                    response.sendRedirect("/login?redirect=add_campaign");
+                                if (requestURI.contains("/add-campaign")) {
+                                    response.sendRedirect("/login?redirect=add-campaign");
+                                } else if (requestURI.contains("/donate-now")) {
+                                    response.sendRedirect("/login?redirect=donate-now");
                                 } else {
                                     response.sendRedirect("/login");
                                 }

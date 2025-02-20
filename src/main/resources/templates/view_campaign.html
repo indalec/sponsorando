@@ -78,11 +78,13 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <a th:unless="${isGuest}" th:href="@{/campaigns(page=${page})}" class="btn btn-outline-secondary btn-sm rounded-1">Go Back</a>
                         <a th:if="${isGuest}" th:href="@{/discover-campaigns(page=${page})}" class="btn btn-outline-secondary btn-sm rounded-1">Go Back</a>
-                        <div th:unless="${isGuest}" class="d-flex flex-column align-items-center mx-3">
+                        <div th:unless="${isGuest || (isUser && currentUserId != campaign.userAccount.id)}" class="d-flex flex-column align-items-center mx-3">
                             <small class="mb-2">Current Status</small>
                             <span class="badge bg-primary" th:text="${campaign.status}"></span>
                         </div>
-                        <a th:unless="${isGuest}" th:href="@{/edit_campaign/{id}(id=${campaign.id}, page=${page})}" class="btn btn-outline-secondary btn-sm rounded-1">Edit Campaign</a>
+                        <a th:unless="${(isUser && currentUserId == campaign.userAccount.id) || isAdmin}" class="btn btn-outline-primary btn-sm rounded-1 me-1"
+                               th:href="@{/donate-now/{id}(id=${campaign.id}, page=${page})}">Donate Now</a>
+                        <a th:unless="${isGuest || (isUser && currentUserId != campaign.userAccount.id)}" th:href="@{/edit_campaign/{id}(id=${campaign.id}, page=${page})}" class="btn btn-outline-secondary btn-sm rounded-1">Edit Campaign</a>
                     </div>
                 </div>
             </div>

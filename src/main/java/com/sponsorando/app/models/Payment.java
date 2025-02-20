@@ -2,6 +2,9 @@ package com.sponsorando.app.models;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 import java.time.LocalDateTime;
 
@@ -16,24 +19,43 @@ public class Payment {
     @OneToOne
     @MapsId
     @JoinColumn(name = "donation_id", referencedColumnName = "id")
+    @NotNull
     private Donation donation;
 
     private String transactionId;
 
     @Enumerated(EnumType.STRING)
+    @NotNull
+    @Column(name = "status")
     private PaymentStatus paymentStatus;
 
+    @Positive
+    @NotNull
     private Double grossAmount;
 
+    @PositiveOrZero
     private Double transactionFee;
 
+    @PositiveOrZero
     private Double serviceFee;
 
+    @Positive
+    @NotNull
     private Double netAmount;
 
-    private String currency;
+    private Double exchangeRatePaymentProvider;
+
+    @ManyToOne
+    @JoinColumn(name = "currency_code", referencedColumnName = "code")
+    @NotNull
+    private Currency currency;
+
+    private Double exchangeRate;
+
+    private Double netConvertedToCampaignCurrency;
 
     @Enumerated(EnumType.STRING)
+    @NotNull
     private PaymentProvider paymentProvider;
 
     private String paymentMethod;
@@ -42,6 +64,7 @@ public class Payment {
 
     private String invoiceId;
 
+    @NotNull
     private LocalDateTime transactionDate;
 
     public Long getDonationId() {
@@ -108,12 +131,36 @@ public class Payment {
         this.netAmount = netAmount;
     }
 
-    public String getCurrency() {
+    public Double getExchangeRatePaymentProvider() {
+        return exchangeRatePaymentProvider;
+    }
+
+    public void setExchangeRatePaymentProvider(Double exchangeRatePaymentProvider) {
+        this.exchangeRatePaymentProvider = exchangeRatePaymentProvider;
+    }
+
+    public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(Currency currency) {
         this.currency = currency;
+    }
+
+    public Double getExchangeRate() {
+        return exchangeRate;
+    }
+
+    public void setExchangeRate(Double exchangeRate) {
+        this.exchangeRate = exchangeRate;
+    }
+
+    public Double getNetConvertedToCampaignCurrency() {
+        return netConvertedToCampaignCurrency;
+    }
+
+    public void setNetConvertedToCampaignCurrency(Double netConvertedToCampaignCurrency) {
+        this.netConvertedToCampaignCurrency = netConvertedToCampaignCurrency;
     }
 
     public PaymentProvider getPaymentProvider() {
@@ -160,14 +207,16 @@ public class Payment {
     public String toString() {
         return "Payment{" +
                 "donationId=" + donationId +
-                ", donation=" + donation +
                 ", transactionId='" + transactionId + '\'' +
                 ", paymentStatus=" + paymentStatus +
                 ", grossAmount=" + grossAmount +
                 ", transactionFee=" + transactionFee +
                 ", serviceFee=" + serviceFee +
                 ", netAmount=" + netAmount +
-                ", currency='" + currency + '\'' +
+                ", exchangeRatePaymentProvider=" + exchangeRatePaymentProvider +
+                ", currency=" + currency +
+                ", exchangeRate=" + exchangeRate +
+                ", netConvertedToCampaignCurrency=" + netConvertedToCampaignCurrency +
                 ", paymentProvider=" + paymentProvider +
                 ", paymentMethod='" + paymentMethod + '\'' +
                 ", failureMessage='" + failureMessage + '\'' +

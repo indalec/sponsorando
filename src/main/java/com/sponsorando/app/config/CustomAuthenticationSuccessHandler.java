@@ -18,8 +18,10 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                                         Authentication authentication) throws IOException {
 
         String redirect = request.getParameter("redirect");
-        if ("add_campaign".equals(redirect)) {
-            response.sendRedirect("/add_campaign");
+        if ("add-campaign".equals(redirect)) {
+            response.sendRedirect("/add-campaign");
+        } else if ("donate-now".equals(redirect)) {
+            response.sendRedirect("/donate-now");
         } else {
             boolean isAdmin = authentication.getAuthorities().stream()
                     .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
