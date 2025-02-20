@@ -4,11 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Campaigns - Sponsorando</title>
+    <link href="/css/campaigns.css" type="text/css" rel="stylesheet">
     <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
 </head>
 <body>
 <header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}" class="container mb-4"></header>
 <div class="container mt-5 flex-grow-1">
+    <div class="container mt-5 flex-grow-1">
+        <div id="successAlert" th:if="${successMessage}"
+             class="alert alert-success alert-dismissible fade show w-50 mx-auto auto-hide"
+             role="alert">
+            <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div id="errorAlert" th:if="${errorMessage}"
+             class="alert alert-danger alert-dismissible fade show w-50 mx-auto auto-hide"
+             role="alert">
+            <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
     <div id="successDivDelete" th:if="${isCampaignDeleted}" class="alert alert-success text-center w-50 mx-auto mt-5" role="alert">
         <span th:text="${currentRole == 'ROLE_ADMIN' ? 'Campaign deactivated successfully' : 'Campaign deleted successfully'}"></span>
     </div>
@@ -79,8 +94,18 @@
                             <td class="text-center" th:text="${campaign.goalAmount}"></td>
                             <td class="text-center" th:text="${campaign.currency.code}"></td>
                             <td class="text-center" th:text="${campaign.collectedAmount}"></td>
-                            <td class="text-center"><span class="badge bg-primary" th:text="${campaign.status}"></span>
+                            <td class="text-center">
+                                <span th:class="'badge ' +
+                                    (${campaign.status.name() == 'DRAFT'} ? 'bg-secondary' :
+                                    (${campaign.status.name() == 'PENDING'} ? 'bg-warning' :
+                                    (${campaign.status.name() == 'ACTIVE'} ? 'bg-success' :
+                                    (${campaign.status.name() == 'INACTIVE'} ? 'bg-danger' :
+                                    (${campaign.status.name() == 'FROZEN'} ? 'bg-light text-dark' :
+                                    (${campaign.status.name() == 'COMPLETED'} ? 'bg-primary' : 'bg-dark'))))))"
+                                      th:text="${campaign.status}">
+                                </span>
                             </td>
+
                             <td class="text-center">
                                 <a th:if="${currentRole == 'ROLE_ADMIN'}"
                                    th:href="@{/addresses/{id}(id=${campaign.address.id})}"
@@ -108,10 +133,18 @@
                                             Delete
                                         </button>
                                     </div>
-                                    <a th:class="${currentRole == 'ROLE_ADMIN'} ? 'btn btn-outline-success btn-sm rounded-1 mt-1 w-50 mx-auto' : 'btn btn-outline-success btn-sm rounded-1 mt-1'"
-                                       th:href="@{/approve_campaign/{id}(id=${campaign.id})}"
-                                       th:text="${currentRole == 'ROLE_ADMIN'} ? 'Approve' : 'Request Approval'">
-                                    </a>
+                                    <div class="d-flex flex-column flex-sm-row justify-content-center align-items-center gap-2 mt-2">
+                                        <a th:if="${(currentRole == 'ROLE_USER' and campaign.status.name() == 'DRAFT') or (currentRole == 'ROLE_ADMIN' and campaign.status.name() == 'PENDING')}"
+                                           th:class="'btn btn-outline-success btn-sm rounded-1'"
+                                           th:href="${currentRole == 'ROLE_ADMIN'} ? @{/validate_campaign/{id}(id=${campaign.id}, page=${currentPage})} : @{/request_approval_campaign/{id}(id=${campaign.id}, page=${currentPage})}"
+                                           th:text="${currentRole == 'ROLE_ADMIN'} ? 'Approve' : 'Request Approval'">
+                                        </a>
+                                        <a th:if="${(currentRole == 'ROLE_ADMIN' and campaign.status.name() == 'PENDING')}"
+                                           th:class="'btn btn-outline-danger btn-sm rounded-1'"
+                                           th:href="@{/validate_campaign/{id}(id=${campaign.id}, page=${currentPage})}">
+                                            Decline
+                                        </a>
+                                    </div>
                                 </div>
                             </td>
                         </tr>

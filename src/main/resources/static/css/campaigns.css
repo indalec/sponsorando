@@ -1,0 +1,19 @@
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.auto-hide {
+    animation: fadeOut 5s forwards;
+}
+
+.auto-hide.show {
+    animation-delay: 5s;
+}
