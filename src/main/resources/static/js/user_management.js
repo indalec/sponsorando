@@ -52,13 +52,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function performSearch() {
         const searchTerm = searchInput.value.trim();
+        const currentUrl = new URL(window.location.href);
         if (searchTerm) {
-            const currentUrl = new URL(window.location.href);
             currentUrl.searchParams.set('search', searchTerm);
             currentUrl.searchParams.set('page', '0');
-            window.location.href = currentUrl.toString();
+        } else {
+            currentUrl.searchParams.delete('search');
+            currentUrl.searchParams.set('page', '0');
         }
+            window.location.href = currentUrl.toString();
     }
+
 
     if (searchButton) {
         searchButton.addEventListener('click', performSearch);

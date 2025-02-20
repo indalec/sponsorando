@@ -36,6 +36,7 @@ public class UsersController {
                         @RequestParam(defaultValue = "asc") String order,
                         @RequestParam(required = false) String search,
                         Model model) {
+
         try {
             Page<UserAccount> userPage;
             if (search != null && !search.trim().isEmpty()) {
