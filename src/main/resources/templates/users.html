@@ -10,6 +10,10 @@
 <header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}" class="container mb-4"></header>
 <h1 class="text-center">Manage Users</h1>
 <div class="container mt-5 dashboard-container flex-grow-1">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Search users by ID, name, email, or status..." id="searchInput">
+        <button class="btn btn-outline-secondary" type="button" id="searchButton">Search</button>
+    </div>
     <div class="table-responsive">
         <table id="userTable" class="table table-striped text-center">
             <thead>
@@ -118,8 +122,9 @@
             <dd><span id="panelDonationsGiven"></span></dd>
         </dl>
         <input type="hidden" id="panelUserId">
-        <form id="toggleUserStatusForm" action="/users/toggle-status" method="post">
+        <form id="toggleUserStatusForm" th:action="@{/users/toggle-status}" method="post">
             <input type="hidden" id="userIdInput" name="userId">
+
             <button id="toggleUserStatusBtn" class="btn w-100 mb-2" type="button" onclick="toggleUserStatus()">Toggle Status</button>
         </form>
         <button class="btn btn-danger w-100 disabled" onclick="deleteUser()">Delete User</button>

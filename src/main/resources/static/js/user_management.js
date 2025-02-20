@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         // Populate user information
                         document.getElementById("panelUserName").innerText = data.username;
                         document.getElementById("panelUserEmail").innerText = data.email;
-                        document.getElementById("panelUserRole").innerText = data.role.name; // Assuming role is an object with a 'name' property
+                        document.getElementById("panelUserRole").innerText = data.role.name;
                         document.getElementById("panelUserStatus").innerText = data.enabled ? 'ACTIVE' : 'SUSPENDED';
                         document.getElementById("panelUserId").value = data.id;
 
@@ -46,7 +46,39 @@ document.addEventListener("DOMContentLoaded", function() {
                 })
         });
     });
-})
+
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+
+    function performSearch() {
+        const searchTerm = searchInput.value.trim();
+        if (searchTerm) {
+            const currentUrl = new URL(window.location.href);
+            currentUrl.searchParams.set('search', searchTerm);
+            currentUrl.searchParams.set('page', '0');
+            window.location.href = currentUrl.toString();
+        }
+    }
+
+    if (searchButton) {
+        searchButton.addEventListener('click', performSearch);
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        // Populate search input with current search term if it exists
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentSearch = urlParams.get('search');
+        if (currentSearch) {
+            searchInput.value = currentSearch;
+        }
+    }
+});
 
 function toggleUserStatus() {
     let userId = document.getElementById("panelUserId").value;
@@ -62,10 +94,4 @@ function toggleUserStatus() {
     form.submit();
 }
 
-function deleteUser() {
-    let userId = document.getElementById("panelUserId").value;
-    if (confirm("Are you sure you want to delete this user?")) {
-        fetch(`/users/${userId}`, { method: 'DELETE' })
-            .then(response => location.reload());
-    }
-}
+

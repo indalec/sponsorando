@@ -34,9 +34,15 @@ public class UsersController {
                         @RequestParam(defaultValue = "10") int size,
                         @RequestParam(defaultValue = "id") String sort,
                         @RequestParam(defaultValue = "asc") String order,
+                        @RequestParam(required = false) String search,
                         Model model) {
         try {
-            Page<UserAccount> userPage = userAccountService.getAllUsers(sort, order, page, size);
+            Page<UserAccount> userPage;
+            if (search != null && !search.trim().isEmpty()) {
+                userPage = userAccountService.searchUsers(search, sort, order, page, size);
+            } else {
+                userPage = userAccountService.getAllUsers(sort, order, page, size);
+            }
 
             model.addAttribute("users", userPage.getContent());
             model.addAttribute("currentPage", page);
@@ -45,8 +51,9 @@ public class UsersController {
             model.addAttribute("sortField", sort);
             model.addAttribute("sortDir", order);
             model.addAttribute("reverseSortDir", order.equals("asc") ? "desc" : "asc");
-        } catch (IllegalArgumentException ex) {
+            model.addAttribute("search", search);
 
+        } catch (IllegalArgumentException ex) {
             Page<UserAccount> defaultUserPage = userAccountService.getAllUsers("id", "asc", 0, size);
 
             model.addAttribute("users", defaultUserPage.getContent());

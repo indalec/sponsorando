@@ -148,10 +148,10 @@ public class UserAccountService implements UserDetailsService {
         // Update related campaigns based on the new user status
         // TODO: status FROZEN is just for testing purpose. Change logic if project gets to production phase.
         CampaignStatus newStatus = user.getEnabled() ? CampaignStatus.ACTIVE : CampaignStatus.FROZEN;
-        updateCampaignStatus(user, newStatus);
+        updateCampaignStatusFromOneUserWhenAccountDisabled(user, newStatus);
     }
 
-    private void updateCampaignStatus(UserAccount userAccount, CampaignStatus status) {
+    private void updateCampaignStatusFromOneUserWhenAccountDisabled(UserAccount userAccount, CampaignStatus status) {
         List<Campaign> campaigns = campaignRepository.findByUserAccount(userAccount);
         System.out.println(campaigns);
         for (Campaign campaign : campaigns) {
@@ -162,8 +162,11 @@ public class UserAccountService implements UserDetailsService {
         }
     }
 
-
-
+    public Page<UserAccount> searchUsers(String search, String sortField, String sortDir, int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.fromString(sortDir), sortField);
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return userAccountRepository.searchUsers(search.toLowerCase(), pageable);
+    }
 
 
 
