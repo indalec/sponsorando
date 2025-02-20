@@ -293,9 +293,29 @@ public class CampaignController {
     public String validateCampaign(
             @PathVariable("id") Long campaignId,
             @RequestParam(value = "page", defaultValue = "0") int currentPage,
-            Model model,
-            RedirectAttributes redirectAttributes
+            @RequestParam(value = "action", required = true) String action,
+            RedirectAttributes redirectAttributes,
+            @ModelAttribute("currentRole") String currentRole
     ) {
+        try {
+            boolean isUpdated = campaignService.validateCampaign(campaignId, action, currentRole);
+            if (isUpdated) {
+                if ("approve".equals(action)) {
+                    redirectAttributes.addFlashAttribute("successMessage", "Campaign approved successfully!");
+                } else if ("decline".equals(action)) {
+                    redirectAttributes.addFlashAttribute("errorMessage", "Campaign declined. Please review and update your campaign and try again.");
+                } else {
+                    redirectAttributes.addFlashAttribute("errorMessage", "Invalid action specified.");
+                }
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Failed to update campaign status.");
+            }
+        } catch (IllegalAccessException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "You do not have permission to perform this action.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "An error occurred while processing the request.");
+        }
 
         return "redirect:/campaigns?page=" + currentPage;
     }
