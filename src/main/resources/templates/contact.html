@@ -1,18 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Contact Us - Sponsorando</title>
-        <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
-    </head>
-    <body>
-    <header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}" class="container mb-4"></header>
-        <main>
-            <div class="container mt-5">
-                <h2 class="text-center">Contact Us</h2>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Contact Us - Sponsorando</title>
+    <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
+    <link href="/css/contact.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}" class="container mb-4"></header>
+<main>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Contact Us</h2>
+        <p class="text-center mb-4 lead">Have questions or suggestions? We're here to help! Reach out to us and let's start a conversation.</p>
+        <div id="successMessage" class="alert alert-success d-none" role="alert">
+            Message sent successfully! We'll get back to you soon.
+        </div>
+
+        <!-- TO-DO: ADD THE "MAIL TO" FEATURE -->
+        <form id="contactForm" class="contact-form bg-light">
+
+            <div class="mb-3">
+                <label for="fullName" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="fullName" required>
+                <div class="invalid-feedback">Please enter your full name.</div>
             </div>
-        </main>
-        <footer th:replace="~{fragments/footer :: footerSection}" role="contentinfo" class="footer"></footer>
-    </body>
+
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email" required>
+                <div class="invalid-feedback">Please enter a valid email address.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="message" class="form-label">How can we help?</label>
+                <textarea class="form-control" id="message" rows="5" required></textarea>
+                <div class="invalid-feedback">Please enter your message.</div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Submit Question</button>
+        </form>
+    </div>
+</main>
+<footer th:replace="~{fragments/footer :: footerSection}" role="contentinfo" class="footer"></footer>
+<script src="/js/contact.js"></script>
+</body>
 </html>
