@@ -17,12 +17,6 @@
             <span th:text="${successMessage}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        <div id="errorAlert" th:if="${errorMessage}"
-             class="alert alert-danger alert-dismissible fade show w-50 mx-auto auto-hide"
-             role="alert">
-            <span th:text="${errorMessage}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
     </div>
     <div id="successDivDelete" th:if="${isCampaignDeleted}" class="alert alert-success text-center w-50 mx-auto mt-5" role="alert">
         <span th:text="${currentRole == 'ROLE_ADMIN' ? 'Campaign deactivated successfully' : 'Campaign deleted successfully'}"></span>
@@ -127,7 +121,11 @@
                                         <a class="btn btn-outline-primary btn-sm rounded-1 me-1"
                                            th:href="@{/c/{slug}(slug=${campaign.slug}, page=${currentPage}, source='campaigns')}">View</a>
                                         <a class="btn btn-outline-secondary btn-sm rounded-1 me-1"
-                                           th:href="@{/edit_campaign/{id}(id=${campaign.id},page=${currentPage})}">Edit</a>
+                                           th:href="@{/edit_campaign/{id}(id=${campaign.id},page=${currentPage})}"
+                                           th:classappend="${campaign.status.name() == 'PENDING'} ? 'disabled'"
+                                           th:attr="aria-disabled=${campaign.status.name() == 'PENDING'}">
+                                            Edit
+                                        </a>
                                         <button type="button" class="btn btn-outline-danger btn-sm rounded-1"
                                                 th:onclick="'confirmCampaignDelete(\'' + ${campaign.id} + '\', ' + ${currentPage} + ')'">
                                             Delete
@@ -136,12 +134,12 @@
                                     <div class="d-flex flex-column flex-sm-row justify-content-center align-items-center gap-2 mt-2">
                                         <a th:if="${(currentRole == 'ROLE_USER' and campaign.status.name() == 'DRAFT') or (currentRole == 'ROLE_ADMIN' and campaign.status.name() == 'PENDING')}"
                                            th:class="'btn btn-outline-success btn-sm rounded-1'"
-                                           th:href="${currentRole == 'ROLE_ADMIN'} ? @{/validate_campaign/{id}(id=${campaign.id}, page=${currentPage})} : @{/request_approval_campaign/{id}(id=${campaign.id}, page=${currentPage})}"
+                                           th:href="${currentRole == 'ROLE_ADMIN'} ? @{/validate_campaign/{id}(id=${campaign.id}, page=${currentPage}, action='approve')} : @{/request_approval_campaign/{id}(id=${campaign.id}, page=${currentPage})}"
                                            th:text="${currentRole == 'ROLE_ADMIN'} ? 'Approve' : 'Request Approval'">
                                         </a>
                                         <a th:if="${(currentRole == 'ROLE_ADMIN' and campaign.status.name() == 'PENDING')}"
                                            th:class="'btn btn-outline-danger btn-sm rounded-1'"
-                                           th:href="@{/validate_campaign/{id}(id=${campaign.id}, page=${currentPage})}">
+                                           th:href="@{/validate_campaign/{id}(id=${campaign.id}, page=${currentPage}, action='decline')}">
                                             Decline
                                         </a>
                                     </div>

@@ -220,6 +220,36 @@ public class CampaignService {
         return false;
     }
 
+    @Transactional
+    public boolean validateCampaign(Long campaignId, String action, String currentRole) throws IllegalAccessException {
+        if (!"ROLE_ADMIN".equals(currentRole)) {
+            throw new IllegalAccessException("Only admins can validate campaigns.");
+        }
+
+        Optional<Campaign> optionalCampaign = campaignRepository.findById(campaignId);
+
+        if (optionalCampaign.isPresent()) {
+            Campaign campaign = optionalCampaign.get();
+
+            if (campaign.getStatus() == CampaignStatus.PENDING) {
+                if ("approve".equals(action)) {
+                    campaign.setStatus(CampaignStatus.ACTIVE);
+                    campaign.setUpdatedAt(LocalDateTime.now());
+                } else if ("decline".equals(action)) {
+                    campaign.setStatus(CampaignStatus.DECLINED);
+                    campaign.setUpdatedAt(LocalDateTime.now());
+                } else {
+                    return false;
+                }
+
+                campaignRepository.save(campaign);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public List<CampaignCardDTO> getFeaturedCampaigns() {
         try {
 
