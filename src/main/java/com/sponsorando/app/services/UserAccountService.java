@@ -4,6 +4,7 @@ import com.sponsorando.app.models.*;
 import com.sponsorando.app.repositories.CampaignRepository;
 import com.sponsorando.app.repositories.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -123,8 +124,9 @@ public class UserAccountService implements UserDetailsService {
         }
     }
 
-    public List<UserAccount> getAllUsers(){
-        return userAccountRepository.findAll();
+    public List<UserAccount> getAllUsers(String sortField, String sortDir) {
+        Sort sort = Sort.by(Sort.Direction.fromString(sortDir), sortField);
+        return userAccountRepository.findAll(sort);
     }
 
     public UserAccount getUserById(Long id) {
@@ -162,15 +164,7 @@ public class UserAccountService implements UserDetailsService {
         userAccountRepository.save(user);
     }
 
-    public void changeUserRole(Long id, String role) {
-        UserAccount user = getUserById(id);
-        if ("ADMIN".equalsIgnoreCase(role)) {
-            user.setRole(Role.ADMIN);
-        } else {
-            user.setRole(Role.USER);
-        }
-        userAccountRepository.save(user);
-    }
+
 
 
 }

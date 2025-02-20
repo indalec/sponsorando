@@ -30,9 +30,25 @@ public class UsersController {
     private CampaignRepository campaignRepository;
 
     @GetMapping("/users")
-    public String users() {
+    public String users(@RequestParam(defaultValue = "id") String sort,
+                        @RequestParam(defaultValue = "asc") String order,
+                        Model model) {
+        try {
+            List<UserAccount> users = userAccountService.getAllUsers(sort, order);
+            model.addAttribute("users", users);
+            model.addAttribute("sortField", sort);
+            model.addAttribute("sortDir", order);
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Ocurred the following error" + ex);
+            List<UserAccount> users = userAccountService.getAllUsers("id", "asc");
+            model.addAttribute("users", users);
+            model.addAttribute("sortField", "id");
+            model.addAttribute("sortDir", "asc");
+        }
+
         return "users";
     }
+
 
 
     @GetMapping("/edit_profile")
@@ -82,10 +98,10 @@ public class UsersController {
         return "redirect:/user_dashboard";
     }
 
-    @GetMapping("/users/api")
-    public ResponseEntity<List<UserAccount>> getAllUsers(){
-        return ResponseEntity.ok(userAccountService.getAllUsers());
-    }
+//    @GetMapping("/users/api")
+//    public ResponseEntity<List<UserAccount>> getAllUsers(){
+//        return ResponseEntity.ok(userAccountService.getAllUsers());
+//    }
 
     @GetMapping("/users/{id}")
     public ResponseEntity<UserPanelDetailsDto> getUserById(@PathVariable Long id) {
@@ -134,10 +150,5 @@ public class UsersController {
         return ResponseEntity.ok("User deleted successfully.");
     }
 
-    @PostMapping("/users/change-role/{id}")
-    public ResponseEntity<String> changeUserRole(@PathVariable Long id, @RequestParam String role) {
-        userAccountService.changeUserRole(id, role);
-        return ResponseEntity.ok("User role updated.");
-    }
 
 }

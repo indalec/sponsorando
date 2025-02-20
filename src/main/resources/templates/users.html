@@ -1,12 +1,9 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Users - Sponsorando</title>
-    <link href="/css/main.css" type="text/css" rel="stylesheet">
-    <link href="/css/dashboard.css" type="text/css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
 </head>
 <body class="d-flex flex-column min-vh-100">
@@ -17,30 +14,51 @@
         <table id="userTable" class="table table-striped text-center">
             <thead>
             <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
+                <th>
+                    <a th:href="@{/users(sort='id', order=${sortField == 'id' && sortDir == 'asc' ? 'desc' : 'asc'})}">ID
+                        <span th:if="${sortField == 'id' && sortDir == 'asc'}">↑</span>
+                        <span th:if="${sortField == 'id' && sortDir == 'desc'}">↓</span>
+                    </a>
+                </th>
+                <th>
+                    <a th:href="@{/users(sort='name', order=${sortField == 'name' && sortDir == 'asc' ? 'desc' : 'asc'})}">Name
+                        <span th:if="${sortField == 'name' && sortDir == 'asc'}">↑</span>
+                        <span th:if="${sortField == 'name' && sortDir == 'desc'}">↓</span>
+                    </a>
+                </th>
+                <th>
+                    <a th:href="@{/users(sort='email', order=${sortField == 'email' && sortDir == 'asc' ? 'desc' : 'asc'})}">Email
+                        <span th:if="${sortField == 'email' && sortDir == 'asc'}">↑</span>
+                        <span th:if="${sortField == 'email' && sortDir == 'desc'}">↓</span>
+                    </a>
+                </th>
+                <th>
+                    <a th:href="@{/users(sort='role', order=${sortField == 'role' && sortDir == 'asc' ? 'desc' : 'asc'})}">Role
+                        <span th:if="${sortField == 'role' && sortDir == 'asc'}">↑</span>
+                        <span th:if="${sortField == 'role' && sortDir == 'desc'}">↓</span>
+                    </a>
+                </th>
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="user : ${users}" th:data-user-id="${user.id}" onclick="openUserDetails(event, this)">
+            <tr th:each="user : ${users}" th:data-user-id="${user.id}">
                 <td th:text="${user.id}"></td>
                 <td th:text="${user.name}"></td>
                 <td th:text="${user.email}"></td>
                 <td th:text="${user.role}"></td>
                 <td>
-                        <span th:text="${user.status}" class="badge"
-                              th:classappend="${user.status == 'ACTIVE' ? 'bg-success' : 'bg-danger'}"></span>
+                    <span th:text="${user.enabled ? 'ACTIVE' : 'INACTIVE'}" class="badge"
+                          th:classappend="${user.enabled ? 'bg-success' : 'bg-danger'}"></span>
                 </td>
                 <td>
-                    <button class="btn btn-outline-primary btn-sm" onclick="openUserDetails(event, this)">Manage</button>
+                    <button class="btn btn-outline-primary btn-sm show-panel-btn" th:data-user-id="${user.id}">Manage</button>
                 </td>
             </tr>
             </tbody>
         </table>
+
     </div>
 </div>
 

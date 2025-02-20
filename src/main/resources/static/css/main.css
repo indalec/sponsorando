@@ -140,6 +140,14 @@ footer {
     margin-top: auto;
 }
 
+.sort-asc::after {
+    content: " ↑";
+}
+
+.sort-desc::after {
+    content: " ↓";
+}
+
 @media (min-width: 992px) {
     .navbar-nav.no-wrap {
         flex-wrap: nowrap;
