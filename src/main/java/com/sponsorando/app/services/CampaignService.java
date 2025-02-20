@@ -194,4 +194,23 @@ public class CampaignService {
 
         return campaignRepository.save(campaign);
     }
+
+    public boolean requestApprovalCampaign(Long campaignId, String userEmail) {
+        Optional<Campaign> optionalCampaign = campaignRepository.findById(campaignId);
+
+        if (optionalCampaign.isPresent()) {
+            Campaign campaign = optionalCampaign.get();
+
+            if (campaign.getUserAccount().getEmail().equals(userEmail) &&
+                    campaign.getStatus() == CampaignStatus.DRAFT) {
+
+                campaign.setStatus(CampaignStatus.PENDING);
+                campaign.setUpdatedAt(LocalDateTime.now());
+                campaignRepository.save(campaign);
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

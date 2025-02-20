@@ -261,4 +261,40 @@ public class CampaignController {
         redirectAttributes.addFlashAttribute("currentRole", role);
         return "redirect:/campaigns?page=" + campaignForm.getPage();
     }
+
+    @GetMapping("/request_approval_campaign/{id}")
+    public String requestApprovalCampaign(
+            @PathVariable("id") Long campaignId,
+            @RequestParam(value = "page", defaultValue = "0") int currentPage,
+            Model model,
+            RedirectAttributes redirectAttributes
+    ) {
+        String currentUserEmail = (String) model.getAttribute("username");
+
+        try {
+            boolean isUpdated = campaignService.requestApprovalCampaign(campaignId, currentUserEmail);
+
+            if (isUpdated) {
+                redirectAttributes.addFlashAttribute("successMessage", "Approval requested successfully!");
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Failed to request approval. Please try again");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "An error occurred while processing the request.");
+        }
+
+        return "redirect:/campaigns?page=" + currentPage;
+    }
+
+    @GetMapping("/validate_campaign/{id}")
+    public String validateCampaign(
+            @PathVariable("id") Long campaignId,
+            @RequestParam(value = "page", defaultValue = "0") int currentPage,
+            Model model,
+            RedirectAttributes redirectAttributes
+    ) {
+
+        return "redirect:/campaigns?page=" + currentPage;
+    }
 }
