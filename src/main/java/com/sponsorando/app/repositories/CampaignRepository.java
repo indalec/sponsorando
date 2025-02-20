@@ -75,7 +75,7 @@ public interface CampaignRepository extends JpaRepository<Campaign, Long> {
             Pageable pageable,
             @Param("sortBy") String sortBy);
 
-    @Query("SELECT c, COUNT(DISTINCT d.userAccount) as donorCount " +
+    @Query("SELECT c, COUNT(d.userAccount) as donorCount " +
             "FROM Campaign c " +
             "LEFT JOIN Donation d ON d.campaign = c " +
             "LEFT JOIN Payment p ON p.donation = d " +
