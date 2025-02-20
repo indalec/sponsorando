@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -73,5 +74,16 @@ public interface CampaignRepository extends JpaRepository<Campaign, Long> {
             @Param("status") CampaignStatus status,
             Pageable pageable,
             @Param("sortBy") String sortBy);
+
+    @Query("SELECT c, COUNT(DISTINCT d.userAccount) as donorCount " +
+            "FROM Campaign c " +
+            "LEFT JOIN Donation d ON d.campaign = c " +
+            "LEFT JOIN Payment p ON p.donation = d " +
+            "WHERE c.status = :status AND p.paymentStatus = com.sponsorando.app.models.PaymentStatus.SUCCEEDED " +
+            "GROUP BY c " +
+            "ORDER BY donorCount DESC")
+    List<Campaign> findActiveCampaignsWithMostDonors(@Param("status") CampaignStatus status, Pageable pageable);
+
+
 
 }

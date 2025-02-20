@@ -4,6 +4,8 @@ import com.sponsorando.app.models.*;
 import com.sponsorando.app.repositories.CampaignRepository;
 import com.sponsorando.app.utils.SlugUtil;
 import jakarta.persistence.EntityNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,8 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CampaignService {
@@ -30,6 +34,8 @@ public class CampaignService {
 
     @Autowired
     private AddressService addressService;
+
+    private static final Logger log = LoggerFactory.getLogger(CampaignService.class);
 
     @Transactional
     public Campaign createCampaign(CampaignForm campaignForm, String email) {
@@ -212,5 +218,55 @@ public class CampaignService {
         }
 
         return false;
+    }
+
+    public List<CampaignCardDTO> getFeaturedCampaigns() {
+        try {
+
+            log.info("In getFeaturedCampaigns");
+            List<Campaign> campaigns = campaignRepository.findActiveCampaignsWithMostDonors(
+                    CampaignStatus.ACTIVE,
+                    PageRequest.of(0, 6));
+            return campaigns.stream()
+                    .map(this::convertToCampaignCardDTO)
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            log.error("Error fetching featured campaigns", e);
+            return Collections.emptyList();
+        }
+    }
+
+    private CampaignCardDTO convertToCampaignCardDTO(Campaign campaign) {
+        List<CampaignCategoryDTO> categoryDTOs = campaign.getCategories().stream()
+                .map(category -> new CampaignCategoryDTO(category.getId(), category.getName()))
+                .collect(Collectors.toList());
+
+        CurrencyDTO currencyDTO = new CurrencyDTO(
+                campaign.getCurrency().getCode(),
+                campaign.getCurrency().getSymbol()
+        );
+
+        AddressDTO addressDTO = new AddressDTO(
+                campaign.getAddress().getStreet(),
+                campaign.getAddress().getNumber(),
+                campaign.getAddress().getCity(),
+                campaign.getAddress().getCountry(),
+                campaign.getAddress().getPostcode(),
+                campaign.getAddress().getLatitude(),
+                campaign.getAddress().getLongitude()
+        );
+
+        return new CampaignCardDTO(
+                campaign.getSlug(),
+                campaign.getTitle(),
+                categoryDTOs,
+                campaign.getDescription(),
+                campaign.getCollectedAmount(),
+                campaign.getGoalAmount(),
+                currencyDTO,
+                campaign.getShowLocation(),
+                addressDTO
+        );
     }
 }

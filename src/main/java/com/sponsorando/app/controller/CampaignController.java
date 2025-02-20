@@ -153,6 +153,7 @@ public class CampaignController {
     public String viewCampaign(
             @PathVariable String slug,
             @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "source", required = false) String source,
             Model model,
             RedirectAttributes redirectAttributes
     ) {
@@ -181,6 +182,7 @@ public class CampaignController {
             }
 
             model.addAttribute("page", page);
+            model.addAttribute("source", source);
 
             return "view_campaign";
         } catch (Exception e) {
