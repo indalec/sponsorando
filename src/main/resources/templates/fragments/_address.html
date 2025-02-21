@@ -1,0 +1,49 @@
+<div th:fragment="address">
+    <div class="address-map-container">
+        <h4>Address Information</h4>
+        <p>Enter the address details below. We'll validate it as you type.</p>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="inputStreet" class="form-label">Street</label>
+                <input type="text" class="form-control validate-address" id="inputStreet" name="street" required>
+                <div class="invalid-feedback">Please enter a street.</div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="inputNumber" class="form-label">Number</label>
+                <input type="text" class="form-control validate-address" id="inputNumber" name="number" required>
+                <div class="invalid-feedback">Please enter a number.</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="inputCity" class="form-label">City</label>
+                <input type="text" class="form-control validate-address" id="inputCity" name="city" required>
+                <div class="invalid-feedback">Please enter a city.</div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="inputPostcode" class="form-label">Postcode</label>
+                <input type="text" class="form-control validate-address" id="inputPostcode" name="postcode" required>
+                <div class="invalid-feedback">Please enter a postcode.</div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="inputCountry" class="form-label">Country</label>
+            <select class="form-select validate-address" id="inputCountry" name="country" required>
+                <option value="">Select a country</option>
+            </select>
+            <div class="invalid-feedback">Please select a country.</div>
+        </div>
+
+        <div class="mb-3">
+            <div id="geocode-status" class="form-text"></div>
+        </div>
+
+        <input type="hidden" id="latitude" name="latitude">
+        <input type="hidden" id="longitude" name="longitude">
+
+        <div id="map" class="mb-3"></div>
+    </div>
+</div>
