@@ -24,14 +24,21 @@ document.addEventListener("DOMContentLoaded", function () {
         emailInput.parentNode.appendChild(emailError);
     }
 
-// Display login error if wrong credentials
+    // Display login error if wrong credentials OR disabled account
     const urlParams = new URLSearchParams(window.location.search);
     const loginError = urlParams.get("error");
+    const disabled = urlParams.get("disabled"); // NEW: Check for 'disabled' parameter
 
-    if (loginError && loginForm) {
+    if ((loginError || disabled) && loginForm) {  // Modified condition
         const errorDiv = document.createElement("div");
         errorDiv.className = "alert alert-danger text-center";
-        errorDiv.innerText = "Invalid email or password. Please try again.";
+
+        if (loginError) {
+            errorDiv.innerText = "Invalid email or password. Please try again.";
+        } else if (disabled) {
+            errorDiv.innerText = "This account is disabled. Please contact support.";
+        }
+
         loginForm.parentNode.insertBefore(errorDiv, loginForm);
     }
 

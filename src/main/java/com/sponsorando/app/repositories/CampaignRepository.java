@@ -2,6 +2,7 @@ package com.sponsorando.app.repositories;
 
 import com.sponsorando.app.models.Campaign;
 import com.sponsorando.app.models.CampaignStatus;
+import com.sponsorando.app.models.UserAccount;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -75,6 +76,11 @@ public interface CampaignRepository extends JpaRepository<Campaign, Long> {
             Pageable pageable,
             @Param("sortBy") String sortBy);
 
+    List<Campaign> findByUserAccount(UserAccount userAccount);
+
+    int countByUserAccount(UserAccount user);
+
+    int countByUserAccountAndStatus(UserAccount userAccount, CampaignStatus campaignStatus);
     @Query("SELECT c, COUNT(d.userAccount) as donorCount " +
             "FROM Campaign c " +
             "LEFT JOIN Donation d ON d.campaign = c " +
