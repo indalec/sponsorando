@@ -53,7 +53,6 @@ public class CampaignController {
             page = campaignService.getCampaignsByStatus(sortBy, pageNumber, pageSize);
         }
 
-        System.out.println("Data:::"+page.getContent());
         model.addAttribute("campaigns", page.getContent());
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("currentPage", page.getNumber());
@@ -242,7 +241,6 @@ public class CampaignController {
         if(bindingResult.hasErrors()) {
             return "edit_campaign";
         }
-        System.out.println(campaignForm);
 
         String role = (String) model.getAttribute("currentRole");
 

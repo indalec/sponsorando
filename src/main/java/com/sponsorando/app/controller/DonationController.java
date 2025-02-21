@@ -6,9 +6,9 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -37,14 +37,6 @@ public class DonationController {
 
     @Autowired
     private PaymentService paymentService;
-
-    @GetMapping("/donations")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String donations(Model model) {
-        List<Donation> donations = donationService.getAllDonations();
-        model.addAttribute("donations", donations);
-        return "donations";
-    }
 
     @GetMapping("/donate-now/{id}")
     public String donateNow(@PathVariable("id") Long campaignId, Model model, RedirectAttributes redirectAttributes) {
@@ -132,5 +124,34 @@ public class DonationController {
                     "message", "An error occurred while processing your donation. Please try again."
             ));
         }
+    }
+
+    @GetMapping("/donations")
+    public String getDonations(Model model, @RequestParam(name = "page", defaultValue = "0") int pageNumber) {
+
+        String currentUser = (String) model.getAttribute("username");
+        String currentRole = (String) model.getAttribute("currentRole");
+
+        int pageSize = 10;
+        Page<Donation> page;
+
+        if ("ROLE_ADMIN".equals(currentRole)) {
+            page = donationService.getDonations(pageNumber, pageSize);
+        } else if ("ROLE_USER".equals(currentRole)) {
+            page = donationService.getDonationsByUserEmail(currentUser, pageNumber, pageSize);
+        } else {
+            page = donationService.getDonations(pageNumber, pageSize);
+        }
+
+        model.addAttribute("donations", page.getContent());
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("currentPage", page.getNumber());
+
+        if (currentUser != null && currentRole != null) {
+            model.addAttribute("currentUser", currentUser);
+            model.addAttribute("currentRole", currentRole);
+        }
+
+        return "donations";
     }
 }
