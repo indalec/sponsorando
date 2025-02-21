@@ -1,6 +1,7 @@
 package com.sponsorando.app.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 
 
@@ -15,14 +16,19 @@ public class Subscription {
     private Long id;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "type")
     private SubscriptionType subscriptionType;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private SubscriptionStatus subscriptionStatus;
 
     private Double amount;
 
-    private String currency;
+    @ManyToOne
+    @JoinColumn(name = "currency", referencedColumnName = "code")
+    @NotNull
+    private Currency currency;
 
     @ManyToOne
     @JoinColumn(name ="user_id")
@@ -65,11 +71,11 @@ public class Subscription {
         this.amount = amount;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(Currency currency) {
         this.currency = currency;
     }
 
@@ -104,7 +110,7 @@ public class Subscription {
                 ", subscriptionType=" + subscriptionType +
                 ", subscriptionStatus=" + subscriptionStatus +
                 ", amount=" + amount +
-                ", currency='" + currency + '\'' +
+                ", currency=" + currency +
                 ", userAccount=" + userAccount +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
