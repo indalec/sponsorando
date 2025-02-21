@@ -57,7 +57,7 @@
                         <tr class="align-top text-center">
                             <th scope="col" class="p-1 py-3">Id</th>
                             <th scope="col" class="p-1 py-3">Title</th>
-                            <th scope="col" class="p-1 py-3">Description</th>
+                           <!-- <th scope="col" class="p-1 py-3">Description</th>-->
                             <th scope="col" class="p-1 py-3">Start Date</th>
                             <th scope="col" class="p-1 py-3">End Date</th>
                             <th scope="col" class="p-1 py-3">Goal</th>
@@ -66,7 +66,7 @@
                             <th scope="col" class="p-1 py-3">Status</th>
                             <th scope="col" class="p-1 py-3"
                                 th:text="${currentRole == 'ROLE_ADMIN' ? 'Address Id' : 'Address'}"></th>
-                            <th scope="col" class="p-1 py-3" th:if="${currentRole == 'ROLE_ADMIN'}">Creator Id</th>
+                            <!--<th scope="col" class="p-1 py-3" th:if="${currentRole == 'ROLE_ADMIN'}">Creator Id</th>-->
                             <th scope="col" class="p-1 py-3">Categories</th>
                             <th scope="col" class="p-1 py-3">Actions</th>
                         </tr>
@@ -75,9 +75,9 @@
                         <tr th:each="campaign : ${campaigns}">
                             <td class="text-center" th:text="${campaign.id}"></td>
                             <td class="text-center" th:text="${campaign.title}"></td>
-                            <td class="text-center"
+                           <!-- <td class="text-center"
                                 th:text="${campaign.description.length() > 20 ? campaign.description.substring(0, 20) + '...' : campaign.description}"></td>
-                            <td class="text-center text-nowrap">
+                           --> <td class="text-center text-nowrap">
                                 <span th:text="${#temporals.format(campaign.startDate, 'dd-MM-yyyy')}"></span><br>
                                 <span th:text="${#temporals.format(campaign.startDate, 'HH:mm a')}"></span>
                             </td>
@@ -107,10 +107,10 @@
                                 <small th:if="${currentRole == 'ROLE_USER'}"
                                        th:text="${campaign.address.street + ', ' + campaign.address.number + ', ' + campaign.address.city + ', ' + campaign.address.country + ', ' + campaign.address.postcode}"></small>
                             </td>
-                            <td class="text-center" th:if="${currentRole == 'ROLE_ADMIN'}">
+                            <!--<td class="text-center" th:if="${currentRole == 'ROLE_ADMIN'}">
                                 <a th:href="@{/userAccounts/{id}(id=${campaign.userAccount.id})}"
                                    th:text="${campaign.userAccount.id}"></a>
-                            </td>
+                            </td>-->
                             <td>
                                 <span th:each="category, iterStat : ${campaign.categories}"
                                       class="badge bg-secondary me-1" th:text="${category.name}"></span>
@@ -151,7 +151,7 @@
                 </div>
                 <div th:if="${campaigns == null or campaigns.size() == 0}" class="alert alert-warning text-center">
                     Currently, you don't have any campaigns.
-                    <div><a th:href="@{/add_campaign}" class="btn btn-primary mt-2">Start a campaign now!</a></div>
+                    <div><a th:href="@{/add-campaign}" class="btn btn-primary mt-2">Start a campaign now!</a></div>
                 </div>
             </div>
         </div>
