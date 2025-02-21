@@ -120,36 +120,48 @@ document.addEventListener("DOMContentLoaded", function() {
                     latitudeInput.value = lat;
                     longitudeInput.value = lon;
 
-                    geocodeStatus.textContent = 'Address validated successfully!';
-                    geocodeStatus.className = 'form-text text-success';
-                    updateMap(lat, lon);
-
                     // Update the input fields with corrected data
                     streetInput.value = result.address.road || street;
                     cityInput.value = result.address.city || result.address.town || result.address.village || city;
 
-
-                    fields.forEach(field => {
-                        field.classList.remove('is-invalid');
-                        field.classList.add('is-valid');
+                    // Check if address exists in database
+                    return checkExistingAddress({
+                        street: streetInput.value,
+                        number: numberInput.value,
+                        city: cityInput.value,
+                        postcode: postcodeInput.value,
+                        country: countryInput.value,
+                        latitude: lat,
+                        longitude: lon
                     });
-                    addressValidated = true;
-                    lastValidatedAddress = addressString;
                 } else {
-                    clearValidation();
-                    geocodeStatus.textContent = 'Address not found. Please check the address.';
-                    geocodeStatus.className = 'form-text text-danger';
+                    throw new Error('Address not found');
+                }
+            })
+            .then(addressData => {
+                // addressData will contain either the existing or new address details
+                console.log('Address processed:', addressData);
 
-                    fields.forEach(field => {
-                        field.classList.remove('is-valid');
-                        field.classList.add('is-invalid');
-                    });
+                geocodeStatus.textContent = 'Address validated successfully!';
+                geocodeStatus.className = 'form-text text-success';
+                updateMap(addressData.latitude, addressData.longitude);
+
+                fields.forEach(field => {
+                    field.classList.remove('is-invalid');
+                    field.classList.add('is-valid');
+                });
+                addressValidated = true;
+                lastValidatedAddress = addressString;
+
+                // Set the addressId if it exists
+                if (addressData.addressId) {
+                    document.getElementById('addressId').value = addressData.addressId;
                 }
             })
             .catch(error => {
-                console.error('Error geocoding address:', error);
+                console.error('Error processing address:', error);
                 clearValidation();
-                geocodeStatus.textContent = 'Error geocoding address.';
+                geocodeStatus.textContent = error.message || 'Error processing address.';
                 geocodeStatus.className = 'form-text text-danger';
                 fields.forEach(field => {
                     field.classList.remove('is-valid');
@@ -158,6 +170,24 @@ document.addEventListener("DOMContentLoaded", function() {
             });
     }
 
+    function checkExistingAddress(addressData) {
+        return fetch('/api/check-address', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(addressData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.exists) {
+                    // Use existing address ID
+                    document.getElementById('addressId').value = data.addressId;
+                }
+                // If it doesn't exist, the backend will have created a new one
+                return data;
+            });
+    }
 
     const debouncedGeocode = debounce(function() {
         const street = streetInput.value.trim();
