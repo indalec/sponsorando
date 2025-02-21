@@ -1,0 +1,29 @@
+#userTable thead th a {
+    text-decoration: none;
+    color: inherit;
+    font-weight: bold;
+    display: block;
+    padding: 0.5rem;
+}
+
+#userTable thead th.actions-header {
+    text-decoration: none;
+    color: inherit;
+    font-weight: bold;
+    padding: 0.5rem;
+}
+
+#userTable thead th a:hover {
+    text-decoration: underline;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+#userTable thead th a span {
+    font-weight: normal;
+}
+
+#userTable thead th {
+    border-bottom: none;
+    vertical-align: middle;
+    text-align: center;
+}
