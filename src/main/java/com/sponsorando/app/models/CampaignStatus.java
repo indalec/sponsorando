@@ -3,6 +3,8 @@ package com.sponsorando.app.models;
 public enum CampaignStatus {
 
     DRAFT,
+    PENDING,
+    DECLINED,
     ACTIVE,
     INACTIVE,
     FROZEN,

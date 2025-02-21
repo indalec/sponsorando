@@ -1,7 +1,7 @@
 package com.sponsorando.app.controller;
 
-import com.sponsorando.app.models.UserAccount;
-import com.sponsorando.app.models.UserForm;
+import com.sponsorando.app.models.*;
+import com.sponsorando.app.services.CampaignService;
 import com.sponsorando.app.services.UserAccountService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import java.util.List;
 
 @Controller
 public class AppController {
@@ -21,8 +22,13 @@ public class AppController {
     @Autowired
     private UserAccountService userAccountService;
 
+    @Autowired
+    private CampaignService campaignService;
+
     @GetMapping("/")
-    public String index() {
+    public String index(Model model) {
+        List<CampaignCardDTO> campaigns = campaignService.getFeaturedCampaigns();
+        model.addAttribute("campaigns", campaigns);
         return "index";
     }
 
@@ -31,8 +37,12 @@ public class AppController {
             @RequestParam(required = false) String redirect,
             Model model
     ) {
-        if ("add_campaign".equals(redirect)) {
+        if ("add-campaign".equals(redirect)) {
             model.addAttribute("showInfoMessage", true);
+            model.addAttribute("message", "Please login to start a campaign");
+        } else if ("donate-now".equals(redirect)) {
+            model.addAttribute("showInfoMessage", true);
+            model.addAttribute("message", "Please login to make a donation");
         }
         return "login";
     }
@@ -93,5 +103,10 @@ public class AppController {
     @GetMapping("/faq")
     public String faq() {
         return "faq";
+    }
+
+    @GetMapping("/team")
+    public String team() {
+        return "team";
     }
 }

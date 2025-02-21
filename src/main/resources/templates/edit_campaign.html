@@ -11,7 +11,7 @@
 </head>
 <body>
 <header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}" class="container mb-4"></header>
-<div class="container mt-5">
+<div class="container my-5">
 
     <h1>Edit Campaign</h1>
     <form th:action="@{/edit_campaign}" method="post" class="needs-validation" novalidate>
@@ -39,7 +39,7 @@
                 <label for="startDate" class="form-label">Start Date and Time</label>
                 <input type="text" class="form-control flatpickr" id="startDate" name="startDate"
                        th:value="${formattedStartDate != null ? formattedStartDate : ''}"
-                       th:disabled="${#strings.trim(campaign.status) == 'ACTIVE'}" required>
+                       th:disabled="${#strings.trim(campaign.status) == 'ACTIVE'}" th:required="${#strings.trim(campaign.status) != 'ACTIVE'}">
                 <div class="invalid-feedback">
                     Please enter the start date of your campaign.
                 </div>
@@ -158,6 +158,8 @@
             <div class="invalid-feedback">Please enter a country.</div>
         </div>
 
+        <input type="hidden" id="status" name="status"
+               th:value="${campaign != null ? #strings.trim(campaign.status) : ''}">
         <input type="hidden" id="latitude" name="latitude"
                th:value="${campaign != null and campaign.address != null ? campaign.address.latitude : ''}">
         <input type="hidden" id="longitude" name="longitude"

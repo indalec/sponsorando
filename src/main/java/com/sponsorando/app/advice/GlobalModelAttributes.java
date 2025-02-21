@@ -1,5 +1,6 @@
 package com.sponsorando.app.advice;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -35,6 +36,12 @@ public class GlobalModelAttributes {
             return authentication.getAuthorities().iterator().next().getAuthority();
         }
         return null;
+    }
+
+    @ModelAttribute("isAuthenticated")
+    public boolean isAuthenticated(Authentication authentication) {
+        return authentication != null && authentication.isAuthenticated() &&
+                !(authentication instanceof AnonymousAuthenticationToken);
     }
 
 }

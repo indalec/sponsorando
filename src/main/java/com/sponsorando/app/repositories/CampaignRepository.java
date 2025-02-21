@@ -81,4 +81,15 @@ public interface CampaignRepository extends JpaRepository<Campaign, Long> {
     int countByUserAccount(UserAccount user);
 
     int countByUserAccountAndStatus(UserAccount userAccount, CampaignStatus campaignStatus);
+    @Query("SELECT c, COUNT(d.userAccount) as donorCount " +
+            "FROM Campaign c " +
+            "LEFT JOIN Donation d ON d.campaign = c " +
+            "LEFT JOIN Payment p ON p.donation = d " +
+            "WHERE c.status = :status AND p.paymentStatus = com.sponsorando.app.models.PaymentStatus.SUCCEEDED " +
+            "GROUP BY c " +
+            "ORDER BY donorCount DESC")
+    List<Campaign> findActiveCampaignsWithMostDonors(@Param("status") CampaignStatus status, Pageable pageable);
+
+
+
 }

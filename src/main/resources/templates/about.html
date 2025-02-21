@@ -5,14 +5,98 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>About Us - Sponsorando</title>
         <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
+        <link href="/css/about.css" type="text/css" rel="stylesheet">
     </head>
     <body>
     <header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}" class="container mb-4"></header>
-        <main>
-            <div class="container mt-5">
-                <h2 class="text-center">About Us</h2>
+    <main class="container">
+        <section class="text-center py-5">
+            <h1 class="display-4 mb-4">About Us</h1>
+            <p class="lead">Welcome to Sponsorando – Where Altruism Meets Opportunity</p>
+        </section>
+
+        <section class="about-section text-center py-5">
+            <p>At Sponsorando, we are a dynamic team of young entrepreneurs committed to changing the way sponsorships work. We believe that every sponsor has the potential to create a meaningful impact, not just through visibility, but by giving back to the community, supporting inspiring creators, and contributing to a brighter future for all. Our mission is to make altruistic sponsorship the new standard – a world where giving is valued for the positive change it creates, not just the exposure it generates.</p>
+        </section>
+        <section class="content-section">
+            <div class="text-content">
+                <h2>Our Mission</h2>
+                <p>We connect sponsors and creators with one simple goal: to transform ideas into reality. Through our platform, we facilitate authentic partnerships based on shared values, community growth, and mutual empowerment. Altruistic Sponsoring isn’t just about funding – it’s about making a lasting, positive impact on the world, one project at a time. Join us in creating something extraordinary that goes beyond marketing.</p>
             </div>
-        </main>
-        <footer th:replace="~{fragments/footer :: footerSection}" role="contentinfo" class="footer"></footer>
+            <div class="image-content">
+                <img src="https://picsum.photos/id/177/200" alt="Team collaboration">
+            </div>
+        </section>
+        <section class="content-section">
+            <div class="text-content">
+                <h2>Our Values</h2>
+                <div class="values-list">
+                    <div class="value-item">
+                        <h4>Community & Growth</h4>
+                        <p>By helping others grow, we grow together. We champion the development of creators, communities, and causes.</p>
+                    </div>
+                    <div class="value-item">
+                        <h4>Transparency & Trust</h4>
+                        <p>We believe in openness. Sponsors can track the impact they are making, while creators get the support they need to succeed.</p>
+                    </div>
+                    <div class="value-item">
+                        <h4>Inspiration & Positivity</h4>
+                        <p>Our platform inspires action and encourages positive change, fostering hope and optimism at every step.</p>
+                    </div>
+                    <div class="value-item">
+                        <h4>Human Connection</h4>
+                        <p>At Sponsorando, we see sponsorship as a partnership, creating bonds that empower both sides to thrive.</p>
+                    </div>
+                    <div class="value-item">
+                        <h4>Empathy & Care</h4>
+                        <p>Sponsorship that comes from the heart</p>
+                    </div>
+                </div>
+            </div>
+            <div class="image-content">
+                <img src="https://picsum.photos/id/469/200" alt="Community image">
+            </div>
+        </section>
+        <section class="content-section">
+            <div class="text-content">
+                <h2>How It Works</h2>
+                <div class="how-it-works">
+                    <div class="step">
+                        <h4>Find a Project You Believe In</h4>
+                        <p>Sponsors browse through projects that align with their values and vision. Whether it’s supporting an artist, an educational initiative, or a social cause, there's something for every sponsor.</p>
+                    </div>
+                    <div class="step">
+                        <h4>Make Your Impact</h4>
+                        <p>With a simple click, you can become part of something bigger, knowing that your contribution goes directly toward supporting creative minds and social good.</p>
+                    </div>
+                    <div class="step">
+                        <h4>See the Difference</h4>
+                        <p>Track your impact in real time and hear from the creators themselves. Our platform ensures transparency so sponsors can see exactly how their support is transforming lives.</p>
+                    </div>
+                    <div class="step">
+                        <h4>Create Positive Change</h4>
+                        <p>As a sponsor, you become part of a thriving community of like-minded individuals and organizations who are making a real difference in the world.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="image-content">
+                <img src="https://picsum.photos/id/448/200" alt="Map interface">
+            </div>
+        </section>
+        <section class="usp-section">
+            <h2>Local Impact, Global Reach</h2>
+            <p>Our interactive map helps you support projects in your community or worldwide</p>
+            <img src="https://picsum.photos/id/448/200" alt="World map" class="my-3">
+        </section>
+        <section class="content-section text-center py-5" style="background: transparent !important;">
+            <div class="text-content w-100">
+                <h2 class="mb-4">Want to know more about us?</h2>
+                <p class="lead mb-4">Discover the passionate creators behind Sponsorando</p>
+                <a href="/team" class="btn btn-primary btn-lg px-5">Meet the Team</a>
+            </div>
+        </section>
+    </main>
+    <footer th:replace="~{fragments/footer :: footerSection}" role="contentinfo" class="footer"></footer>
     </body>
 </html>
+

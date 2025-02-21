@@ -3,8 +3,8 @@ package com.sponsorando.app.controller;
 import com.sponsorando.app.models.*;
 import com.sponsorando.app.repositories.CampaignCategoryRepository;
 import com.sponsorando.app.repositories.CampaignRepository;
-import com.sponsorando.app.repositories.CurrencyRepository;
 import com.sponsorando.app.services.CampaignService;
+import com.sponsorando.app.services.CurrencyService;
 import com.sponsorando.app.services.UserAccountService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class CampaignController {
     private CampaignService campaignService;
 
     @Autowired
-    private CurrencyRepository currencyRepository;
+    private CurrencyService currencyService;
 
     @Autowired
     private CampaignRepository campaignRepository;
@@ -63,12 +63,12 @@ public class CampaignController {
         return "discover_campaigns";
     }
 
-    @GetMapping("/add_campaign")
+    @GetMapping("/add-campaign")
     @PreAuthorize("isAuthenticated()")
     public String addCampaign(Model model) {
 
         List<CampaignCategory> categories = campaignCategoryRepository.findAll();
-        List<Currency> currencies = currencyRepository.findAll();
+        List<Currency> currencies = currencyService.getCurrencies();
 
         model.addAttribute("categories", categories);
         model.addAttribute("currencies", currencies);
@@ -76,7 +76,7 @@ public class CampaignController {
         return "add_campaign";
     }
 
-    @PostMapping("/add_campaign")
+    @PostMapping("/add-campaign")
     public String addCampaign(
             @ModelAttribute @Valid CampaignForm campaignForm,
             RedirectAttributes redirectAttributes,
@@ -100,7 +100,7 @@ public class CampaignController {
                 redirectAttributes.addFlashAttribute("isCampaignAdded", false);
             }
         }
-        return "redirect:/add_campaign";
+        return "redirect:/add-campaign";
     }
 
     @GetMapping("/campaigns")
@@ -153,6 +153,7 @@ public class CampaignController {
     public String viewCampaign(
             @PathVariable String slug,
             @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "source", required = false) String source,
             Model model,
             RedirectAttributes redirectAttributes
     ) {
@@ -181,6 +182,7 @@ public class CampaignController {
             }
 
             model.addAttribute("page", page);
+            model.addAttribute("source", source);
 
             return "view_campaign";
         } catch (Exception e) {
@@ -204,7 +206,7 @@ public class CampaignController {
     public String editCampaign(@PathVariable("id") Long id, @RequestParam("page") int currentPage, Model model) {
 
         List<CampaignCategory> categories = campaignCategoryRepository.findAll();
-        List<Currency> currencies = currencyRepository.findAll();
+        List<Currency> currencies = currencyService.getCurrencies();
 
         model.addAttribute("categories", categories);
         model.addAttribute("currencies", currencies);
@@ -262,4 +264,59 @@ public class CampaignController {
         return "redirect:/campaigns?page=" + campaignForm.getPage();
     }
 
+    @GetMapping("/request_approval_campaign/{id}")
+    public String requestApprovalCampaign(
+            @PathVariable("id") Long campaignId,
+            @RequestParam(value = "page", defaultValue = "0") int currentPage,
+            Model model,
+            RedirectAttributes redirectAttributes
+    ) {
+        String currentUserEmail = (String) model.getAttribute("username");
+
+        try {
+            boolean isUpdated = campaignService.requestApprovalCampaign(campaignId, currentUserEmail);
+
+            if (isUpdated) {
+                redirectAttributes.addFlashAttribute("successMessage", "Approval requested successfully!");
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Failed to request approval. Please try again");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "An error occurred while processing the request.");
+        }
+
+        return "redirect:/campaigns?page=" + currentPage;
+    }
+
+    @GetMapping("/validate_campaign/{id}")
+    public String validateCampaign(
+            @PathVariable("id") Long campaignId,
+            @RequestParam(value = "page", defaultValue = "0") int currentPage,
+            @RequestParam(value = "action", required = true) String action,
+            RedirectAttributes redirectAttributes,
+            @ModelAttribute("currentRole") String currentRole
+    ) {
+        try {
+            boolean isUpdated = campaignService.validateCampaign(campaignId, action, currentRole);
+            if (isUpdated) {
+                if ("approve".equals(action)) {
+                    redirectAttributes.addFlashAttribute("successMessage", "Campaign approved successfully!");
+                } else if ("decline".equals(action)) {
+                    redirectAttributes.addFlashAttribute("errorMessage", "Campaign declined. Please review and update your campaign and try again.");
+                } else {
+                    redirectAttributes.addFlashAttribute("errorMessage", "Invalid action specified.");
+                }
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Failed to update campaign status.");
+            }
+        } catch (IllegalAccessException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "You do not have permission to perform this action.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "An error occurred while processing the request.");
+        }
+
+        return "redirect:/campaigns?page=" + currentPage;
+    }
 }
