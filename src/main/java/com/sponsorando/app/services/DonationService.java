@@ -5,6 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.sponsorando.app.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,5 +88,15 @@ public class DonationService {
     public Optional<Donation> getDonationById(Long id) {
         logger.info("Fetching donation with ID: {}", id);
         return donationRepository.findById(id);
+    }
+
+    public Page<Donation> getDonations(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return donationRepository.findAll(pageable);
+    }
+
+    public Page<Donation> getDonationsByUserEmail(String email, int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return donationRepository.findByUserAccountEmail(email, pageable);
     }
 }

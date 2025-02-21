@@ -1,18 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Donations - Sponsorando</title>
-        <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
-    </head>
-    <body>
-    <header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}" class="container mb-4"></header>
-        <main>
-            <div class="container mt-5">
-                <h2 class="text-center">Donations</h2>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Donations - Sponsorando</title>
+    <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
+    <link rel="stylesheet" type="text/css" href="/css/donation.css"/>
+</head>
+<body>
+<header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}"
+        class="container mb-4"></header>
+<div class="container mt-5 flex-grow-1">
+
+    <h1 th:text="${currentRole == 'ROLE_ADMIN' ? 'Donations' : 'Your Donations'}"></h1>
+    <form th:action="@{/donations}" method="post" class="mt-5">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped align-middle"
+                           th:if="${donations != null and donations.size() > 0}">
+                        <thead class="table-secondary">
+                        <tr class="align-top text-center">
+                            <th scope="col" class="p-1 py-3">Id</th>
+                            <th scope="col" class="p-1 py-3">Amount</th>
+                            <th scope="col" class="p-1 py-3">Currency</th>
+                            <th scope="col" class="p-1 py-3">Donation Date</th>
+                            <th scope="col" class="p-1 py-3">Campaign</th>
+                            <th scope="col" class="p-1 py-3" th:if="${currentRole == 'ROLE_ADMIN'}">User Id</th>
+                            <th scope="col" class="p-1 py-3">Anonymous</th>
+                            <th scope="col" class="p-1 py-3">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="donation : ${donations}">
+
+                            <td class="text-center" th:text="${donation.id}"></td>
+                            <td class="text-center" th:text="${donation.amount}"></td>
+                            <td class="text-center" th:text="${donation.currency.code}"></td>
+                            <td class="text-center">
+                                <span th:text="${#temporals.format(donation.donationDate, 'dd-MM-yyyy | HH:mm a')}"></span>
+                            </td>
+
+                            <td class="text-center">
+                                <a id="titleStyle" style="color: var(--text-color) !important;text-decoration: none;" th:href="@{/c/{slug}(slug=${donation.campaign.slug}, page=${currentPage}, source='donations')}"
+                                   th:text="${donation.campaign.title}"></a>
+                            </td>
+                            <td class="text-center" th:if="${currentRole == 'ROLE_ADMIN'}" th:text="${donation.userAccount.id}"></td>
+                            <td class="text-center" th:text="${donation.anonymous ? 'Yes' : 'No'}"></td>
+                            <td>
+                                <div class="d-flex flex-column align-items-center">
+                                    <div class="btn-group mb-1" role="group">
+                                        <a class="btn btn-outline-primary btn-sm rounded-1 me-1"
+                                           th:href="@{/d/{id}(id=${donation.campaign.id},page=${currentPage}, source='donations')}">View</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div th:if="${donations == null or donations.size() == 0}" class="alert alert-warning text-center">
+                    Currently, you don't have any donations.
+                </div>
             </div>
-        </main>
-        <footer th:replace="~{fragments/footer :: footerSection}" role="contentinfo" class="footer"></footer>
-    </body>
+        </div>
+
+        <nav class="mt-4" aria-label="Page navigation" th:if="${donations != null and donations.size() > 0}">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{/donations(page=0)}">First</a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{/donations(page=${currentPage - 1})}">Previous</a>
+                </li>
+                <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+                    th:classappend="${pageNum == currentPage} ? 'active'">
+                    <a class="page-link" th:href="@{/donations(page=${pageNum})}" th:text="${pageNum + 1}"></a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{/donations(page=${currentPage + 1})}">Next</a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{/donations(page=${totalPages - 1})}">Last</a>
+                </li>
+            </ul>
+        </nav>
+    </form>
+
+</div>
+<footer th:replace="~{fragments/footer :: footerSection}" role="contentinfo" class="footer"></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+<script src="/js/action_notifications.js"></script>
+</body>
 </html>
