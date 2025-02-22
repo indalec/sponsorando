@@ -47,7 +47,7 @@ public class AddressService {
         address.setCountry(campaignForm.getCountry());
         address.setPostcode(campaignForm.getPostcode());
         address.setLatitude(campaignForm.getLatitude());
-        address.setLongitude(campaignForm.getLatitude());
+        address.setLongitude(campaignForm.getLongitude());
 
         return addressRepository.save(address);
     }
