@@ -54,6 +54,7 @@ public class PaymentService {
     public Payment processPayment(String paymentProvider, String token, Donation donation) {
         logger.info("Processing payment for donation ID: {} with provider: {}", donation.getId(), paymentProvider);
 
+        Payment payment = null;
         try {
             PaymentProvider provider = PaymentProvider.valueOf(paymentProvider.toUpperCase());
             Object service = paymentServices.get(provider);
@@ -62,7 +63,6 @@ public class PaymentService {
                 throw new IllegalArgumentException("Unsupported payment provider: " + paymentProvider);
             }
 
-            Payment payment;
             if (service instanceof StripePaymentService) {
                 payment = ((StripePaymentService) service).processPayment(token, donation);
             } else {
@@ -74,10 +74,21 @@ public class PaymentService {
 
             if (payment.getPaymentStatus() == PaymentStatus.SUCCEEDED) {
                 campaignService.updateCampaignCollectedAmount(donation.getCampaign().getId(), payment.getNetConvertedToCampaignCurrency());
+            } else {
+                logger.warn("Payment failed for donation ID: {}. Deleting donation.", donation.getId());
+                donationService.deleteDonation(donation.getId());
             }
+
             return payment;
         } catch (Exception e) {
             logger.error("Error processing payment for donation ID: {}", donation.getId(), e);
+            if (payment != null) {
+                try {
+                    paymentRepository.delete(payment);
+                } catch (Exception deleteException) {
+                    logger.error("Error deleting payment for donation ID: {}", donation.getId(), deleteException);
+                }
+            }
             donationService.deleteDonation(donation.getId());
             throw new RuntimeException("Payment processing failed", e);
         }
