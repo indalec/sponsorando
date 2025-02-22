@@ -1,4 +1,3 @@
-// address.js
 document.addEventListener("DOMContentLoaded", function() {
     const streetInput = document.getElementById("inputStreet");
     const numberInput = document.getElementById("inputNumber");
@@ -21,8 +20,12 @@ document.addEventListener("DOMContentLoaded", function() {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
     }
-
+    initMap();
     function updateMap(lat, lng) {
+        if (!lat || !lng) {
+            console.warn("Invalid latitude or longitude:", lat, lng);
+            return;
+        }
         const newLatLng = new L.LatLng(lat, lng);
         map.setView(newLatLng, 15);
         if (marker) {
@@ -31,7 +34,6 @@ document.addEventListener("DOMContentLoaded", function() {
             marker = L.marker(newLatLng).addTo(map);
         }
     }
-
     function debounce(func, delay) {
         let timeout;
         return function(...args) {
@@ -39,7 +41,6 @@ document.addEventListener("DOMContentLoaded", function() {
             timeout = setTimeout(() => func.apply(this, args), delay);
         };
     }
-
     function clearValidation() {
         addressValidated = false;
         latitudeInput.value = '';
@@ -55,11 +56,9 @@ document.addEventListener("DOMContentLoaded", function() {
             map.setView([0, 0], 2);
         }
     }
-
     function fetchCountries() {
         const overpassUrl = 'https://overpass-api.de/api/interpreter';
         const query = '[out:json];relation["admin_level"="2"]["ISO3166-1"];out tags;';
-
         fetch(`${overpassUrl}?data=${encodeURIComponent(query)}`)
             .then(response => response.json())
             .then(data => {
@@ -90,7 +89,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 populateCountries();
             });
     }
-
     function populateCountries() {
         const countrySelect = document.getElementById('inputCountry');
         countries.forEach(country => {
@@ -100,68 +98,62 @@ document.addEventListener("DOMContentLoaded", function() {
             countrySelect.appendChild(option);
         });
     }
-
+    function isValidCoordinate(coord) {
+        return typeof coord === 'number' && !isNaN(coord);
+    }
     function geocodeAddress(street, number, city, postcode, countryCode) {
         const country = countries.find(c => c.code === countryCode)?.name || countryCode;
         const addressString = `${number} ${street}, ${postcode} ${city}, ${country}`;
-
         if (addressString === lastValidatedAddress) {
-            return; // Skip geocoding if the address hasn't changed
+            return;
         }
-
         fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(addressString)}&format=json&addressdetails=1&limit=1`)
             .then(response => response.json())
             .then(data => {
                 if (data && data.length > 0) {
                     const result = data[0];
-                    const lat = result.lat;
-                    const lon = result.lon;
-
+                    const lat = parseFloat(result.lat);
+                    const lon = parseFloat(result.lon);
+                    if (!isValidCoordinate(lat) || !isValidCoordinate(lon)) {
+                        throw new Error('Invalid coordinates received from geocoding.');
+                    }
                     latitudeInput.value = lat;
                     longitudeInput.value = lon;
-
+                    geocodeStatus.textContent = 'Address validated successfully!';
+                    geocodeStatus.className = 'form-text text-success';
+                    updateMap(lat, lon);
                     // Update the input fields with corrected data
                     streetInput.value = result.address.road || street;
                     cityInput.value = result.address.city || result.address.town || result.address.village || city;
-
-                    // Check if address exists in database
-                    return checkExistingAddress({
+                    fields.forEach(field => {
+                        field.classList.remove('is-invalid');
+                        field.classList.add('is-valid');
+                    });
+                    addressValidated = true;
+                    lastValidatedAddress = addressString;
+                    window.addressData = {
                         street: streetInput.value,
                         number: numberInput.value,
                         city: cityInput.value,
                         postcode: postcodeInput.value,
                         country: countryInput.value,
-                        latitude: lat,
-                        longitude: lon
-                    });
+                        latitude: latitudeInput.value,
+                        longitude: longitudeInput.value
+                    };
                 } else {
-                    throw new Error('Address not found');
-                }
-            })
-            .then(addressData => {
-                // addressData will contain either the existing or new address details
-                console.log('Address processed:', addressData);
-
-                geocodeStatus.textContent = 'Address validated successfully!';
-                geocodeStatus.className = 'form-text text-success';
-                updateMap(addressData.latitude, addressData.longitude);
-
-                fields.forEach(field => {
-                    field.classList.remove('is-invalid');
-                    field.classList.add('is-valid');
-                });
-                addressValidated = true;
-                lastValidatedAddress = addressString;
-
-                // Set the addressId if it exists
-                if (addressData.addressId) {
-                    document.getElementById('addressId').value = addressData.addressId;
+                    clearValidation();
+                    geocodeStatus.textContent = 'Address not found. Please check the address.';
+                    geocodeStatus.className = 'form-text text-danger';
+                    fields.forEach(field => {
+                        field.classList.remove('is-valid');
+                        field.classList.add('is-invalid');
+                    });
                 }
             })
             .catch(error => {
-                console.error('Error processing address:', error);
+                console.error('Error geocoding address:', error);
                 clearValidation();
-                geocodeStatus.textContent = error.message || 'Error processing address.';
+                geocodeStatus.textContent = 'Error geocoding address.';
                 geocodeStatus.className = 'form-text text-danger';
                 fields.forEach(field => {
                     field.classList.remove('is-valid');
@@ -169,51 +161,34 @@ document.addEventListener("DOMContentLoaded", function() {
                 });
             });
     }
-
-    function checkExistingAddress(addressData) {
-        return fetch('/api/check-address', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(addressData)
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.exists) {
-                    // Use existing address ID
-                    document.getElementById('addressId').value = data.addressId;
-                }
-                // If it doesn't exist, the backend will have created a new one
-                return data;
-            });
-    }
-
     const debouncedGeocode = debounce(function() {
         const street = streetInput.value.trim();
         const number = numberInput.value.trim();
         const city = cityInput.value.trim();
         const postcode = postcodeInput.value.trim();
         const country = countryInput.value;
-
         if (street && number && city && postcode && country) {
             geocodeAddress(street, number, city, postcode, country);
         } else {
             clearValidation();
         }
     }, 500);
-
     fields.forEach(field => {
         field.addEventListener('input', function() {
             debouncedGeocode();
         });
     });
-
-    initMap();
     fetchCountries();
-
     window.validateAddress = function() {
         return addressValidated;
-    };
-
+    }
+    if (latitudeInput.value && longitudeInput.value) {
+        const initialLat = parseFloat(latitudeInput.value);
+        const initialLng = parseFloat(longitudeInput.value);
+        if (isValidCoordinate(initialLat) && isValidCoordinate(initialLng)) {
+            updateMap(initialLat, initialLng);
+        } else {
+            console.warn("Invalid initial latitude or longitude:", initialLat, initialLng);
+        }
+    }
 });
