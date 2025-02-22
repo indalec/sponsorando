@@ -51,7 +51,7 @@ public class StripePaymentService {
                 double netAmount = balanceTransaction.getNet() / 100.0; // Convert from smallest currency unit
                 payment.setNetAmount(netAmount);
 
-                double transactionFee = payment.getGrossAmount() - netAmount - stripeFee;
+                double transactionFee = Math.round((payment.getGrossAmount() - netAmount - stripeFee) * 100.0) / 100.0;
                 payment.setTransactionFee(transactionFee);
 
                 if (balanceTransaction.getExchangeRate() != null) {
