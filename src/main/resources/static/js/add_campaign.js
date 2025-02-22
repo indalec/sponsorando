@@ -1,27 +1,60 @@
-// add_campaign.js
+
 document.addEventListener("DOMContentLoaded", function() {
 
-    // Flatpickr initialization (Date pickers)
+    const now = new Date();
+
+    function roundToNearestFiveMinutes(date) {
+        const coeff = 1000 * 60 * 5;
+        return new Date(Math.ceil(date.getTime() / coeff) * coeff);
+    }
+
+    const roundedNow = roundToNearestFiveMinutes(now);
+
+    const startDateInput = document.getElementById("startDate");
+    const endDateInput = document.getElementById("endDate");
+
     const startDatePicker = flatpickr("#startDate", {
         enableTime: true,
         dateFormat: "d/m/Y H:i",
         time_24hr: true,
         minDate: "today",
-        onChange: function(selectedDates, dateStr, instance) {
+        defaultDate: roundedNow,
+        minuteIncrement: 5,
+        onChange: function (selectedDates, dateStr, instance) {
             endDatePicker.set('minDate', dateStr);
+            const minEndTime = new Date(selectedDates[0]);
+            minEndTime.setHours(minEndTime.getHours() + 1);
+            endDatePicker.set('minTime', minEndTime);
+
+            if (endDatePicker.selectedDates[0] <= selectedDates[0]) {
+                endDatePicker.setDate(minEndTime);
+            }
         }
     });
+
+
+
+
+
+    function getOneHourLater(date) {
+        const later = new Date(date);
+        later.setHours(later.getHours() + 1);
+        return roundToNearestFiveMinutes(later);
+    }
 
     const endDatePicker = flatpickr("#endDate", {
         enableTime: true,
         dateFormat: "d/m/Y H:i",
         time_24hr: true,
-        minDate: "today"
+        minDate: "today",
+        defaultDate: getOneHourLater(roundedNow),
+        minuteIncrement: 5,
+        onChange: function (selectedDates, dateStr, instance) {
+            if (selectedDates[0] <= startDatePicker.selectedDates[0]) {
+                instance.setDate(getOneHourLater(startDatePicker.selectedDates[0]), true);
+            }
+        }
     });
-
-    const form = document.querySelector('form');
-    const startDateInput = document.getElementById("startDate");
-    const endDateInput = document.getElementById("endDate");
 
     function validateDates() {
         const startDate = startDatePicker.selectedDates[0];
@@ -42,6 +75,8 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     endDateInput.addEventListener('change', validateDates);
+
+    const form = document.querySelector('form');
 
     form.addEventListener('submit', function(event) {
         if (!startDatePicker.selectedDates[0]) {
