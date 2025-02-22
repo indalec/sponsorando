@@ -1,18 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Payments - Sponsorando</title>
-        <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
-    </head>
-    <body>
-    <header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}" class="container mb-4"></header>
-        <main>
-            <div class="container mt-5">
-                <h2 class="text-center">Payments</h2>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Payments - Sponsorando</title>
+    <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
+</head>
+<body>
+<header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}" class="container mb-4"></header>
+<div class="container mt-5 flex-grow-1">
+
+    <h1 th:text="'payments'"></h1>
+    <form th:action="@{/payments}" method="post" class="mt-5">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped align-middle"
+                           th:if="${payments != null and payments.size() > 0}">
+                        <thead class="table-secondary">
+                        <tr class="align-top text-center">
+                            <th scope="col" class="p-1 py-3">Transaction Id</th>
+                            <th scope="col" class="p-1 py-3">Status</th>
+                            <th scope="col" class="p-1 py-3">Gross Amount</th>
+                            <th scope="col" class="p-1 py-3">Transaction Fee</th>
+                            <th scope="col" class="p-1 py-3">Service Fee</th>
+                            <th scope="col" class="p-1 py-3">Net Amount</th>
+                            <th scope="col" class="p-1 py-3">Currency</th>
+                            <th scope="col" class="p-1 py-3">Transaction Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="payment : ${payments}">
+
+                            <td class="text-start" th:text="${payment.transactionId}"></td>
+                            <td class="text-center" th:text="${payment.paymentStatus}"></td>
+                            <td class="text-center" th:text="${payment.grossAmount}"></td>
+                            <td class="text-center" th:text="${payment.transactionFee}"></td>
+                            <td class="text-center" th:text="${payment.serviceFee}"></td>
+                            <td class="text-center" th:text="${payment.netAmount}"></td>
+                            <td class="text-center" th:text="${payment.currency.code}"></td>
+                            <td class="text-center">
+                                <span th:text="${#temporals.format(payment.transactionDate, 'dd-MM-yyyy | HH:mm a')}"></span>
+                            </td>
+
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div th:if="${payments == null or payments.size() == 0}" class="alert alert-warning text-center">
+                    Currently, there are no payments.
+                </div>
             </div>
-        </main>
-        <footer th:replace="~{fragments/footer :: footerSection}" role="contentinfo" class="footer"></footer>
-    </body>
+        </div>
+
+        <nav class="mt-4" aria-label="Page navigation" th:if="${payments != null and payments.size() > 0}">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{/payments(page=0)}">First</a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{/payments(page=${currentPage - 1})}">Previous</a>
+                </li>
+                <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+                    th:classappend="${pageNum == currentPage} ? 'active'">
+                    <a class="page-link" th:href="@{/payments(page=${pageNum})}" th:text="${pageNum + 1}"></a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{/payments(page=${currentPage + 1})}">Next</a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{/payments(page=${totalPages - 1})}">Last</a>
+                </li>
+            </ul>
+        </nav>
+    </form>
+
+</div>
+<footer th:replace="~{fragments/footer :: footerSection}" role="contentinfo" class="footer"></footer>
+</body>
 </html>
