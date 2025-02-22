@@ -87,7 +87,13 @@ public class DonationService {
     @Transactional(readOnly = true)
     public Optional<Donation> getDonationById(Long id) {
         logger.info("Fetching donation with ID: {}", id);
-        return donationRepository.findById(id);
+        Optional<Donation> donation = donationRepository.findById(id);
+        if (donation.isPresent()) {
+            logger.info("Donation found: {}", donation.get());
+        } else {
+            logger.warn("No donation found with ID: {}", id);
+        }
+        return donation;
     }
 
     public Page<Donation> getDonations(int pageNumber, int pageSize) {
