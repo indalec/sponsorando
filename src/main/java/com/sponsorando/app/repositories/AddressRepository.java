@@ -9,13 +9,12 @@ import java.util.List;
 @Repository
 public interface AddressRepository extends JpaRepository<Address, Long> {
 
-    List<Address> findByStreetAndNumberAndCityAndPostcodeAndCountryAndLatitudeAndLongitude(
-            String street,
-            String number,
-            String city,
-            String postcode,
-            String country,
-            Double latitude,
-            Double longitude);
+
+
+    List<Address> findByStreetAndNumberAndCityAndPostcodeAndCountry(String street,
+                                                                    String number,
+                                                                    String city,
+                                                                    String postcode,
+                                                                    String country);
 }
 

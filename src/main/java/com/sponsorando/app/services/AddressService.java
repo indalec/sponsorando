@@ -19,19 +19,25 @@ public class AddressService {
 
     public Address createAddress(CampaignForm campaignForm) {
 
-        List<Address> existingAddresses = addressRepository.findByStreetAndNumberAndCityAndPostcodeAndCountryAndLatitudeAndLongitude(
+        List<Address> existingAddresses = addressRepository.findByStreetAndNumberAndCityAndPostcodeAndCountry(
                 campaignForm.getStreet(),
                 campaignForm.getNumber(),
                 campaignForm.getCity(),
                 campaignForm.getPostcode(),
-                campaignForm.getCountry(),
-                campaignForm.getLatitude(),
-                campaignForm.getLongitude()
+                campaignForm.getCountry()
         );
 
         if (!existingAddresses.isEmpty()) {
+            for(Address address : existingAddresses){
+                if (address.getStreet().equals(campaignForm.getStreet()) &&
+                    address.getNumber().equals(campaignForm.getNumber()) &&
+                    address.getCity().equals(campaignForm.getCity()) &&
+                    address.getPostcode().equals(campaignForm.getPostcode()) &&
+                    address.getCountry().equals(campaignForm.getCountry())) {
 
-            return existingAddresses.get(0);
+                    return existingAddresses.getFirst();
+                }
+            }
         }
 
         Address address = new Address();

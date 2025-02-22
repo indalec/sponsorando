@@ -1,7 +1,16 @@
 <div th:fragment="address">
     <div class="address-map-container">
-        <h4>Address Information</h4>
-        <p>Enter the address details below. We'll validate it as you type.</p>
+        <div class="row d-flex justify-content-between align-items-start mb-3">
+            <div class="col-md-6">
+                <h4>Address Information</h4>
+                <p>Please enter your address details in the fields below</p>
+            </div>
+            <div class="col-md-6 d-flex align-items-center justify-content-end">
+                <label for="showlocation" class="form-label mb-0 me-2">Show Location (Others will be able to see it)</label>
+                <input type="checkbox" id="showlocation" name="showLocation" class="form-check-input" checked />
+            </div>
+        </div>
+
 
         <div class="row">
             <div class="col-md-6 mb-3">
@@ -44,6 +53,6 @@
         <input type="hidden" id="latitude" name="latitude">
         <input type="hidden" id="longitude" name="longitude">
 
-        <div id="map" class="mb-3"></div>
+        <div id="map" class="my-3" ></div>
     </div>
 </div>

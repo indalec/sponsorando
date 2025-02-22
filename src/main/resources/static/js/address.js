@@ -95,6 +95,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const option = document.createElement('option');
             option.value = country.code;
             option.textContent = country.name;
+            option.selected = country.name === 'Germany';
             countrySelect.appendChild(option);
         });
     }
@@ -119,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     }
                     latitudeInput.value = lat;
                     longitudeInput.value = lon;
-                    geocodeStatus.textContent = 'Address validated successfully!';
+                    // geocodeStatus.textContent = 'Address validated successfully!';
                     geocodeStatus.className = 'form-text text-success';
                     updateMap(lat, lon);
                     // Update the input fields with corrected data
@@ -142,7 +143,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     };
                 } else {
                     clearValidation();
-                    geocodeStatus.textContent = 'Address not found. Please check the address.';
+                    // geocodeStatus.textContent = 'Address not found. Please check the address.';
                     geocodeStatus.className = 'form-text text-danger';
                     fields.forEach(field => {
                         field.classList.remove('is-valid');
@@ -153,7 +154,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .catch(error => {
                 console.error('Error geocoding address:', error);
                 clearValidation();
-                geocodeStatus.textContent = 'Error geocoding address.';
+                // geocodeStatus.textContent = 'Error geocoding address.';
                 geocodeStatus.className = 'form-text text-danger';
                 fields.forEach(field => {
                     field.classList.remove('is-valid');

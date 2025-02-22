@@ -34,7 +34,7 @@ public class CampaignForm {
     @NotEmpty(message = "Please select at least one option")
     private List<CampaignCategory> categories;
 
-    private Boolean showLocation;
+    private boolean showLocation;
 
     private int page;
 
