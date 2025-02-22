@@ -8,6 +8,9 @@ import com.sponsorando.app.repositories.PaymentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,10 +39,11 @@ public class PaymentService {
     private DonationService donationService;
 
     @Transactional(readOnly = true)
-    public List<Payment> getAllPayments() {
+    public Page<Payment> getAllPayments(int pageNumber, int pageSize) {
         logger.info("Fetching all payments");
         try {
-            return paymentRepository.findAll();
+            Pageable pageable = PageRequest.of(pageNumber, pageSize);
+            return paymentRepository.findAll(pageable);
         } catch (Exception e) {
             logger.error("Error fetching payments", e);
             throw new RuntimeException("Failed to retrieve payments", e);
