@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Donation Details - Sponsorando</title>
+    <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
+</head>
+<body>
+<header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}"
+        class="container mb-4"></header>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card mb-5">
+                <div style="height: 200px; display: flex; justify-content: center; align-items: center;">
+                    <svg class="card-img-top" style="width: 50%; height: auto;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+                        <image href="/images/title.svg" width="100%" height="100%"/>
+                    </svg>
+                </div>
+                <h1 th:unless="${(isUser && currentUser.id != donation.userAccount.id) || isAdmin}" class="card-title ms-4 mb-4" th:text="${currentUser.name + ', thanks for supporting!'}"></h1>
+                <div class="card-body ms-5 p-4">
+                    <h2 class="card-title mb-4">Donation Details</h2>
+
+                    <div class="mb-4">
+                        <strong>Gross Amount:</strong>
+                        <span th:text="${donation.amount + ' ' + donation.currency.symbol}"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <strong>Donation Date:</strong>
+                        <span th:text="${#temporals.format(donation.donationDate, 'dd-MM-yyyy HH:mm a')}"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <strong>Campaign:</strong>
+                        <a th:if="${donation.campaign}"
+                           style="color: var(--text-color) !important; text-decoration: none;"
+                           th:href="@{/c/{slug}(slug=${donation.campaign.slug}, page=${currentPage}, source='donations')}"
+                           th:text="${donation.campaign.title}"
+                           onmouseover="this.style.textDecoration='underline'"
+                           onmouseout="this.style.textDecoration='none'"></a>
+                        <span th:unless="${donation.campaign}">N/A</span>
+                    </div>
+
+                    <div class="mb-4">
+                        <strong>Donor:</strong>
+                        <span th:if="${donation.anonymous}">Anonymous</span>
+                        <span th:unless="${donation.anonymous}" th:text="${donation.userAccount.name}"></span>
+                    </div>
+
+                    <div class="mb-4" th:if="${donation.subscription}">
+                        <strong>Subscription:</strong>
+                        <span th:text="${donation.subscription.name}"></span>
+                    </div>
+
+                    <div th:if="${isAdmin}" class="mt-4">
+                        <h3 class="h5 mb-4">Administrative Details</h3>
+                        <div class="mb-3">
+                            <strong>Donation ID:</strong>
+                            <span th:text="${donation.id}"></span>
+                        </div>
+                        <div class="mb-3">
+                            <strong>User Account ID:</strong>
+                            <span th:text="${donation.userAccount.id}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer p-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a th:href="@{/donations(page=${currentPage})}" class="btn btn-outline-secondary btn-sm rounded-1">Back to Donations</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/footer :: footerSection}" role="contentinfo" class="footer mt-5"></footer>
+</body>
+</html>
