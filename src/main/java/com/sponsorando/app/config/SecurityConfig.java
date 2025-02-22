@@ -43,6 +43,7 @@ public class SecurityConfig {
                             .requestMatchers("/edit_campaign").authenticated()
                             .requestMatchers("/update_profile").authenticated()
                             .requestMatchers("/donations").authenticated()
+                            .requestMatchers("/d/**").authenticated()
                             .requestMatchers("/admin/**").hasRole("ADMIN")
                             .requestMatchers("/donations/**").hasRole("ADMIN")
                             .requestMatchers("/payments/**").hasRole("ADMIN")
