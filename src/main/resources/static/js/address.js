@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     }
                     latitudeInput.value = lat;
                     longitudeInput.value = lon;
-                    // geocodeStatus.textContent = 'Address validated successfully!';
+                    // git .textContent = 'Address validated successfully!';
                     geocodeStatus.className = 'form-text text-success';
                     updateMap(lat, lon);
                     // Update the input fields with corrected data
