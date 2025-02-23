@@ -13,12 +13,17 @@ document.addEventListener("DOMContentLoaded", function() {
     const startDateInput = document.getElementById("startDate");
     const endDateInput = document.getElementById("endDate");
 
+    function getOneHourLater(date = new Date()) {
+        const later = new Date(date.getTime() + 60 * 60 * 1000);
+        return roundToNearestFiveMinutes(later);
+    }
+
     const startDatePicker = flatpickr("#startDate", {
         enableTime: true,
         dateFormat: "d/m/Y H:i",
         time_24hr: true,
-        minDate: "today",
-        defaultDate: roundedNow,
+        minDate: getOneHourLater(),
+        defaultDate: getOneHourLater(),
         minuteIncrement: 5,
         onChange: function (selectedDates, dateStr, instance) {
             endDatePicker.set('minDate', dateStr);
@@ -32,22 +37,12 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-
-
-
-
-    function getOneHourLater(date) {
-        const later = new Date(date);
-        later.setHours(later.getHours() + 1);
-        return roundToNearestFiveMinutes(later);
-    }
-
     const endDatePicker = flatpickr("#endDate", {
         enableTime: true,
         dateFormat: "d/m/Y H:i",
         time_24hr: true,
-        minDate: "today",
-        defaultDate: getOneHourLater(roundedNow),
+        minDate: getOneHourLater(getOneHourLater()),
+        defaultDate: getOneHourLater(getOneHourLater()),
         minuteIncrement: 5,
         onChange: function (selectedDates, dateStr, instance) {
             if (selectedDates[0] <= startDatePicker.selectedDates[0]) {
@@ -56,11 +51,23 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
+    function isAtLeastOneHourInFuture(date) {
+        const now = new Date();
+        const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
+        return date >= oneHourFromNow;
+    }
+
     function validateDates() {
         const startDate = startDatePicker.selectedDates[0];
         const endDate = endDatePicker.selectedDates[0];
 
         if (!startDate || !endDate) {
+            return false;
+        }
+
+        if (!isAtLeastOneHourInFuture(startDate)) {
+            startDateInput.classList.add("is-invalid");
+            startDateInput.nextElementSibling.textContent = "Start date must be at least 1 hour in the future from now.";
             return false;
         }
 
@@ -77,6 +84,7 @@ document.addEventListener("DOMContentLoaded", function() {
     endDateInput.addEventListener('change', validateDates);
 
     const form = document.querySelector('form');
+
 
     form.addEventListener('submit', function(event) {
         if (!startDatePicker.selectedDates[0]) {
@@ -96,6 +104,42 @@ document.addEventListener("DOMContentLoaded", function() {
             event.stopPropagation();
         }
     });
+
+    // Title validation
+    const titleInput = document.getElementById("title");
+    titleInput.addEventListener("input", function(event) {
+        const minLength = 2;
+        const maxLength = 255;
+        const currentLength = event.target.value.length;
+        const errorElement = document.getElementById("titleLengthError");
+
+        if (currentLength < minLength || currentLength > maxLength) {
+            titleInput.classList.add("is-invalid");
+            errorElement.textContent = `Title must be between ${minLength} and ${maxLength} characters. Current length: ${currentLength}`;
+        } else {
+            titleInput.classList.remove("is-invalid");
+            titleInput.classList.add("is-valid");
+            errorElement.textContent = "";
+        }
+    });
+
+    // Description validation
+    const descriptionInput = document.getElementById("description");
+    descriptionInput.addEventListener("input", function(event) {
+        const maxLength = 5000;
+        const currentLength = event.target.value.length;
+        const errorElement = descriptionInput.nextElementSibling;
+
+        if (currentLength > maxLength) {
+            descriptionInput.classList.add("is-invalid");
+            errorElement.textContent = `Description must not exceed ${maxLength} characters. Current length: ${currentLength}`;
+        } else {
+            descriptionInput.classList.remove("is-invalid");
+            descriptionInput.classList.add("is-valid");
+            errorElement.textContent = "";
+        }
+    });
+
 
     //Goal Amount validation
     document.getElementById("goalAmount").addEventListener("input", function(event) {
@@ -123,22 +167,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // New Title validation
-    const titleInput = document.getElementById("title");
-    titleInput.addEventListener("input", function(event) {
-        const length = event.target.value.length;
-        const errorElement = document.getElementById("titleLengthError");
-
-        if (length < 2 || length > 255) {
-            titleInput.classList.add("is-invalid");
-            errorElement.textContent = `Title must be between 2 and 255 characters. Current length: ${length}`;
-        } else {
-            titleInput.classList.remove("is-invalid");
-            titleInput.classList.add("is-valid");
-            errorElement.textContent = "";
-        }
-    });
-
     //Bootstrap Forms validation
     (() => {
         'use strict'
@@ -146,21 +174,32 @@ document.addEventListener("DOMContentLoaded", function() {
 
         Array.from(forms).forEach(form => {
             form.addEventListener('submit', event => {
-                if (!form.checkValidity() || !validateForm()) {
+                const submitErrorMessage = document.getElementById('submitErrorMessage');
+                if (!form.checkValidity() || !window.validateAddress() || !validateDates()) {
                     event.preventDefault()
                     event.stopPropagation()
+
+                    // Display error message
+                    submitErrorMessage.style.display = 'block';
+                    // Hide the error message after 3 seconds
+                    setTimeout(() => {
+                        submitErrorMessage.style.display = 'none';
+                    }, 3000);
+                } else {
+                    // Hide error message if form is valid
+                    submitErrorMessage.style.display = 'none';
                 }
                 form.classList.add('was-validated')
             }, false)
         })
     })();
 
-    window.validateForm = function() {
-        if (!window.validateAddress()) {
-            alert('Please ensure the address is correctly validated before submitting.');
-            return false;
-        }
-        return true;
-    }
+    // window.validateForm = function() {
+    //     if (!window.validateAddress()) {
+    //         alert('Please ensure the address is correctly validated before submitting.');
+    //         return false;
+    //     }
+    //     return true;
+    // }
 
 });
