@@ -105,6 +105,7 @@
                            th:href="@{/donate-now/{id}(id=${campaign.id}, page=${page})}">Donate Now</a>
                         <a th:unless="${isGuest || (isUser && currentUserId != campaign.userAccount.id)}"
                            th:href="@{/edit_campaign/{id}(id=${campaign.id}, page=${page})}"
+                           th:classappend="${#lists.contains({'PENDING', 'FROZEN', 'INACTIVE', 'COMPLETED', 'DECLINED'}, campaign.status.name())} ? 'disabled'"
                            class="btn btn-outline-secondary btn-sm rounded-1">Edit Campaign</a>
                     </div>
                 </div>

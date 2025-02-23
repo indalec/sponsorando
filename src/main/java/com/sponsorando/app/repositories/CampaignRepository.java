@@ -6,10 +6,12 @@ import com.sponsorando.app.models.UserAccount;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -90,6 +92,12 @@ public interface CampaignRepository extends JpaRepository<Campaign, Long> {
             "ORDER BY donorCount DESC")
     List<Campaign> findActiveCampaignsWithMostDonors(@Param("status") CampaignStatus status, Pageable pageable);
 
-
+    @Modifying
+    @Query("UPDATE Campaign c SET c.status = :newStatus, c.updatedAt = :now " +
+            "WHERE c.status = :currentStatus AND c.endDate < :now")
+    int updateExpiredCampaigns(@Param("currentStatus") CampaignStatus currentStatus,
+                                 @Param("newStatus") CampaignStatus newStatus,
+                                 @Param("now") LocalDateTime now,
+                                 @Param("batchSize") int batchSize);
 
 }
