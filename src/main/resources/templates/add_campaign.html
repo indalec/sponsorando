@@ -25,13 +25,15 @@
         <!-- Campaign Details -->
         <div class="mb-3">
             <label for="title" class="form-label">Title</label>
-            <input type="text" class="form-control" id="title" name="title" required>
-            <div class="invalid-feedback">Please enter a title for your campaign.</div>
+            <input type="text" class="form-control" id="title" name="title" minlength="2" maxlength="255" required>
+            <div class="invalid-feedback" id="titleLengthError">
+                Please enter a title between 2 and 255 characters.
+            </div>
         </div>
 
         <div class="mb-3">
             <label for="description" class="form-label">Description</label>
-            <textarea class="form-control" id="description" rows="3" name="description" required></textarea>
+            <textarea class="form-control" id="description" rows="3" name="description" maxlength="5000" required></textarea>
             <div class="invalid-feedback">Please enter a description of your campaign.</div>
         </div>
 

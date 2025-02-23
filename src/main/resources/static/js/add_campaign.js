@@ -123,6 +123,22 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
+    // New Title validation
+    const titleInput = document.getElementById("title");
+    titleInput.addEventListener("input", function(event) {
+        const length = event.target.value.length;
+        const errorElement = document.getElementById("titleLengthError");
+
+        if (length < 2 || length > 255) {
+            titleInput.classList.add("is-invalid");
+            errorElement.textContent = `Title must be between 2 and 255 characters. Current length: ${length}`;
+        } else {
+            titleInput.classList.remove("is-invalid");
+            titleInput.classList.add("is-valid");
+            errorElement.textContent = "";
+        }
+    });
+
     //Bootstrap Forms validation
     (() => {
         'use strict'
@@ -130,7 +146,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         Array.from(forms).forEach(form => {
             form.addEventListener('submit', event => {
-                if (!form.checkValidity() || !validateForm()) { // Added validateForm
+                if (!form.checkValidity() || !validateForm()) {
                     event.preventDefault()
                     event.stopPropagation()
                 }
