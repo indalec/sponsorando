@@ -14,18 +14,21 @@
     <h2 class="text-center">Sign Up for Sponsorando</h2>
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <form th:action="@{/signup}" method="POST" enctype="multipart/form-data">
+            <form th:action="@{/signup}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                 <div class="mb-3">
                     <label for="name" class="form-label">Full Name</label>
-                    <input type="text" class="form-control" id="name" name="name" required>
+                    <input type="text" class="form-control" id="name" name="name" required minlength="2" maxlength="50">
+                    <div id="nameError" class="invalid-feedback">Please enter a valid name (2-50 characters).</div>
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email Address</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
+                    <input type="email" class="form-control" id="email" name="email" required placeholder="Enter your email">
+                    <div id="emailError" class="invalid-feedback">Please enter a valid email address.</div>
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
                     <input type="password" class="form-control" id="password" name="password" minlength="8" maxlength="50" required>
+                    <div id="passwordError" class="invalid-feedback">Password must be at least 8 characters.</div>
                 </div>
                 <!--<div class="mb-3">
                     <label for="image" class="form-label">Upload Image</label>
