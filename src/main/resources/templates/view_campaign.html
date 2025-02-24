@@ -98,7 +98,13 @@
                         <div th:unless="${isGuest || (isUser && currentUserId != campaign.userAccount.id)}"
                              class="d-flex flex-column align-items-center mx-3">
                             <small class="mb-2">Current Status</small>
-                            <span class="badge bg-primary" th:text="${campaign.status}"></span>
+                            <span th:class="'badge ' +
+                                    (${campaign.status.name() == 'DRAFT'} ? 'bg-secondary' :
+                                    (${campaign.status.name() == 'PENDING'} ? 'bg-warning' :
+                                    (${campaign.status.name() == 'ACTIVE'} ? 'bg-success' :
+                                    (${campaign.status.name() == 'INACTIVE'} ? 'bg-danger' :
+                                    (${campaign.status.name() == 'FROZEN'} ? 'bg-light text-dark' :
+                                    (${campaign.status.name() == 'COMPLETED'} ? 'bg-primary' : 'bg-dark'))))))" th:text="${campaign.status}"></span>
                         </div>
                         <a th:unless="${(isUser && currentUserId == campaign.userAccount.id) || isAdmin}"
                            class="btn btn-outline-primary btn-sm rounded-1 me-1"
