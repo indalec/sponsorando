@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 // Email format validation
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+$/;
 
     if (emailInput) {
         emailInput.addEventListener("blur", function () {
