@@ -95,20 +95,35 @@
                         <a th:unless="${source}" th:href="@{/discover-campaigns(page=${page})}"
                            class="btn btn-outline-secondary btn-sm rounded-1">Go Back</a>
 
-                        <div th:unless="${isGuest || (isUser && currentUserId != campaign.userAccount.id)}"
-                             class="d-flex flex-column align-items-center mx-3">
-                            <small class="mb-2">Current Status</small>
-                            <span th:class="'badge ' +
+                        <a th:if="${(currentRole == 'ROLE_USER' and campaign.status.name() == 'DRAFT') or (currentRole == 'ROLE_ADMIN' and campaign.status.name() == 'PENDING')}"
+                           th:class="'btn btn-outline-success btn-sm rounded-1'"
+                           th:href="${currentRole == 'ROLE_ADMIN'} ? @{/validate_campaign/{id}(id=${campaign.id}, page=${currentPage}, action='approve')} : @{/request_approval_campaign/{id}(id=${campaign.id}, page=${currentPage})}"
+                           th:text="${currentRole == 'ROLE_ADMIN'} ? 'Approve' : 'Request Approval'">
+                        </a>
+
+                        <div class="d-flex flex-column flex-sm-row justify-content-center align-items-center gap-2 mt-2">
+                            <div th:unless="${isGuest || (isUser && currentUserId != campaign.userAccount.id)}"
+                                 class="d-flex flex-column align-items-center mx-3">
+                                <small class="mb-2">Current Status</small>
+                                <span th:class="'badge ' +
                                     (${campaign.status.name() == 'DRAFT'} ? 'bg-secondary' :
                                     (${campaign.status.name() == 'PENDING'} ? 'bg-warning' :
                                     (${campaign.status.name() == 'ACTIVE'} ? 'bg-success' :
                                     (${campaign.status.name() == 'INACTIVE'} ? 'bg-danger' :
                                     (${campaign.status.name() == 'FROZEN'} ? 'bg-light text-dark' :
                                     (${campaign.status.name() == 'COMPLETED'} ? 'bg-primary' : 'bg-dark'))))))" th:text="${campaign.status}"></span>
+                            </div>
+                            <a th:unless="${(isUser && currentUserId == campaign.userAccount.id) || isAdmin}"
+                               class="btn btn-outline-primary btn-sm rounded-1 me-1"
+                               th:href="@{/donate-now/{id}(id=${campaign.id}, page=${page})}">Donate Now</a>
                         </div>
-                        <a th:unless="${(isUser && currentUserId == campaign.userAccount.id) || isAdmin}"
-                           class="btn btn-outline-primary btn-sm rounded-1 me-1"
-                           th:href="@{/donate-now/{id}(id=${campaign.id}, page=${page})}">Donate Now</a>
+
+                        <a th:if="${(currentRole == 'ROLE_ADMIN' and campaign.status.name() == 'PENDING')}"
+                           th:class="'btn btn-outline-danger btn-sm rounded-1'"
+                           th:href="@{/validate_campaign/{id}(id=${campaign.id}, page=${currentPage}, action='decline')}">
+                            Decline
+                        </a>
+
                         <a th:unless="${isGuest || (isUser && currentUserId != campaign.userAccount.id)}"
                            th:href="@{/edit_campaign/{id}(id=${campaign.id}, page=${page})}"
                            th:classappend="${#lists.contains({'PENDING', 'FROZEN', 'INACTIVE', 'COMPLETED', 'DECLINED'}, campaign.status.name())} ? 'disabled'"

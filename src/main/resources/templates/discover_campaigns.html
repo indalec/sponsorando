@@ -81,6 +81,9 @@
                                th:if="${campaign.showLocation}"
                                th:text="${#strings.abbreviate(campaign.address.street + ', ' + campaign.address.number + ', ' + campaign.address.city + ', ' + campaign.address.country + ', ' + campaign.address.postcode, 50)}"></small>
 
+                        <div th:if="${username == campaign.UserAccount.email}" class="d-flex flex-column flex-sm-row justify-content-center align-items-center gap-2 mt-1 mb-2">
+                                <span class="badge bg-light text-dark me-1 mb-1" th:text="${campaign.UserAccount.name + '''s campaign'}"></span>
+                        </div>
                     </div>
                 </div>
             </a>
