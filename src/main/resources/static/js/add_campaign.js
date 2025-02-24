@@ -1,183 +1,205 @@
+
 document.addEventListener("DOMContentLoaded", function() {
-        const fields = ["inputStreet", "inputNumber", "inputCity", "inputPostcode", "inputCountry"];
-        const addressInput = document.getElementById("address");
-        const suggestionsList = document.getElementById("suggestions");
-        let manualInput = false;  // Flag to check if user is manually entering address
-        let map = L.map('map').setView([0, 0], 2);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
+    const now = new Date();
 
-        let marker;
+    function roundToNearestFiveMinutes(date) {
+        const coeff = 1000 * 60 * 5;
+        return new Date(Math.ceil(date.getTime() / coeff) * coeff);
+    }
 
-        function updateMap(lat, lon) {
-            if (marker) map.removeLayer(marker);
-            marker = L.marker([lat, lon]).addTo(map);
-            map.setView([lat, lon], 13);
-            document.getElementById("latitude").value = lat;
-            document.getElementById("longitude").value = lon;
-        }
+    const roundedNow = roundToNearestFiveMinutes(now);
 
-        async function validateAddress() {
-            if (manualInput) return; // If user manually enters address, don't override it
+    const startDateInput = document.getElementById("startDate");
+    const endDateInput = document.getElementById("endDate");
 
-            let address = fields.map(id => document.getElementById(id).value).filter(val => val).join(", ");
-            if (address.length < 5) return;
+    function getOneHourLater(date = new Date()) {
+        const later = new Date(date.getTime() + 60 * 60 * 1000);
+        return roundToNearestFiveMinutes(later);
+    }
 
-            let response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&addressdetails=1`);
-            let data = await response.json();
+    const startDatePicker = flatpickr("#startDate", {
+        enableTime: true,
+        dateFormat: "d/m/Y H:i",
+        time_24hr: true,
+        minDate: getOneHourLater(),
+        defaultDate: getOneHourLater(),
+        minuteIncrement: 5,
+        onChange: function (selectedDates, dateStr, instance) {
+            endDatePicker.set('minDate', dateStr);
+            const minEndTime = new Date(selectedDates[0]);
+            minEndTime.setHours(minEndTime.getHours() + 1);
+            endDatePicker.set('minTime', minEndTime);
 
-            if (data.length > 0) {
-                updateMap(data[0].lat, data[0].lon);
+            if (endDatePicker.selectedDates[0] <= selectedDates[0]) {
+                endDatePicker.setDate(minEndTime);
             }
         }
+    });
 
-        addressInput.addEventListener("input", async function() {
-            let query = this.value.trim();
-            if (query.length < 3) return;
-
-            let response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}&addressdetails=1`);
-            let data = await response.json();
-            suggestionsList.innerHTML = "";
-
-            if (data.length === 0) return;
-
-            data.forEach(place => {
-                let li = document.createElement("li");
-                li.textContent = place.display_name;
-                li.classList.add("list-group-item");
-                li.onclick = () => {
-                    manualInput = false; // Reset manual input mode
-                    addressInput.value = place.display_name;
-                    suggestionsList.innerHTML = "";
-
-                    // Autofill structured address fields
-                    document.getElementById("inputStreet").value = place.address.road || "";
-                    document.getElementById("inputNumber").value = place.address.house_number || "";
-                    document.getElementById("inputCity").value = place.address.city || place.address.town || place.address.village || "";
-                    document.getElementById("inputPostcode").value = place.address.postcode || "";
-                    document.getElementById("inputCountry").value = place.address.country || "";
-
-                    updateMap(place.lat, place.lon);
-                };
-                suggestionsList.appendChild(li);
-            });
-        });
-
-        // Initialize Flatpickr for start date picker
-        const startDatePicker = flatpickr("#startDate", {
-            enableTime: true,
-            dateFormat: "d/m/Y H:i",
-            time_24hr: true,
-            minDate: "today",
-            onChange: function(selectedDates, dateStr, instance) {
-                endDatePicker.set('minDate', dateStr);
-            }
-        });
-
-        // Initialize Flatpickr for end date picker
-        const endDatePicker = flatpickr("#endDate", {
-            enableTime: true,
-            dateFormat: "d/m/Y H:i",
-            time_24hr: true,
-            minDate: "today"
-        });
-
-        const form = document.querySelector('form');
-        const startDateInput = document.getElementById("startDate");
-        const endDateInput = document.getElementById("endDate");
-
-        function validateDates() {
-            const startDate = startDatePicker.selectedDates[0];
-            const endDate = endDatePicker.selectedDates[0];
-
-            if (!startDate || !endDate) {
-                return false;
-            }
-
-            if (endDate <= startDate) {
-                endDateInput.classList.add("is-invalid");
-                endDateInput.nextElementSibling.textContent = "End date must be later than the start date.";
-                return false;
-            } else {
-                endDateInput.classList.remove("is-invalid");
-                return true;
+    const endDatePicker = flatpickr("#endDate", {
+        enableTime: true,
+        dateFormat: "d/m/Y H:i",
+        time_24hr: true,
+        minDate: getOneHourLater(getOneHourLater()),
+        defaultDate: getOneHourLater(getOneHourLater()),
+        minuteIncrement: 5,
+        onChange: function (selectedDates, dateStr, instance) {
+            if (selectedDates[0] <= startDatePicker.selectedDates[0]) {
+                instance.setDate(getOneHourLater(startDatePicker.selectedDates[0]), true);
             }
         }
+    });
 
-        endDateInput.addEventListener('change', validateDates);
+    function isAtLeastOneHourInFuture(date) {
+        const now = new Date();
+        const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
+        return date >= oneHourFromNow;
+    }
 
-        form.addEventListener('submit', function(event) {
-            if (!startDatePicker.selectedDates[0]) {
-                startDateInput.classList.add("is-invalid");
-                event.preventDefault();
-                event.stopPropagation();
-            } else {
-                startDateInput.classList.remove("is-invalid");
-            }
+    function validateDates() {
+        const startDate = startDatePicker.selectedDates[0];
+        const endDate = endDatePicker.selectedDates[0];
 
-            if (!endDatePicker.selectedDates[0]) {
-                endDateInput.classList.add("is-invalid");
-                event.preventDefault();
-                event.stopPropagation();
-            } else if (!validateDates()) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-        });
+        if (!startDate || !endDate) {
+            return false;
+        }
 
-        document.getElementById("goalAmount").addEventListener("input", function (event) {
-            let inputField = event.target;
-            let value = inputField.value.trim();
-            let errorMessage = "";
+        if (!isAtLeastOneHourInFuture(startDate)) {
+            startDateInput.classList.add("is-invalid");
+            startDateInput.nextElementSibling.textContent = "Start date must be at least 1 hour in the future from now.";
+            return false;
+        }
 
-            // Ensure the value is a valid currency format
-            if (value === "") {
-                errorMessage = "Please enter the amount you want to raise for your campaign.";
-            } else if (!/^\d+(\.\d{1,2})?$/.test(value)) {
-                errorMessage = "Please enter a valid number in currency format (e.g., 10.00).";
-            } else if (parseFloat(value) < 10) {
-                errorMessage = "The minimum goal amount must be at least 10.";
-            } else if (parseFloat(value) <= 0) {
-                errorMessage = "Please enter a positive amount greater than zero.";
-            }
+        if (endDate <= startDate) {
+            endDateInput.classList.add("is-invalid");
+            endDateInput.nextElementSibling.textContent = "End date must be later than the start date.";
+            return false;
+        } else {
+            endDateInput.classList.remove("is-invalid");
+            return true;
+        }
+    }
 
-            // Display or remove error message
-            if (errorMessage) {
-                inputField.classList.add("is-invalid");
-                inputField.nextElementSibling.textContent = errorMessage; // Set the error message
-            } else {
-                inputField.classList.remove("is-invalid");
-                inputField.classList.add("is-valid");
-                inputField.nextElementSibling.textContent = ""; // Remove error message
-            }
-        });
+    endDateInput.addEventListener('change', validateDates);
 
-        (() => {
-            'use strict'
+    const form = document.querySelector('form');
 
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            const forms = document.querySelectorAll('.needs-validation')
 
-            // Loop over them and prevent submission
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
+    form.addEventListener('submit', function(event) {
+        if (!startDatePicker.selectedDates[0]) {
+            startDateInput.classList.add("is-invalid");
+            event.preventDefault();
+            event.stopPropagation();
+        } else {
+            startDateInput.classList.remove("is-invalid");
+        }
 
-                    form.classList.add('was-validated')
-                }, false)
-            })
-        })();
+        if (!endDatePicker.selectedDates[0]) {
+            endDateInput.classList.add("is-invalid");
+            event.preventDefault();
+            event.stopPropagation();
+        } else if (!validateDates()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    });
 
-        // Add event listeners for manual address input
-        fields.forEach(field => {
-            document.getElementById(field).addEventListener("input", () => {
-                manualInput = true;
-                validateAddress();
-            });
-        });
+    // Title validation
+    const titleInput = document.getElementById("title");
+    titleInput.addEventListener("input", function(event) {
+        const minLength = 2;
+        const maxLength = 255;
+        const currentLength = event.target.value.length;
+        const errorElement = document.getElementById("titleLengthError");
+
+        if (currentLength < minLength || currentLength > maxLength) {
+            titleInput.classList.add("is-invalid");
+            errorElement.textContent = `Title must be between ${minLength} and ${maxLength} characters. Current length: ${currentLength}`;
+        } else {
+            titleInput.classList.remove("is-invalid");
+            titleInput.classList.add("is-valid");
+            errorElement.textContent = "";
+        }
+    });
+
+    // Description validation
+    const descriptionInput = document.getElementById("description");
+    descriptionInput.addEventListener("input", function(event) {
+        const maxLength = 5000;
+        const currentLength = event.target.value.length;
+        const errorElement = descriptionInput.nextElementSibling;
+
+        if (currentLength > maxLength) {
+            descriptionInput.classList.add("is-invalid");
+            errorElement.textContent = `Description must not exceed ${maxLength} characters. Current length: ${currentLength}`;
+        } else {
+            descriptionInput.classList.remove("is-invalid");
+            descriptionInput.classList.add("is-valid");
+            errorElement.textContent = "";
+        }
+    });
+
+
+    //Goal Amount validation
+    document.getElementById("goalAmount").addEventListener("input", function(event) {
+        let inputField = event.target;
+        let value = inputField.value.trim();
+        let errorMessage = "";
+
+        if (value === "") {
+            errorMessage = "Please enter the amount you want to raise for your campaign.";
+        } else if (!/^\d+(\.\d{1,2})?$/.test(value)) {
+            errorMessage = "Please enter a valid number in currency format (e.g., 10.00).";
+        } else if (parseFloat(value) < 10) {
+            errorMessage = "The minimum goal amount must be at least 10.";
+        } else if (parseFloat(value) <= 0) {
+            errorMessage = "Please enter a positive amount greater than zero.";
+        }
+
+        if (errorMessage) {
+            inputField.classList.add("is-invalid");
+            inputField.nextElementSibling.textContent = errorMessage;
+        } else {
+            inputField.classList.remove("is-invalid");
+            inputField.classList.add("is-valid");
+            inputField.nextElementSibling.textContent = "";
+        }
+    });
+
+    //Bootstrap Forms validation
+    (() => {
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation')
+
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                const submitErrorMessage = document.getElementById('submitErrorMessage');
+                if (!form.checkValidity() || !window.validateAddress() || !validateDates()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+
+                    // Display error message
+                    submitErrorMessage.style.display = 'block';
+                    // Hide the error message after 3 seconds
+                    setTimeout(() => {
+                        submitErrorMessage.style.display = 'none';
+                    }, 3000);
+                } else {
+                    // Hide error message if form is valid
+                    submitErrorMessage.style.display = 'none';
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })();
+
+    // window.validateForm = function() {
+    //     if (!window.validateAddress()) {
+    //         alert('Please ensure the address is correctly validated before submitting.');
+    //         return false;
+    //     }
+    //     return true;
+    // }
+
 });

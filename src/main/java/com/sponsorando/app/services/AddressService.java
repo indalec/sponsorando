@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class AddressService {
@@ -15,7 +16,29 @@ public class AddressService {
     @Autowired
     private AddressRepository addressRepository;
 
+
     public Address createAddress(CampaignForm campaignForm) {
+
+        List<Address> existingAddresses = addressRepository.findByStreetAndNumberAndCityAndPostcodeAndCountry(
+                campaignForm.getStreet(),
+                campaignForm.getNumber(),
+                campaignForm.getCity(),
+                campaignForm.getPostcode(),
+                campaignForm.getCountry()
+        );
+
+        if (!existingAddresses.isEmpty()) {
+            for(Address address : existingAddresses){
+                if (address.getStreet().equals(campaignForm.getStreet()) &&
+                    address.getNumber().equals(campaignForm.getNumber()) &&
+                    address.getCity().equals(campaignForm.getCity()) &&
+                    address.getPostcode().equals(campaignForm.getPostcode()) &&
+                    address.getCountry().equals(campaignForm.getCountry())) {
+
+                    return existingAddresses.getFirst();
+                }
+            }
+        }
 
         Address address = new Address();
         address.setStreet(campaignForm.getStreet());
@@ -27,8 +50,9 @@ public class AddressService {
         address.setLongitude(campaignForm.getLongitude());
 
         return addressRepository.save(address);
-
     }
+
+
 
     public Address updateAddress(CampaignForm updatedCampaignDetails, Campaign existingCampaign) {
         Address address = new Address();

@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         // Populate user information
                         document.getElementById("panelUserName").innerText = data.username;
                         document.getElementById("panelUserEmail").innerText = data.email;
-                        document.getElementById("panelUserRole").innerText = data.role.name;
+                        document.getElementById("panelUserRole").innerText = data.role;
                         document.getElementById("panelUserStatus").innerText = data.enabled ? 'ACTIVE' : 'SUSPENDED';
                         document.getElementById("panelUserId").value = data.id;
 

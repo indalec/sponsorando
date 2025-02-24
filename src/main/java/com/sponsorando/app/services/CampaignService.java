@@ -52,7 +52,7 @@ public class CampaignService {
         campaign.setCollectedAmount(0.0);
         List<CampaignCategory> categories = campaignForm.getCategories();
         campaign.setCategories(categories);
-        campaign.setShowLocation(Boolean.TRUE);
+        campaign.setShowLocation(campaignForm.getShowLocation());
 
         if (userAccount != null) {
             campaign.setUserAccount(userAccount);

@@ -38,7 +38,7 @@ public class Campaign {
     @Enumerated(EnumType.STRING)
     private CampaignStatus status = CampaignStatus.DRAFT;
 
-    private Boolean showLocation;
+    private boolean showLocation;
 
     @ManyToOne
     @JoinColumn(name = "address_id")
