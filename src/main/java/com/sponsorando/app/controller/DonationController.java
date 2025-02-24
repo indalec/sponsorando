@@ -183,6 +183,12 @@ public class DonationController {
             if (donationOptional.isPresent()) {
                 Donation donation = donationOptional.get();
 
+                Optional<Payment> paymentOptional = paymentService.getPaymentById(donation.getId());
+                if (paymentOptional.isPresent()) {
+                    Payment payment = paymentOptional.get();
+                    model.addAttribute("payment", payment);
+                }
+
                 if (!donation.getUserAccount().getEmail().equals(userEmail) && !isAdmin) {
                     redirectAttributes.addFlashAttribute("errorMessage", "This donation is not available for viewing.");
                     return "redirect:/donations?page=" + page;

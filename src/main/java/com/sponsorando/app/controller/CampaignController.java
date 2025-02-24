@@ -42,7 +42,8 @@ public class CampaignController {
     public String discoverCampaigns(Model model,
                                     @RequestParam(name = "page", defaultValue = "0") int pageNumber,
                                     @RequestParam(name = "searchQuery", required = false) String searchQuery,
-                                    @RequestParam(name = "sortBy", defaultValue = "mostUrgent") String sortBy) {
+                                    @RequestParam(name = "sortBy", defaultValue = "mostUrgent") String sortBy
+    ) {
 
         int pageSize = 9;
         Page<Campaign> page;

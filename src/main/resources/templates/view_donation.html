@@ -29,6 +29,21 @@
                     </div>
 
                     <div class="mb-4">
+                        <strong>Transaction Fee:</strong>
+                        <span th:text="${payment.transactionFee + ' ' + donation.currency.symbol}"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <strong>Service Fee:</strong>
+                        <span th:text="${payment.serviceFee + ' ' + donation.currency.symbol}"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <strong>Net Amount:</strong>
+                        <span th:text="${payment.netAmount + ' ' + donation.currency.symbol}"></span>
+                    </div>
+
+                    <div class="mb-4">
                         <strong>Donation Date:</strong>
                         <span th:text="${#temporals.format(donation.donationDate, 'dd-MM-yyyy HH:mm a')}"></span>
                     </div>
