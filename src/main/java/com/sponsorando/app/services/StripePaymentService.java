@@ -10,6 +10,7 @@ import com.sponsorando.app.models.PaymentProvider;
 import com.sponsorando.app.models.PaymentStatus;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -18,14 +19,18 @@ import java.util.Map;
 @Service
 public class StripePaymentService {
 
-    @Value("${stripe.secret.key}")
-    private String stripeSecretKey;
+    private final String stripeSecretKey;
 
+    public StripePaymentService(@Value("${stripe.secret.key}") String stripeSecretKey) {
+        this.stripeSecretKey = stripeSecretKey;
+    }
+
+    @Transactional
     public Payment processPayment(String token, Donation donation) {
         Stripe.apiKey = stripeSecretKey;
         try {
             Map<String, Object> params = new HashMap<>();
-            params.put("amount", (int) (donation.getAmount() * 100)); // Convert to smallest currency unit
+            params.put("amount", (int) (donation.getAmount() * 100)); // Convert to the smallest currency unit
             params.put("currency", donation.getCurrency().getCode().toLowerCase());
             params.put("source", token);
 
@@ -35,7 +40,7 @@ public class StripePaymentService {
             payment.setDonation(donation);
             payment.setTransactionId(charge.getId());
             payment.setPaymentStatus(charge.getStatus().equalsIgnoreCase("succeeded") ? PaymentStatus.SUCCEEDED : PaymentStatus.FAILED);
-            payment.setGrossAmount(charge.getAmount().doubleValue() / 100); // Convert from smallest currency unit
+            payment.setGrossAmount(charge.getAmount().doubleValue() / 100); // Convert from the smallest currency unit
             payment.setCurrency(donation.getCurrency());
             payment.setPaymentProvider(PaymentProvider.STRIPE);
             payment.setPaymentMethod(charge.getPaymentMethod());
@@ -44,11 +49,11 @@ public class StripePaymentService {
 
             BalanceTransaction balanceTransaction = BalanceTransaction.retrieve(charge.getBalanceTransaction());
             if (balanceTransaction != null) {
-                double stripeFee = balanceTransaction.getFee() / 100.0; // Convert from smallest currency unit
+                double stripeFee = balanceTransaction.getFee() / 100.0; // Convert from the smallest currency unit
                 payment.setServiceFee(stripeFee);
 
                 // Net amount is already calculated by Stripe in the charge currency
-                double netAmount = balanceTransaction.getNet() / 100.0; // Convert from smallest currency unit
+                double netAmount = balanceTransaction.getNet() / 100.0; // Convert from the smallest currency unit
                 payment.setNetAmount(netAmount);
 
                 double transactionFee = Math.round((payment.getGrossAmount() - netAmount - stripeFee) * 100.0) / 100.0;

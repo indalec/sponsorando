@@ -89,16 +89,18 @@
                             <td class="text-center" th:text="${campaign.currency.code}"></td>
                             <td class="text-center" th:text="${campaign.collectedAmount}"></td>
                             <td class="text-center">
-                                <span th:class="'badge ' +
-                                    (${campaign.status.name() == 'DRAFT'} ? 'bg-secondary' :
-                                    (${campaign.status.name() == 'PENDING'} ? 'bg-warning' :
-                                    (${campaign.status.name() == 'ACTIVE'} ? 'bg-success' :
-                                    (${campaign.status.name() == 'INACTIVE'} ? 'bg-danger' :
-                                    (${campaign.status.name() == 'FROZEN'} ? 'bg-light text-dark' :
-                                    (${campaign.status.name() == 'COMPLETED'} ? 'bg-primary' : 'bg-dark'))))))"
-                                      th:text="${campaign.status}">
+                                <span th:class="|badge ${
+                                    campaign.status.name() == 'DRAFT' ? 'bg-secondary' :
+                                    campaign.status.name() == 'PENDING' ? 'bg-warning' :
+                                    campaign.status.name() == 'APPROVED' ? 'bg-info' :
+                                    campaign.status.name() == 'ACTIVE' ? 'bg-success' :
+                                    campaign.status.name() == 'INACTIVE' ? 'bg-danger' :
+                                    campaign.status.name() == 'FROZEN' ? 'bg-light text-dark' :
+                                    campaign.status.name() == 'COMPLETED' ? 'bg-primary' : 'bg-dark'
+                                }|" th:text="${campaign.status}">
                                 </span>
                             </td>
+
 
                             <td class="text-center">
                                 <a th:if="${currentRole == 'ROLE_ADMIN'}"
@@ -122,7 +124,7 @@
                                            th:href="@{/c/{slug}(slug=${campaign.slug}, page=${currentPage}, source='campaigns')}">View</a>
                                         <a class="btn btn-outline-secondary btn-sm rounded-1 me-1"
                                            th:href="@{/edit_campaign/{id}(id=${campaign.id},page=${currentPage})}"
-                                           th:classappend="${#lists.contains({'PENDING', 'FROZEN', 'INACTIVE', 'COMPLETED', 'DECLINED'}, campaign.status.name())} ? 'disabled'"
+                                           th:classappend="${#lists.contains({'PENDING', 'APPROVED', 'FROZEN', 'INACTIVE', 'COMPLETED', 'DECLINED'}, campaign.status.name())} ? 'disabled'"
                                            th:attr="aria-disabled=${campaign.status.name() == 'PENDING'}">
                                             Edit
                                         </a>

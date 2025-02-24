@@ -14,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -73,7 +72,11 @@ public class PaymentService {
             logger.info("Payment processed and saved successfully for donation ID: {}", donation.getId());
 
             if (payment.getPaymentStatus() == PaymentStatus.SUCCEEDED) {
-                campaignService.updateCampaignCollectedAmount(donation.getCampaign().getId(), payment.getNetConvertedToCampaignCurrency());
+                boolean updateSuccess = campaignService.updateCampaignCollectedAmount(donation.getCampaign().getId(), payment.getNetConvertedToCampaignCurrency());
+                if (!updateSuccess) {
+                    logger.error("Failed to update campaign collected amount for donation ID: {}. Rolling back transaction.", donation.getId());
+                    throw new RuntimeException("Failed to update campaign collected amount");
+                }
             } else {
                 logger.warn("Payment failed for donation ID: {}. Deleting donation.", donation.getId());
                 donationService.deleteDonation(donation.getId());
@@ -97,6 +100,12 @@ public class PaymentService {
     @Transactional(readOnly = true)
     public Optional<Payment> getPaymentById(Long id) {
         logger.info("Fetching payment with ID: {}", id);
+        Optional<Payment> payment = paymentRepository.findById(id);
+        if (payment.isPresent()) {
+            logger.info("Payment found: {}", payment.get());
+        } else {
+            logger.warn("No payment found with ID: {}", id);
+        }
         return paymentRepository.findById(id);
     }
 }

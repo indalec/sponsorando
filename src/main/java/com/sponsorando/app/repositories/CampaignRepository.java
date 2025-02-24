@@ -100,4 +100,11 @@ public interface CampaignRepository extends JpaRepository<Campaign, Long> {
                                  @Param("now") LocalDateTime now,
                                  @Param("batchSize") int batchSize);
 
+    @Modifying
+    @Query("UPDATE Campaign c SET c.status = :newStatus, c.updatedAt = :now " +
+            "WHERE c.status = :currentStatus AND c.startDate <= :now")
+    int activateApprovedCampaigns(@Param("currentStatus") CampaignStatus currentStatus,
+                                  @Param("newStatus") CampaignStatus newStatus,
+                                  @Param("now") LocalDateTime now,
+                                  @Param("batchSize") int batchSize);
 }

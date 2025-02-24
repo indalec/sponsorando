@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 
 @Service
 public class CampaignSchedulerService {
 
     private static final Logger logger = LoggerFactory.getLogger(CampaignSchedulerService.class);
-    private static final ZoneOffset UTC_ZONE = ZoneOffset.UTC;
+    private static final ZoneId SYSTEM_ZONE = ZoneId.systemDefault();
 
     public static final String BATCH_SIZE = "app.scheduler.expired.campaigns.batch.size";
     public static final String FIXED_RATE = "app.scheduler.expired.campaigns.rate";
@@ -42,8 +42,8 @@ public class CampaignSchedulerService {
     @Scheduled(initialDelayString = "${" + INITIAL_DELAY + ":60000}",
             fixedRateString = "${" + FIXED_RATE + ":60000}")
     @Transactional
-    public void checkAndUpdateCampaignStatus() {
-        LocalDateTime now = LocalDateTime.now(UTC_ZONE);
+    public void updateExpiredCampaigns() {
+        LocalDateTime now = LocalDateTime.now(SYSTEM_ZONE);
         int totalUpdated = 0;
         int updatedCount;
 
@@ -53,6 +53,23 @@ public class CampaignSchedulerService {
             totalUpdated += updatedCount;
         } while (updatedCount == batchSize);
 
-        logger.info("Updated {} expired campaigns", totalUpdated);
+        logger.info("SCHEDULER: Completed {} expired campaigns", totalUpdated);
+    }
+
+    @Scheduled(initialDelayString = "${" + INITIAL_DELAY + ":60000}",
+            fixedRateString = "${" + FIXED_RATE + ":60000}")
+    @Transactional
+    public void activateApprovedCampaigns() {
+        LocalDateTime now = LocalDateTime.now(SYSTEM_ZONE);
+        int totalActivated = 0;
+        int activatedCount;
+
+        do {
+            activatedCount = campaignRepository.activateApprovedCampaigns(
+                    CampaignStatus.APPROVED, CampaignStatus.ACTIVE, now, batchSize);
+            totalActivated += activatedCount;
+        } while (activatedCount == batchSize);
+
+        logger.info("SCHEDULER: Activated {} approved campaigns", totalActivated);
     }
 }

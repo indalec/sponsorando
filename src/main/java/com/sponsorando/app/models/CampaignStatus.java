@@ -4,6 +4,7 @@ public enum CampaignStatus {
 
     DRAFT,
     PENDING,
+    APPROVED,
     DECLINED,
     ACTIVE,
     INACTIVE,

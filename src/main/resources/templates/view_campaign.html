@@ -105,13 +105,15 @@
                             <div th:unless="${isGuest || (isUser && currentUserId != campaign.userAccount.id)}"
                                  class="d-flex flex-column align-items-center mx-3">
                                 <small class="mb-2">Current Status</small>
-                                <span th:class="'badge ' +
-                                    (${campaign.status.name() == 'DRAFT'} ? 'bg-secondary' :
-                                    (${campaign.status.name() == 'PENDING'} ? 'bg-warning' :
-                                    (${campaign.status.name() == 'ACTIVE'} ? 'bg-success' :
-                                    (${campaign.status.name() == 'INACTIVE'} ? 'bg-danger' :
-                                    (${campaign.status.name() == 'FROZEN'} ? 'bg-light text-dark' :
-                                    (${campaign.status.name() == 'COMPLETED'} ? 'bg-primary' : 'bg-dark'))))))" th:text="${campaign.status}"></span>
+                                <span th:class="|badge ${
+                                    campaign.status.name() == 'DRAFT' ? 'bg-secondary' :
+                                    campaign.status.name() == 'PENDING' ? 'bg-warning' :
+                                    campaign.status.name() == 'APPROVED' ? 'bg-info' :
+                                    campaign.status.name() == 'ACTIVE' ? 'bg-success' :
+                                    campaign.status.name() == 'INACTIVE' ? 'bg-danger' :
+                                    campaign.status.name() == 'FROZEN' ? 'bg-light text-dark' :
+                                    campaign.status.name() == 'COMPLETED' ? 'bg-primary' : 'bg-dark'
+                                    }|" th:text="${campaign.status}"></span>
                             </div>
                             <a th:unless="${(isUser && currentUserId == campaign.userAccount.id) || isAdmin}"
                                class="btn btn-outline-primary btn-sm rounded-1 me-1"
@@ -126,7 +128,7 @@
 
                         <a th:unless="${isGuest || (isUser && currentUserId != campaign.userAccount.id)}"
                            th:href="@{/edit_campaign/{id}(id=${campaign.id}, page=${page})}"
-                           th:classappend="${#lists.contains({'PENDING', 'FROZEN', 'INACTIVE', 'COMPLETED', 'DECLINED'}, campaign.status.name())} ? 'disabled'"
+                           th:classappend="${#lists.contains({'PENDING', 'APPROVED', 'FROZEN', 'INACTIVE', 'COMPLETED', 'DECLINED'}, campaign.status.name())} ? 'disabled'"
                            class="btn btn-outline-secondary btn-sm rounded-1">Edit Campaign</a>
                     </div>
                 </div>

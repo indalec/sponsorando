@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class StripeController {
 
-    @Value("${stripe.public.key}")
-    private String stripePublicKey;
+    private final String stripePublicKey;
+
+    public StripeController( @Value("${stripe.public.key}")String stripePublicKey) {
+        this.stripePublicKey = stripePublicKey;
+    }
 
     @GetMapping("/api/stripe-public-key")
     public ResponseEntity<String> getStripePublicKey() {
