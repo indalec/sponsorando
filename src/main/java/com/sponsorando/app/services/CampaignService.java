@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +36,8 @@ public class CampaignService {
     @Autowired
     private AddressService addressService;
 
-    private static final Logger log = LoggerFactory.getLogger(CampaignService.class);
+    private static final Logger logger = LoggerFactory.getLogger(CampaignService.class);
+    private static final ZoneId SYSTEM_ZONE = ZoneId.systemDefault();
 
     @Transactional
     public Campaign createCampaign(CampaignForm campaignForm, String email) {
@@ -66,11 +68,13 @@ public class CampaignService {
         return null;
     }
 
+    @Transactional(readOnly = true)
     public Page<Campaign> getCampaigns(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return campaignRepository.findAll(pageable);
     }
 
+    @Transactional(readOnly = true)
     public Page<Campaign> getActiveCampaignsByTitleOrCategory(String searchQuery, String sortBy, int pageNumber, int pageSize) {
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize, getSortOrder(sortBy));
@@ -78,6 +82,7 @@ public class CampaignService {
                 CampaignStatus.ACTIVE, searchQuery, pageable, sortBy);
     }
 
+    @Transactional(readOnly = true)
     public Page<Campaign> getCampaignsByStatus(String sortBy, int pageNumber, int pageSize) {
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
@@ -95,11 +100,13 @@ public class CampaignService {
         };
     }
 
+    @Transactional(readOnly = true)
     public Page<Campaign> getCampaignsByUserEmail(String email, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return campaignRepository.findByUserAccountEmailAndStatusNot(email, CampaignStatus.INACTIVE, pageable);
     }
 
+    @Transactional(readOnly = true)
     public int getTotalPages(String email, String role, int pageSize) {
 
         long totalCampaigns;
@@ -158,6 +165,7 @@ public class CampaignService {
         }
     }
 
+    @Transactional
     public boolean updateCampaign(CampaignForm updatedCampaignDetails) {
         try {
 
@@ -189,18 +197,26 @@ public class CampaignService {
         }
     }
 
-    public Campaign updateCampaignCollectedAmount(Long id, Double netAmount) {
-        Campaign campaign = campaignRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Campaign not found with id: " + id));
+    @Transactional
+    public boolean updateCampaignCollectedAmount(Long id, Double netAmount) {
+        try {
+            Campaign campaign = campaignRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Campaign not found with id: " + id));
 
-        Double currentAmount = campaign.getCollectedAmount();
-        Double newAmount = (currentAmount != null ? currentAmount : 0) + netAmount;
-        campaign.setCollectedAmount(newAmount);
-        campaign.setUpdatedAt(LocalDateTime.now());
+            Double currentAmount = campaign.getCollectedAmount();
+            Double newAmount = (currentAmount != null ? currentAmount : 0) + netAmount;
+            campaign.setCollectedAmount(newAmount);
+            campaign.setUpdatedAt(LocalDateTime.now());
 
-        return campaignRepository.save(campaign);
+            campaignRepository.save(campaign);
+            return true;
+        } catch (Exception e) {
+            logger.error("Error updating campaign collected amount for ID: {}", id, e);
+            return false;
+        }
     }
 
+    @Transactional
     public boolean requestApprovalCampaign(Long campaignId, String userEmail) {
         Optional<Campaign> optionalCampaign = campaignRepository.findById(campaignId);
 
@@ -233,8 +249,11 @@ public class CampaignService {
 
             if (campaign.getStatus() == CampaignStatus.PENDING) {
                 if ("approve".equals(action)) {
-                    campaign.setStatus(CampaignStatus.ACTIVE);
-                    campaign.setUpdatedAt(LocalDateTime.now());
+                    if (campaign.getStartDate().isAfter(LocalDateTime.now(SYSTEM_ZONE))) {
+                        campaign.setStatus(CampaignStatus.APPROVED);
+                    } else {
+                        campaign.setStatus(CampaignStatus.ACTIVE);
+                    }
                 } else if ("decline".equals(action)) {
                     campaign.setStatus(CampaignStatus.DECLINED);
                     campaign.setUpdatedAt(LocalDateTime.now());
@@ -250,10 +269,11 @@ public class CampaignService {
         return false;
     }
 
+    @Transactional(readOnly = true)
     public List<CampaignCardDTO> getFeaturedCampaigns() {
         try {
 
-            log.info("In getFeaturedCampaigns");
+            logger.info("In getFeaturedCampaigns");
             List<Campaign> campaigns = campaignRepository.findActiveCampaignsWithMostDonors(
                     CampaignStatus.ACTIVE,
                     PageRequest.of(0, 6));
@@ -262,7 +282,7 @@ public class CampaignService {
                     .collect(Collectors.toList());
 
         } catch (Exception e) {
-            log.error("Error fetching featured campaigns", e);
+            logger.error("Error fetching featured campaigns", e);
             return Collections.emptyList();
         }
     }

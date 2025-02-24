@@ -302,9 +302,7 @@ public class CampaignController {
                 if ("approve".equals(action)) {
                     redirectAttributes.addFlashAttribute("successMessage", "Campaign approved successfully!");
                 } else if ("decline".equals(action)) {
-                    redirectAttributes.addFlashAttribute("errorMessage", "Campaign declined. Please review and update your campaign and try again.");
-                } else {
-                    redirectAttributes.addFlashAttribute("errorMessage", "Invalid action specified.");
+                    redirectAttributes.addFlashAttribute("errorMessage", "Campaign declined.");
                 }
             } else {
                 redirectAttributes.addFlashAttribute("errorMessage", "Failed to update campaign status.");
