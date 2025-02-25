@@ -26,14 +26,14 @@
 }
 
 #sponsorando-image {
-    display: block; /* Evita espacios extra en imágenes inline */
-    margin: 0 auto; /* Centra horizontalmente */
-    width: 80%; /* Ajusta el ancho */
-    max-width: 1000px; /* Límite opcional */
-    height: auto; /* Mantiene la proporción */
+    display: block;
+    margin: 0 auto;
+    width: 50%;
+    max-width: 1000px;
+    height: auto;
 }
 
-/* Alternating sections */
+
 .content-section:nth-child(even) {
     flex-direction: row-reverse;
     background: rgba(51, 200, 86, 0.10);
