@@ -15,6 +15,7 @@
     flex: 1;
     min-width: 300px;
     padding: 1rem;
+
 }
 
 .image-content img {
@@ -22,6 +23,14 @@
     height: auto;
     border-radius: 15px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+#sponsorando-image {
+    display: block; /* Evita espacios extra en imágenes inline */
+    margin: 0 auto; /* Centra horizontalmente */
+    width: 80%; /* Ajusta el ancho */
+    max-width: 1000px; /* Límite opcional */
+    height: auto; /* Mantiene la proporción */
 }
 
 /* Alternating sections */
