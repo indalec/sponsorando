@@ -1,28 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login - Sponsorando</title>
     <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
+    <link href="/css/login.css" type="text/css" rel="stylesheet">
 </head>
 
 <body>
 <header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}" class="container mb-4"></header>
-<div class="container flex-grow-1 mt-5">
-    <div id="showInfoMessage" th:if="${showInfoMessage}" class="alert alert-info d-flex align-items-center alert-dismissible fade show w-50 mx-auto" role="alert">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-info-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Info:">
-            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-        </svg>
-        <div>
-            <div th:text="${message}"></div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    </div>
-    <h2 class="text-center">Login to Sponsorando</h2>
-    <div class="row justify-content-center">
-        <div class="col-md-6">
+<div class="split-container">
+    <div class="left-section">
+        <div class="login-form">
+            <div id="showInfoMessage" th:if="${showInfoMessage}" class="alert alert-info d-flex align-items-center alert-dismissible fade show w-100" role="alert">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-info-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Info:">
+                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                </svg>
+                <div>
+                    <div th:text="${message}"></div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+
+            <h2 class="text-center mb-4">Login</h2>
             <form th:action="@{/login}" method="POST">
                 <input type="hidden" name="redirect" th:value="${param.redirect}" />
                 <div class="mb-3">
@@ -36,14 +38,25 @@
                 </div>
 
                 <div class="text-center">
-                    <button type="submit" class="btn btn-success">Login</button>
+                    <button type="submit" class="btn btn-success px-5">Login</button>
                 </div>
             </form>
+        </div>
+    </div>
+    <div class="right-section">
+        <div class="image-overlay">
+            <div class="overlay-content">
+                <img src="/images/title.svg" alt="Sponsorando Logo" class="overlay-logo">
+                <h1 class="overlay-title">Transforming the Future, Together</h1>
+                <p class="overlay-text">
+                    Enter our community committed to positive social change.
+                    Every login is a step towards a more supportive and sustainable world.
+                </p>
+            </div>
         </div>
     </div>
 </div>
 <footer th:replace="~{fragments/footer :: footerSection}" role="contentinfo" class="footer"></footer>
 <script src="/js/login.js"></script>
 </body>
-
 </html>

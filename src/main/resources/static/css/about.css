@@ -15,6 +15,7 @@
     flex: 1;
     min-width: 300px;
     padding: 1rem;
+
 }
 
 .image-content img {
@@ -24,14 +25,22 @@
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-/* Alternating sections */
+#sponsorando-image {
+    display: block;
+    margin: 0 auto;
+    width: 50%;
+    max-width: 1000px;
+    height: auto;
+}
+
+
 .content-section:nth-child(even) {
     flex-direction: row-reverse;
-    background: rgba(51, 200, 86, 0.10); /* Primary color with opacity */
+    background: rgba(51, 200, 86, 0.10);
 }
 
 .content-section:nth-child(odd) {
-    background: rgba(16, 203, 255, 0.10); /* Secondary color with opacity */
+    background: rgba(16, 203, 255, 0.10);
 }
 
 .values-list {

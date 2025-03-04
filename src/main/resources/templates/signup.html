@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Sign Up - Sponsorando</title>
     <div th:replace="~{fragments/_partial-head :: partialHead}"></div>
+    <link href="/css/signup.css" type="text/css" rel="stylesheet">
 </head>
 
 <body>
 <header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}" class="container mb-4"></header>
-<div class="container mt-5">
-    <h2 class="text-center">Sign Up for Sponsorando</h2>
-    <div class="row justify-content-center">
-        <div class="col-md-6">
+<div class="split-container">
+    <div class="left-section">
+        <div class="login-form">
+            <h2 class="text-center mb-4">Sign Up</h2>
             <form th:action="@{/signup}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                 <div class="mb-3">
                     <label for="name" class="form-label">Full Name</label>
@@ -30,19 +31,26 @@
                     <input type="password" class="form-control" id="password" name="password" minlength="8" maxlength="50" required>
                     <div id="passwordError" class="invalid-feedback">Password must be at least 8 characters.</div>
                 </div>
-                <!--<div class="mb-3">
-                    <label for="image" class="form-label">Upload Image</label>
-                    <input type="file" class="form-control" id="image" name="imageUrl">
-                </div>-->
                 <div class="text-center">
-                    <button type="submit" class="btn btn-primary">Sign Up</button>
+                    <button type="submit" class="btn btn-success px-5">Create Account</button>
                 </div>
             </form>
+        </div>
+    </div>
+    <div class="right-section">
+        <div class="image-overlay">
+            <div class="overlay-content">
+                <img src="/images/title.svg" alt="Sponsorando Logo" class="overlay-logo">
+                <h1 class="overlay-title">Start Making a Difference</h1>
+                <p class="overlay-text">
+                    Become part of a movement creating real change.
+                    Your registration helps build a better tomorrow for everyone.
+                </p>
+            </div>
         </div>
     </div>
 </div>
 <footer th:replace="~{fragments/footer :: footerSection}" role="contentinfo" class="footer"></footer>
 <script src="/js/signup.js"></script>
 </body>
-
 </html>
