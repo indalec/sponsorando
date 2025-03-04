@@ -22,7 +22,7 @@
             justify-content: center;
             align-items: center;
             padding: 2rem;
-            background: rgba(51, 200, 86, 0.50); /* Primary color with transparency */
+            background: rgba(51, 200, 86, 0.50);
         }
 
         .right-section {
@@ -73,6 +73,20 @@
             filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
         }
 
+        .login-form {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-form h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
         @media (max-width: 768px) {
             .split-container {
                 flex-direction: column;
@@ -82,7 +96,7 @@
 
             .left-section {
                 padding: 2rem 1rem;
-                background: rgba(51, 200, 86, 0.98); /* More opaque green on mobile */
+                background: rgba(51, 200, 86, 0.98);
             }
 
             .right-section {
@@ -106,6 +120,11 @@
                 padding: 1rem;
                 text-align: center;
             }
+
+            .login-form {
+                padding: 1.5rem;
+                box-shadow: none;
+            }
         }
     </style>
 </head>
@@ -114,8 +133,8 @@
 <header th:replace="~{fragments/header/_conditional-header :: headerSectionConditional}" class="container mb-4"></header>
 <div class="split-container">
     <div class="left-section">
-        <h2 class="text-center mb-4">Sign Up</h2>
         <div class="login-form">
+            <h2 class="text-center mb-4">Sign Up</h2>
             <form th:action="@{/signup}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                 <div class="mb-3">
                     <label for="name" class="form-label">Full Name</label>
