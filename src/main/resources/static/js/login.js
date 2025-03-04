@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-// Hide the respective button based on the current page
+
     const loginButtons = document.querySelectorAll("#login, #login-expanded");
     loginButtons.forEach(button => {
         if (button) {
@@ -9,12 +9,12 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-// Ensure form, input, and error elements exist before using them
+
     const loginForm = document.querySelector("form");
     const emailInput = document.getElementById("email");
     let emailError = document.getElementById("emailError");
 
-// Create email error message dynamically if it doesn’t exist
+
     if (!emailError && emailInput) {
         emailError = document.createElement("div");
         emailError.id = "emailError";
@@ -24,12 +24,12 @@ document.addEventListener("DOMContentLoaded", function () {
         emailInput.parentNode.appendChild(emailError);
     }
 
-    // Display login error if wrong credentials OR disabled account
+
     const urlParams = new URLSearchParams(window.location.search);
     const loginError = urlParams.get("error");
-    const disabled = urlParams.get("disabled"); // NEW: Check for 'disabled' parameter
+    const disabled = urlParams.get("disabled");
 
-    if ((loginError || disabled) && loginForm) {  // Modified condition
+    if ((loginError || disabled) && loginForm) {
         const errorDiv = document.createElement("div");
         errorDiv.className = "alert alert-danger text-center";
 
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
         loginForm.parentNode.insertBefore(errorDiv, loginForm);
     }
 
-// Email format validation
+
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+$/;
 
     if (emailInput) {

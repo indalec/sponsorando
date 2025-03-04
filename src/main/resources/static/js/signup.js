@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Form Validation Logic on Submit
+
 
     const form = document.querySelector('.needs-validation'); // Select the form
     form.addEventListener('submit', function (event) {
@@ -17,6 +17,6 @@ document.addEventListener("DOMContentLoaded", function () {
             event.stopPropagation()
         }
 
-        form.classList.add('was-validated'); // Add class to show feedback
+        form.classList.add('was-validated');
     });
 });
